@@ -4,7 +4,9 @@
   "description": "",
   "main": "server.js",
   "dependencies": {
-    "express": "^4.16.2"
+    "cors": "^2.8.4",
+    "express": "^4.16.2",
+    "socket.io": "^2.0.4"
   },
   "devDependencies": {},
   "scripts": {
