@@ -4,7 +4,7 @@ const app = express();
 const server = require('http').Server(app);
 const io = require('socket.io')(server);
 
-app.use(express.static('public'));
+app.use(express.static('public-react/build'));
 
 io.on('connection', socket => {
   console.log('client connected!');
