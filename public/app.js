@@ -1,4 +1,15 @@
+$(() => {
+  const socket = io();
+  console.log(socket);
+  
+  $('form').submit(e => {
+    inputEl = e.target.message;
+    socket.emit('message', inputEl.value);
+    inputEl.value = '';
+    return false;
+  });
 
-const socket = io();
-
-console.log('js online');
+  socket.on('message-all', msg => {
+    $('#messages').append($('<li>').text(msg));
+  })
+});
