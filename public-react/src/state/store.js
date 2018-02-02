@@ -5,12 +5,13 @@ import thunk from 'redux-thunk';
 
 import me from './reducers/me';
 import messages from './reducers/messages';
+import socket from './reducers/socket';
 
 
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 
 const rootReducer = combineReducers({
-  me, messages
+  me, messages, socket
 });
 
 const store = createStore(
