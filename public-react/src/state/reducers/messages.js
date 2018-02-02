@@ -1,4 +1,6 @@
 
+import { POST_ALL } from '../constants';
+
 const devDefaultState = [
   {
     user: 'mie',
@@ -19,6 +21,11 @@ const devDefaultState = [
 
 export default function messages(state = devDefaultState, { type, payload }) {
   switch(type) {
+    case POST_ALL:
+      return [
+        ...state,
+        payload
+      ];
     default:
       return state;
   }

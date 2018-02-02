@@ -1,8 +1,9 @@
 import React, { PureComponent } from 'react';
+import Msg from './Msg';
+
 import { connect } from 'react-redux';
 import io from 'socket.io-client';
-
-import Msg from './Msg';
+import { postAll } from '../../state/actions/messages';
 
 import './Chat.css';
 
@@ -10,6 +11,11 @@ class Chat extends PureComponent {
 
   componentDidMount() {
     this.socket = io();
+  }
+
+  handlePost = e => {
+    e.preventDefault();
+    this.props.postAll(e.target.msgText.value);
   }
 
   render() {
@@ -25,8 +31,8 @@ class Chat extends PureComponent {
             />
           ))}
         </ul>
-        <form className="new-msg">
-          <textarea/>
+        <form className="new-msg" onSubmit={this.handlePost}>
+          <textarea name="msgText"/>
           <button type="submit">Send</button>
         </form>
       </section>
@@ -39,5 +45,5 @@ export default connect(
     me: state.me,
     messages: state.messages
   }),
-  null
+  { postAll }
 )(Chat);
