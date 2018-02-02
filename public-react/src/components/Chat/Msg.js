@@ -5,11 +5,11 @@ class Msg extends PureComponent {
 
   render() {
     const {
-      user, text, timestamp
+      user, text, timestamp, myMsg
     } = this.props;
 
     return (
-      <li className="msg">
+      <li className={myMsg ? 'my-msg msg' : 'msg'}>
         <span className="user">{user}</span>
         <span className="timestamp">{JSON.stringify(timestamp)}</span>
         <p className="msg-text">{text}</p>

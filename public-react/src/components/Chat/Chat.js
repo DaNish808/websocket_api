@@ -19,11 +19,19 @@ class Chat extends PureComponent {
             user="mie"
             text="hello!"
             timestamp={new Date()}
+            myMsg={false}
           />
           <Msg 
-            user="me"
+            user="dave"
             text="hi!"
             timestamp={new Date()}
+            myMsg={false}
+          />
+          <Msg 
+            user="dev"
+            text="hello world!"
+            timestamp={new Date()}
+            myMsg={true}
           />
         </ul>
         <form className="new-msg">
