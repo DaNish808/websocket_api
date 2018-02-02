@@ -1,5 +1,5 @@
 
-import { POST_ALL } from '../constants';
+import { POST_ALL, RECEIVE_POST } from '../constants';
 
 const devDefaultState = [
   {
@@ -21,6 +21,7 @@ const devDefaultState = [
 
 export default function messages(state = devDefaultState, { type, payload }) {
   switch(type) {
+    case RECEIVE_POST:
     case POST_ALL:
       return [
         ...state,

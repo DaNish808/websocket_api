@@ -1,4 +1,12 @@
-import { POST_ALL } from '../constants';
+import { POST_ALL, RECEIVE_POST } from '../constants';
+
+
+export function receivePost(msg) {
+  return {
+    type: RECEIVE_POST,
+    payload: msg
+  };
+}
 
 export function postAll(text) {
 

@@ -2,7 +2,7 @@ import React, { PureComponent } from 'react';
 import Msg from './Msg';
 
 import { connect } from 'react-redux';
-import { postAll } from '../../state/actions/messages';
+import { receivePost, postAll } from '../../state/actions/messages';
 import { plugSocket } from '../../state/actions/socket';
 
 import './Chat.css';
@@ -10,11 +10,11 @@ import './Chat.css';
 class Chat extends PureComponent {
 
   async componentDidMount() {
-    const { plugSocket, socket } = this.props;
+    const { plugSocket, receivePost } = this.props;
 
     await plugSocket();
     this.props.socket.on('message-all', msg => {
-      console.log(msg);
+      receivePost(msg);
     });
   }
 
@@ -52,5 +52,5 @@ export default connect(
     messages: state.messages,
     socket: state.socket
   }),
-  { postAll, plugSocket }
+  { receivePost, postAll, plugSocket }
 )(Chat);
