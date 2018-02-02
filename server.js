@@ -9,7 +9,8 @@ app.use(express.static('public-react/build'));
 io.on('connection', socket => {
   console.log('client connected!');
 
-  socket.on('message', msg => {
+  socket.on('message-all', msg => {
+    console.log(msg);
     io.emit('message-all', msg);
   });
 

@@ -9,8 +9,13 @@ import './Chat.css';
 
 class Chat extends PureComponent {
 
-  componentDidMount() {
-    this.props.plugSocket();
+  async componentDidMount() {
+    const { plugSocket, socket } = this.props;
+
+    await plugSocket();
+    this.props.socket.on('message-all', msg => {
+      console.log(msg);
+    });
   }
 
   handlePost = e => {
@@ -44,7 +49,8 @@ class Chat extends PureComponent {
 export default connect(
   state => ({
     me: state.me,
-    messages: state.messages
+    messages: state.messages,
+    socket: state.socket
   }),
   { postAll, plugSocket }
 )(Chat);

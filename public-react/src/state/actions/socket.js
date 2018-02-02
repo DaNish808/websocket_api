@@ -1,7 +1,25 @@
 import io from 'socket.io-client';
 import { PLUG_SOCKET } from '../constants';
 
-export const plugSocket = () => ({
-  type: PLUG_SOCKET,
-  payload: io()
-});
+
+export function plugSocket(cb) {
+
+  return (dispatch, getState) => {
+
+    return new Promise(async resolve => {
+
+      const socket = await io();
+    
+      console.log(socket);
+    
+      dispatch({
+        type: PLUG_SOCKET,
+        payload: socket
+      });
+  
+      console.log(getState().socket);
+  
+      resolve('socket available in store');
+    });
+  };
+}
