@@ -1,4 +1,5 @@
 import React, { PureComponent } from 'react';
+import { connect } from 'react-redux';
 import io from 'socket.io-client';
 
 import Msg from './Msg';
@@ -12,27 +13,17 @@ class Chat extends PureComponent {
   }
 
   render() {
+    const { me, messages } = this.props;
+
     return (
       <section className="chat-box">
         <ul className="messages">
-          <Msg 
-            user="mie"
-            text="hello!"
-            timestamp={new Date()}
-            myMsg={false}
-          />
-          <Msg 
-            user="dave"
-            text="hi!"
-            timestamp={new Date()}
-            myMsg={false}
-          />
-          <Msg 
-            user="dev"
-            text="hello world!"
-            timestamp={new Date()}
-            myMsg={true}
-          />
+          {messages.map(msg => (
+            <Msg
+              msg={msg}
+              myMsg={msg.user === me.username}
+            />
+          ))}
         </ul>
         <form className="new-msg">
           <textarea/>
@@ -43,4 +34,10 @@ class Chat extends PureComponent {
   }
 }
 
-export default Chat;
+export default connect(
+  state => ({
+    me: state.me,
+    messages: state.messages
+  }),
+  null
+)(Chat);
