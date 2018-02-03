@@ -12,8 +12,8 @@ class App extends PureComponent {
   render() {
     return (
       <div className="App">
-        <header role="banner">
-          <h1>hello</h1>
+        <header className="banner" role="banner">
+          <h1>hello {this.props.username}</h1>
           <Settings/>
         </header>
         <Members/>
