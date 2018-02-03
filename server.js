@@ -1,14 +1,9 @@
-const PORT = 8000;
-const express = require('express');
-const app = express();
+const app = require('./src/app');
 const server = require('http').Server(app);
 const io = require('./src/io');
+const PORT = 8000;
+
 
 io.listen(server);
-
-app.use(express.static('public-react/build'));
-
-
-
 
 server.listen(PORT, () => console.log('server started on port:', PORT));
