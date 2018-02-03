@@ -3,7 +3,7 @@ import Msg from './Msg';
 
 import { connect } from 'react-redux';
 import { setUsername } from '../../state/actions/me';
-import { setMembers } from '../../state/actions/members';
+import { setMembers, newMember, removeMember } from '../../state/actions/members';
 import { receivePost, postAll } from '../../state/actions/messages';
 import { plugSocket } from '../../state/actions/socket';
 
@@ -12,7 +12,10 @@ import './Chat.css';
 class Chat extends PureComponent {
 
   async componentDidMount() {
-    const { setUsername, setMembers, plugSocket, receivePost } = this.props;
+    const { 
+      setUsername, setMembers, newMember, 
+      removeMember, plugSocket, receivePost 
+    } = this.props;
 
     await plugSocket();
     const { socket } = this.props;
@@ -25,6 +28,13 @@ class Chat extends PureComponent {
     });
     socket.on('message-all', msg => {
       receivePost(msg);
+    });
+    socket.on('member-update', ({ newUsername, oldUsername }) => {
+      newMember(newUsername);
+      if(oldUsername) removeMember(oldUsername);
+    });
+    socket.on('member-disconnect', username => {
+      removeMember(username);
     });
   }
 
@@ -62,5 +72,8 @@ export default connect(
     messages: state.messages,
     socket: state.socket
   }),
-  { setUsername, setMembers, receivePost, postAll, plugSocket }
+  { 
+    setUsername, setMembers, newMember, 
+    removeMember, receivePost, postAll, 
+    plugSocket }
 )(Chat);

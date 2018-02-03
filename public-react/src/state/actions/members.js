@@ -6,3 +6,18 @@ export function setMembers(members) {
     payload: members
   };
 }
+
+export function newMember(name) {
+  return {
+    type: NEW_MEMBER,
+    payload: name
+  };
+}
+
+export function removeMember(name) {
+  console.log('action:', name)
+  return {
+    type: MEMBER_DISCONNECT,
+    payload: name
+  };
+}

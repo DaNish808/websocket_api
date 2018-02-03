@@ -1,5 +1,6 @@
 import { NEW_MEMBER, NEW_MEMBERS, MEMBER_DISCONNECT } from '../constants';
 
+
 export default function members(state = [], { type, payload }) {
   let i = null;
   switch(type) {
@@ -15,6 +16,7 @@ export default function members(state = [], { type, payload }) {
       ];
     case MEMBER_DISCONNECT:
       i = state.indexOf(payload);
+      console.log(`reducer: ${i}; ${payload}`);
       return [
         ...state.slice(0, i),
         ...state.slice(i + 1)

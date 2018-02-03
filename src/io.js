@@ -7,10 +7,11 @@ const itemList = require('./utils/itemList');
 let io = null;
 const members = {};
 
+
 function addConnectionListener() {
   io.on('connection', socket => {
     let username = `${generateName()}`;
-    
+
     socket.emit('all-members', Object.keys(members));
     socket.emit(
       'message-all', 
@@ -47,7 +48,8 @@ function addConnectionListener() {
     
     socket.on('disconnect', () => {
       console.log('client disconnected');
-      socket.broadcast.emit(
+      io.emit('member-disconnect', username);
+      io.emit(
         'message-all', 
         {
           user: 'system',
