@@ -15,6 +15,30 @@
   left: 0;
   right: 0;
   height: 4rem;
+  padding: 0.3rem 0.3rem 0.3rem 0;
+  background: rgba(0,0,0,1);
+  background: -moz-linear-gradient(-45deg, rgba(0,0,0,1) 0%, rgba(0,0,0,1) 60%, rgba(10,83,128,1) 100%);
+  background: -webkit-gradient(left top, right bottom, color-stop(0%, rgba(0,0,0,1)), color-stop(60%, rgba(0,0,0,1)), color-stop(100%, rgba(10,83,128,1)));
+  background: -webkit-linear-gradient(-45deg, rgba(0,0,0,1) 0%, rgba(0,0,0,1) 60%, rgba(10,83,128,1) 100%);
+  background: -o-linear-gradient(-45deg, rgba(0,0,0,1) 0%, rgba(0,0,0,1) 60%, rgba(10,83,128,1) 100%);
+  background: -ms-linear-gradient(-45deg, rgba(0,0,0,1) 0%, rgba(0,0,0,1) 60%, rgba(10,83,128,1) 100%);
+  background: linear-gradient(135deg, rgba(0,0,0,1) 0%, rgba(0,0,0,1) 60%, rgba(10,83,128,1) 100%);
   display: grid;
   grid-template-columns: auto 6rem;
+  grid-gap: 0.3rem;
+}
+
+.chat-box form button {
+  border: none;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: hsl(202, 40%, 93%);
+  color: rgba(10,83,128,1);
+  font-size: 150%;
+}
+
+.chat-box form button span {
+  font-size: 40%;
 }
