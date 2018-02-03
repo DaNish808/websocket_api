@@ -10,7 +10,7 @@ module.exports = function nameList(names) {
       return `${names[0]} and ${names[1]}`;
     default:
       return names.reduce((list, name, i) => 
-        `, ${i === len - 1 ? 'and ' : ''}${name}`
+        list += `, ${i === len - 1 ? 'and ' : ''}${name}`
       );
   }
 };
