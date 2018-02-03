@@ -11,7 +11,7 @@ class Members extends PureComponent {
     return (
       <aside className="members">
         <header>
-          <h2>online now:</h2>
+          <h2>online now</h2>
         </header>
         <ul>
           {members.map(name => (
