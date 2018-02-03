@@ -2,6 +2,9 @@
   position: relative;
 }
 
+
+
+
 .chat-box div.message-box {
   height: calc(100% - 4rem);
   display: flex;
@@ -10,9 +13,18 @@
 }
 
 .chat-box ul.messages {
-  padding: 1rem;
   list-style: none;
 }
+
+.chat-box li.msg {
+  margin: 1rem;
+  border-radius: 0.5rem;
+  padding: 0.8rem;
+  background: #cce;
+}
+
+
+
 
 .chat-box form {
   position: absolute;

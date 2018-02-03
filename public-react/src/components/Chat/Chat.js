@@ -63,13 +63,19 @@ class Chat extends PureComponent {
       <section className="chat-box">
         <div className="message-box">
           <ul className="messages">
-            {messages.map((msg, i) => (
-              <Msg
-                key={i}
-                msg={msg}
-                myMsg={msg.user === me.username}
-              />
-            ))}
+            {messages.map((msg, i) => {
+              const user = msg.user;
+              const myMsg = user === me.username;
+
+              return(
+                <Msg
+                  key={i}
+                  msg={msg}
+                  myMsg={myMsg}
+                  firstInChain={msg.firstInChain}
+                />
+              );
+            })}
           </ul>
         </div>
         <form className="new-msg" 

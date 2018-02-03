@@ -6,12 +6,16 @@ class Msg extends PureComponent {
   render() {
     const {
       msg: { user, text, timestamp }, 
-      myMsg
+      myMsg,
+      firstInChain
     } = this.props;
-
+    
+    if(firstInChain) console.log('i\'m first!');
     return (
       <li className={myMsg ? 'my-msg msg' : 'msg'}>
-        <span className="user">{user}</span>
+        {user &&
+          <span className="user">{user}</span>
+        }
         <span className="timestamp">{JSON.stringify(timestamp)}</span>
         <p className="msg-text">{text}</p>
       </li>

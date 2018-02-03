@@ -1,12 +1,5 @@
-import { POST_ALL, RECEIVE_POST } from '../constants';
+import { POST_ALL, RECEIVE_POST, MOD_POST } from '../constants';
 
-
-export function receivePost(msg) {
-  return {
-    type: RECEIVE_POST,
-    payload: msg
-  };
-}
 
 export function postAll(text) {
 
@@ -20,7 +13,10 @@ export function postAll(text) {
     const payload = {
       user,
       text,
-      timestamp: new Date()
+      timestamp: new Date(),
+      firstInChain: false,
+      inChain: false,
+      lastInChain: false
     };
 
     dispatch({
@@ -29,5 +25,44 @@ export function postAll(text) {
     });
 
     socket.emit('message-all', payload);
+  };
+}
+
+export function receivePost(msg) {
+
+  return (dispatch, getState) => {
+    const { messages } = getState();
+
+    const i = messages.length;
+    if(i > 0) {
+      const prevMsg = messages[i - 1];
+
+      if(msg.user === prevMsg.user) {
+        msg.lastInChain = true;
+        
+        const modifications = prevMsg.lastInChain ? 
+          {
+            lastInChain: false,
+            inChain: true
+          } :
+          {
+            firstInChain: true
+          }
+        ;
+
+        dispatch({
+          type: MOD_POST,
+          payload: {
+            mods: modifications, 
+            i: i - 1
+          }
+        });
+      }
+    }
+
+    dispatch({
+      type: RECEIVE_POST,
+      payload: msg
+    });
   };
 }

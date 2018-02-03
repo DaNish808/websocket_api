@@ -1,4 +1,4 @@
-import { POST_ALL, RECEIVE_POST } from '../constants';
+import { POST_ALL, RECEIVE_POST, MOD_POST } from '../constants';
 import generateName from 'sillyname';
 
 const devDefaults = [
@@ -116,6 +116,15 @@ export default function messages(state = devDefaults || [], { type, payload }) {
       return [
         ...state,
         payload
+      ];
+    case MOD_POST:
+      return [
+        ...state.slice(0, payload.i),
+        {
+          ...state[payload.i],
+          ...payload.mods
+        },
+        ...state.slice(payload.i + 1)
       ];
     default:
       return state;
