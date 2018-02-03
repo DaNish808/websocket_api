@@ -39,8 +39,21 @@ class Chat extends PureComponent {
   }
 
   handlePost = e => {
+    console.log(e.target);
     e.preventDefault();
-    this.props.postAll(e.target.msgText.value);
+    const msgEl = e.target.msgText;
+    this.postMsg(msgEl);
+  }
+  
+  handleCtrlEnterPost = e => {
+    if(e.ctrlKey && e.key === 'Enter') {
+      this.postMsg(e.target);
+    }
+  }
+  
+  postMsg = textboxEl => {
+    this.props.postAll(textboxEl.value);
+    textboxEl.value = '';  
   }
 
   render() {
@@ -59,9 +72,15 @@ class Chat extends PureComponent {
             ))}
           </ul>
         </div>
-        <form className="new-msg" onSubmit={this.handlePost}>
+        <form className="new-msg" 
+          onSubmit={this.handlePost}
+          onKeyDown={this.handleCtrlEnterPost}
+        >
           <textarea name="msgText"/>
-          <button type="submit">Send</button>
+          <button type="submit">
+            Send<br/>
+            <span>(Ctrl + Enter)</span>
+          </button>
         </form>
       </section>
     );
