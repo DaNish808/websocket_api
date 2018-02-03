@@ -1,4 +1,6 @@
-/* http://meyerweb.com/eric/tools/css/reset/ 
+/* 
+	RESET STYLES
+	http://meyerweb.com/eric/tools/css/reset/ 
    v2.0 | 20110126
    License: none (public domain)
 */
@@ -48,4 +50,11 @@ table {
 	border-spacing: 0;
 }
 
+/* END RESET STYLES */
 
+
+
+html, body, div#root, div.App {
+	height: 100%;
+	width: 100%;
+}
