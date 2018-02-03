@@ -9,6 +9,11 @@
   overflow-y: scroll;
 }
 
+.chat-box ul.messages {
+  padding: 1rem;
+  list-style: none;
+}
+
 .chat-box form {
   position: absolute;
   bottom: 0;
@@ -36,9 +41,17 @@
   justify-content: center;
   background: hsl(202, 40%, 93%);
   color: rgba(10,83,128,1);
-  font-size: 150%;
+  font-size: 120%;
+  transition: ease-in;
+  transition-duration: 0.1s;
 }
 
 .chat-box form button span {
   font-size: 40%;
+}
+
+.chat-box form button:hover {
+  background: hsl(203, 40%, 85%); 
+  color: hsl(203, 86%, 17%);
+  font-size: 140%;
 }

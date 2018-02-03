@@ -12,7 +12,9 @@
 }
 
 .members ul {
+  height: calc(100% - 4.4rem);
   padding: 0 0.5rem;
+  overflow-y: scroll;
   list-style: none;
 }
 
