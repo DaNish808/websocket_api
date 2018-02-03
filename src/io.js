@@ -1,6 +1,6 @@
 const IO = require('socket.io');
 
-const faker = require('faker');
+const generateName = require('sillyname');
 const itemList = require('./utils/itemList');
 
 
@@ -9,7 +9,7 @@ const members = {};
 
 function addConnectionListener() {
   io.on('connection', socket => {
-    let username = `${faker.internet.userName()}`;
+    let username = `${generateName()}`;
     socket.emit(
       'message-all', 
       {
