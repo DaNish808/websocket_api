@@ -18,8 +18,8 @@ io.on('connection', socket => {
     {
       user: 'admin',
       text: members.length === 0 ?
-        'You\'re the first one here!':
-        `You joined the chat with ${require('./utils/nameList')(Object.keys(members))}`,
+        `Hello ${username}, you\'re the first one here!`:
+        `Hello ${username}, you joined the chat with ${require('./utils/nameList')(Object.keys(members))}`,
       timestamp: new Date()
     }
   )
@@ -50,8 +50,8 @@ io.on('connection', socket => {
     socket.broadcast.emit(
       'message-all', 
       {
-        user: username,
-        text: 'disconnected',
+        user: 'admin',
+        text: `${username} has disconnected`,
         timestamp: new Date()
       }
     );
@@ -66,10 +66,10 @@ io.on('connection', socket => {
     socket.broadcast.emit(
       'message-all', 
       {
-        user: newUsername,
+        user: 'admin',
         text: oldUsername ?
-          `name changed from :${oldUsername}` :
-          'joined chat',
+          `${newUsername} name changed from ${oldUsername}` :
+          `${newUsername} has joined the chat`,
         timestamp: new Date()
       }
     );
