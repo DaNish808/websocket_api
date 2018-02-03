@@ -27,7 +27,7 @@ function addConnectionListener() {
     console.log(members);
     
 
-    /*****  *****/
+    /***** socket listeners *****/
     socket.on('reset-username', newName => {
       const oldUsername = username;
       delete members[username];
