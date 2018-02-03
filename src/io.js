@@ -7,19 +7,22 @@ const itemList = require('./utils/itemList');
 let io = null;
 const members = {};
 
+
 function addConnectionListener() {
   io.on('connection', socket => {
     let username = `${generateName()}`;
+
+    socket.emit('all-members', Object.keys(members));
     socket.emit(
       'message-all', 
       {
-        user: 'admin',
+        user: 'system',
         text: members.length === 0 ?
           `Hello ${username}, you\'re the first one here!`:
           `Hello ${username}, you joined the chat with ${itemList(Object.keys(members))}`,
         timestamp: new Date()
       }
-    )
+    );
     members[username] = socket.id;
   
     sendUserUpdate(username);
@@ -27,7 +30,7 @@ function addConnectionListener() {
     console.log(members);
     
 
-    /*****  *****/
+    /***** socket listeners *****/
     socket.on('reset-username', newName => {
       const oldUsername = username;
       delete members[username];
@@ -45,10 +48,11 @@ function addConnectionListener() {
     
     socket.on('disconnect', () => {
       console.log('client disconnected');
-      socket.broadcast.emit(
+      io.emit('member-disconnect', username);
+      io.emit(
         'message-all', 
         {
-          user: 'admin',
+          user: 'system',
           text: `${username} has disconnected`,
           timestamp: new Date()
         }
@@ -66,7 +70,7 @@ function addConnectionListener() {
       socket.broadcast.emit(
         'message-all', 
         {
-          user: 'admin',
+          user: 'system',
           text: oldUsername ?
             `${newUsername} name changed from ${oldUsername}` :
             `${newUsername} has joined the chat`,
