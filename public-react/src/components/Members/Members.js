@@ -1,7 +1,6 @@
 import React, { PureComponent } from 'react';
 
 import { connect } from 'react-redux';
-import { setMembers } from '../../state/actions/members';
 
 import './Members.css';
 

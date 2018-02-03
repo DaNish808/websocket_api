@@ -48,15 +48,17 @@ class Chat extends PureComponent {
 
     return (
       <section className="chat-box">
-        <ul className="messages">
-          {messages.map((msg, i) => (
-            <Msg
-              key={i}
-              msg={msg}
-              myMsg={msg.user === me.username}
-            />
-          ))}
-        </ul>
+        <div className="message-box">
+          <ul className="messages">
+            {messages.map((msg, i) => (
+              <Msg
+                key={i}
+                msg={msg}
+                myMsg={msg.user === me.username}
+              />
+            ))}
+          </ul>
+        </div>
         <form className="new-msg" onSubmit={this.handlePost}>
           <textarea name="msgText"/>
           <button type="submit">Send</button>

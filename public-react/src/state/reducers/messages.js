@@ -3,7 +3,7 @@ import generateName from 'sillyname';
 
 const devDefaults = [
   {
-    user: generateName(),
+    user: 'FIRST POSTER',
     timestamp: new Date(),
     text: Array(Math.floor(Math.random() * 40)).fill('').map(() => generateName())
   },
@@ -103,7 +103,7 @@ const devDefaults = [
     text: Array(Math.floor(Math.random() * 40)).fill('').map(() => generateName())
   },
   {
-    user: generateName(),
+    user: 'LAST POSTER',
     timestamp: new Date(),
     text: Array(Math.floor(Math.random() * 40)).fill('').map(() => generateName())
   }
