@@ -1,19 +1,9 @@
-const PORT = 8000;
-const express = require('express');
-const app = express();
+const app = require('./src/app');
 const server = require('http').Server(app);
-const io = require('socket.io')(server);
+const io = require('./src/io');
+const PORT = 8000;
 
-app.use(express.static('public-react/build'));
 
-io.on('connection', socket => {
-  console.log('client connected!');
-
-  socket.on('message', msg => {
-    io.emit('message-all', msg);
-  });
-
-  socket.on('disconnect', () => console.log('client disconnected'));
-});
+io.listen(server);
 
 server.listen(PORT, () => console.log('server started on port:', PORT));

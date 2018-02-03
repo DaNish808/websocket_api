@@ -5,7 +5,7 @@ class Msg extends PureComponent {
 
   render() {
     const {
-      msg: { user, text, timestamp }, 
+      msg: { user, text, timestamp, notification }, 
       myMsg
     } = this.props;
 

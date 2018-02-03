@@ -1,5 +1,4 @@
 import React, { PureComponent } from 'react';
-import io from 'socket.io-client';
 
 import Chat from './components/Chat/Chat';
 

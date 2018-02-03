@@ -1,18 +1,33 @@
-import { POST_ALL } from '../constants';
+import { POST_ALL, RECEIVE_POST } from '../constants';
+
+
+export function receivePost(msg) {
+  return {
+    type: RECEIVE_POST,
+    payload: msg
+  };
+}
 
 export function postAll(text) {
 
   return (dispatch, getState) => {
 
-    console.log(text);
+    const { 
+      me: { username: user },
+      socket
+    } = getState();
+
+    const payload = {
+      user,
+      text,
+      timestamp: new Date()
+    };
 
     dispatch({
       type: POST_ALL,
-      payload: {
-        user: getState().me.username,
-        text,
-        timestamp: new Date()
-      }
+      payload
     });
+
+    socket.emit('message-all', payload);
   };
 }

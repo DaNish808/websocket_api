@@ -2,15 +2,24 @@ import React, { PureComponent } from 'react';
 import Msg from './Msg';
 
 import { connect } from 'react-redux';
-import io from 'socket.io-client';
-import { postAll } from '../../state/actions/messages';
+import { setUsername } from '../../state/actions/me';
+import { receivePost, postAll } from '../../state/actions/messages';
+import { plugSocket } from '../../state/actions/socket';
 
 import './Chat.css';
 
 class Chat extends PureComponent {
 
-  componentDidMount() {
-    this.socket = io();
+  async componentDidMount() {
+    const { setUsername, plugSocket, receivePost } = this.props;
+
+    await plugSocket();
+    this.props.socket.on('set-username', ({ newUsername }) => {
+      setUsername(newUsername);
+    });
+    this.props.socket.on('message-all', msg => {
+      receivePost(msg);
+    });
   }
 
   handlePost = e => {
@@ -24,8 +33,9 @@ class Chat extends PureComponent {
     return (
       <section className="chat-box">
         <ul className="messages">
-          {messages.map(msg => (
+          {messages.map((msg, i) => (
             <Msg
+              key={i}
               msg={msg}
               myMsg={msg.user === me.username}
             />
@@ -43,7 +53,8 @@ class Chat extends PureComponent {
 export default connect(
   state => ({
     me: state.me,
-    messages: state.messages
+    messages: state.messages,
+    socket: state.socket
   }),
-  { postAll }
+  { setUsername, receivePost, postAll, plugSocket }
 )(Chat);
