@@ -14,8 +14,8 @@ class Members extends PureComponent {
           <h2>online now</h2>
         </header>
         <ul>
-          {members.map((name, i) => (
-            <li key={i}>{name}</li>
+          {members.map(({ username }, i) => (
+            <li key={i}>{username}</li>
           ))}
         </ul>
       </aside>

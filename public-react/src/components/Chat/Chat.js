@@ -24,7 +24,6 @@ class Chat extends PureComponent {
       setUsername(user);
     });
     socket.on('all-members', members => {
-      console.log(members);
       setMembers(members);
     });
     socket.on('message-all', msg => {
