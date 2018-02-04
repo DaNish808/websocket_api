@@ -13,13 +13,13 @@
 .App header.banner {
   grid-area: header;
   background: rgba(0,0,0,1);
-  background: -moz-linear-gradient(45deg, rgba(0,0,0,1) 0%, rgba(0,0,0,1) 60%, rgba(10,83,128,1) 100%);
-  background: -webkit-gradient(left bottom, right top, color-stop(0%, rgba(0,0,0,1)), color-stop(60%, rgba(0,0,0,1)), color-stop(100%, rgba(10,83,128,1)));
-  background: -webkit-linear-gradient(45deg, rgba(0,0,0,1) 0%, rgba(0,0,0,1) 60%, rgba(10,83,128,1) 100%);
-  background: -o-linear-gradient(45deg, rgba(0,0,0,1) 0%, rgba(0,0,0,1) 60%, rgba(10,83,128,1) 100%);
-  background: -ms-linear-gradient(45deg, rgba(0,0,0,1) 0%, rgba(0,0,0,1) 60%, rgba(10,83,128,1) 100%);
-  background: linear-gradient(45deg, rgba(0,0,0,1) 0%, rgba(0,0,0,1) 60%, rgba(10,83,128,1) 100%);
-  color: hsl(203, 86%, 68%);
+  background: -moz-linear-gradient(45deg, rgba(0,0,0,1) 0%, rgba(0,0,0,1) 60%, hsl(203, 86%, 27%) 100%);
+  background: -webkit-gradient(left bottom, right top, color-stop(0%, rgba(0,0,0,1)), color-stop(60%, rgba(0,0,0,1)), color-stop(100%, hsl(203, 86%, 27%)));
+  background: -webkit-linear-gradient(45deg, rgba(0,0,0,1) 0%, rgba(0,0,0,1) 60%, hsl(203, 86%, 27%) 100%);
+  background: -o-linear-gradient(45deg, rgba(0,0,0,1) 0%, rgba(0,0,0,1) 60%, hsl(203, 86%, 27%) 100%);
+  background: -ms-linear-gradient(45deg, rgba(0,0,0,1) 0%, rgba(0,0,0,1) 60%, hsl(203, 86%, 27%) 100%);
+  background: linear-gradient(45deg, rgba(0,0,0,1) 0%, rgba(0,0,0,1) 60%, hsl(203, 86%, 27%) 100%);
+  color: hsl(203, 86%, 88%);
   display: flex;
   justify-content: space-between;
 }
@@ -58,11 +58,11 @@
 
 /* Handle */
 ::-webkit-scrollbar-thumb {
-  background: hsl(203, 30%, 70%); 
+  background: hsl(203, 0%, 80%); 
   border-radius: 4px;
 }
 
 /* Handle on hover */
 ::-webkit-scrollbar-thumb:hover {
-  background: hsl(203, 40%, 50%); 
+  background: hsl(203, 0%, 50%); 
 }

@@ -1,7 +1,8 @@
 import { SET_USERNAME } from '../constants';
 
 const devDefaultState = {
-  username: 'dev'
+  username: 'dev',
+  myHue: 203
 };
 
 

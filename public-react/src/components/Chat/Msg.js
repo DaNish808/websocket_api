@@ -64,7 +64,7 @@ class Msg extends PureComponent {
             <span 
               className="user"
               style={{
-                backgroundColor: `hsl(${hue}, ${system ? '0%' : '65%'}, 35%)`,
+                backgroundColor: `hsl(${hue}, ${system ? '0%' : '100%'}, 30%)`,
                 color: `hsl(${hue}, ${system ? '0%' : '100%'}, 95%)`,
               }}
             >{user}</span>

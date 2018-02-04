@@ -1,7 +1,7 @@
 .members {
   border-right: 0.3rem solid black;
   padding: 0 0.5rem;
-  background: rgba(214,233,244,1);
+  background: hsl(202, 58%, 95%);
 }
 
 .members header h2 {
