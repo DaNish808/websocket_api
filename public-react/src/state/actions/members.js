@@ -7,15 +7,14 @@ export function setMembers(members) {
   };
 }
 
-export function newMember(name) {
+export function newMember(member) {
   return {
     type: NEW_MEMBER,
-    payload: name
+    payload: member
   };
 }
 
 export function removeMember(name) {
-  console.log('action:', name)
   return {
     type: MEMBER_DISCONNECT,
     payload: name

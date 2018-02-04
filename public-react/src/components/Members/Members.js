@@ -7,15 +7,22 @@ import './Members.css';
 class Members extends PureComponent {
 
   render() {
-    const { members } = this.props;
+    const { myHue, members } = this.props;
     return (
-      <aside className="members">
+      <aside className="members" style={{
+        background: `hsl(${myHue}, 58%, 95%)`
+      }}>
         <header>
           <h2>online now</h2>
         </header>
         <ul>
-          {members.map(name => (
-            <li>{name}</li>
+          {members.map(({ username, userHue }, i) => (
+            <li 
+              key={i}
+              style={{
+                color: `hsl(${userHue}, 100%, 40%)`
+              }}
+            >{username}</li>
           ))}
         </ul>
       </aside>
@@ -25,6 +32,7 @@ class Members extends PureComponent {
 
 export default connect(
   state => ({
+    myHue: state.me.myHue,
     members: state.members
   }),
   null

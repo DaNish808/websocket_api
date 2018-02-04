@@ -11,8 +11,13 @@ const members = {};
 function addConnectionListener() {
   io.on('connection', socket => {
     let username = `${generateName()}`;
+    let userHue = Math.floor(Math.random() * 256);
 
-    socket.emit('all-members', Object.keys(members));
+    socket.emit('all-members', Object.keys(members).map(username => ({
+      username,
+      userHue: members[username].hue
+    })));
+      
     socket.emit(
       'message-all', 
       {
@@ -23,9 +28,12 @@ function addConnectionListener() {
         timestamp: new Date()
       }
     );
-    members[username] = socket.id;
+    members[username] = {
+      socketId: socket.id,
+      hue: userHue
+    };
   
-    sendUserUpdate(username);
+    sendUserUpdate(userHue, username);
     console.log('client connected!');
     console.log(members);
     
@@ -36,9 +44,12 @@ function addConnectionListener() {
       delete members[username];
       username = newName;
   
-      sendUserUpdate(username, oldUsername);
+      sendUserUpdate(userHue, username, oldUsername);
   
-      members[username] = socket.id;
+      members[username] = {
+        socketId: socket.id,
+        hue: userHue
+      };
     });
   
     socket.on('message-all', msg => {
@@ -62,10 +73,10 @@ function addConnectionListener() {
     
 
     /***** broadcast emitters for member updates *****/
-    function sendUserUpdate(newUsername, oldUsername = null) {
-      socket.emit('set-username', { newUsername });
+    function sendUserUpdate(userHue, newUsername, oldUsername = null) {
+      socket.emit('set-user', { newUsername, userHue });
       socket.broadcast.emit('member-update', { 
-        newUsername, oldUsername 
+        newUsername, oldUsername, userHue
       });
       socket.broadcast.emit(
         'message-all', 

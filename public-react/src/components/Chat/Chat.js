@@ -8,8 +8,29 @@ import { receivePost, postAll } from '../../state/actions/messages';
 import { plugSocket } from '../../state/actions/socket';
 
 import './Chat.css';
+import { __esModule } from 'react-redux/lib/components/Provider';
 
 class Chat extends PureComponent {
+
+  constructor() {
+    super();
+    this.state = {};
+  }
+  
+  componentWillReceiveProps() {
+    const { me: { myHue } } = this.props;
+    this.setState({
+      buttonHasFocus: false,
+      normalButtonStyle: {
+        background: `hsl(${myHue}, 40%, 93%)`,
+        color: `hsl(${myHue}, 86%, 27%)`,
+      },
+      focusButtonStyle: {
+        background: `hsl(${myHue}, 40%, 85%)`,
+        color: `hsl(${myHue}, 86%, 17%)`,
+      }
+    });
+  }
 
   async componentDidMount() {
     const { 
@@ -20,8 +41,8 @@ class Chat extends PureComponent {
     await plugSocket();
     const { socket } = this.props;
 
-    socket.on('set-username', ({ newUsername }) => {
-      setUsername(newUsername);
+    socket.on('set-user', (user) => {
+      setUsername(user);
     });
     socket.on('all-members', members => {
       setMembers(members);
@@ -29,12 +50,29 @@ class Chat extends PureComponent {
     socket.on('message-all', msg => {
       receivePost(msg);
     });
-    socket.on('member-update', ({ newUsername, oldUsername }) => {
-      newMember(newUsername);
+    socket.on('member-update', ({ userHue, newUsername, oldUsername }) => {
+      newMember({
+        username: newUsername,
+        userHue
+      });
       if(oldUsername) removeMember(oldUsername);
     });
     socket.on('member-disconnect', username => {
       removeMember(username);
+    });
+  }
+
+  handleButtonFocus = e => {
+    this.setState({
+      ...this.state,
+      buttonHasFocus: true
+    });
+  }
+  
+  handleButtonUnfocus = e => {
+    this.setState({
+      ...this.state,
+      buttonHasFocus: false
     });
   }
 
@@ -57,7 +95,15 @@ class Chat extends PureComponent {
   }
 
   render() {
-    const { me, messages } = this.props;
+    const { 
+      me, messages, nameHueDict,
+      me: { myHue }
+    } = this.props;
+    const {
+      buttonHasFocus, focusButtonStyle, normalButtonStyle
+    } = this.state;
+
+    console.log('buttonHasFocus:', buttonHasFocus);
 
     return (
       <section className="chat-box">
@@ -66,12 +112,20 @@ class Chat extends PureComponent {
             {messages.map((msg, i) => {
               const user = msg.user;
               const myMsg = user === me.username;
+              const systemMsg = user === 'system';
 
               return(
                 <Msg
                   key={i}
                   msg={msg}
                   myMsg={myMsg}
+                  hue={
+                    systemMsg ?
+                      0 :
+                      myMsg ? 
+                        me.myHue : 
+                        nameHueDict[user]}
+                  system={systemMsg}
                 />
               );
             })}
@@ -80,9 +134,21 @@ class Chat extends PureComponent {
         <form className="new-msg" 
           onSubmit={this.handlePost}
           onKeyDown={this.handleCtrlEnterPost}
+          style={{
+            background: `-moz-linear-gradient(-45deg, rgba(0,0,0,1) 0%, rgba(0,0,0,1) 60%, hsl(${myHue}, 86%, 27%) 100%)`,
+            background: `-webkit-gradient(left top, right bottom, color-stop(0%, rgba(0,0,0,1)), color-stop(60%, rgba(0,0,0,1)), color-stop(100%, hsl(${myHue}, 86%, 27%)))`,
+            background: `-webkit-linear-gradient(-45deg, rgba(0,0,0,1) 0%, rgba(0,0,0,1) 60%, hsl(${myHue}, 86%, 27%) 100%)`,
+            background: `-o-linear-gradient(-45deg, rgba(0,0,0,1) 0%, rgba(0,0,0,1) 60%, hsl(${myHue}, 86%, 27%) 100%)`,
+            background: `-ms-linear-gradient(-45deg, rgba(0,0,0,1) 0%, rgba(0,0,0,1) 60%, hsl(${myHue}, 86%, 27%) 100%)`,
+            background: `linear-gradient(135deg, rgba(0,0,0,1) 0%, rgba(0,0,0,1) 60%, hsl(${myHue}, 86%, 27%) 100%)`,
+          }}
         >
           <textarea name="msgText"/>
-          <button type="submit">
+          <button type="submit"
+            onMouseEnter={this.handleButtonFocus} onFocus={this.handleButtonFocus}
+            onMouseLeave={this.handleButtonUnfocus} onBlur={this.handleButtonUnfocus}
+            style={buttonHasFocus ? focusButtonStyle : normalButtonStyle}
+          >
             Send<br/>
             <span>(Ctrl + Enter)</span>
           </button>
@@ -95,6 +161,10 @@ class Chat extends PureComponent {
 export default connect(
   state => ({
     me: state.me,
+    nameHueDict: state.members.reduce((dict, { username, userHue }) => {
+      dict[username] = userHue;
+      return dict;
+    }, {}),
     messages: state.messages,
     socket: state.socket
   }),
