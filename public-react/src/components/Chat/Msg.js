@@ -12,35 +12,54 @@ class Msg extends PureComponent {
       myMsg
     } = this.props;
 
-    console.log(firstInChain, inChain, lastInChain);
-    let chainStyles = {};
-    if(firstInChain) chainStyles = {
-      marginBottom: '0',
-      borderBottomRightRadius: '0',
-      borderBottomLeftRadius: '0'
-    };
-    else if(inChain) chainStyles = {
-      margin: '0 1rem',
-      borderRadius: '0',
-    };
-    else if(lastInChain) chainStyles = {
-      marginTop: '0',
-      borderTopRightRadius: '0',
-      borderTopLeftRadius: '0'
-
-    };
+    let chainSpacing = {};
+    let chainEdges = {};
+    if(firstInChain) {
+      chainSpacing = {
+        marginBottom: '0',
+      };
+      chainEdges = {
+        width: '100%',
+        borderBottomRightRadius: '0',
+        borderBottomLeftRadius: '0'
+      };
+    }
+    else if(inChain) {
+      chainSpacing = {
+        marginTop: '0',
+        marginBottom: '0'
+      };
+      chainEdges = {
+        width: '100%',
+        borderRadius: '0'
+      };
+    }
+    else if(lastInChain) {
+      chainSpacing = {
+        marginTop: '0',
+      };
+      chainEdges = {
+        width: '100%',
+        borderTopRightRadius: '0',
+        borderTopLeftRadius: '0'
+      };
+    }
     
-    if(firstInChain) console.log('i\'m first!');
     return (
       <li 
-        className={myMsg ? 'my-msg msg' : 'msg'}
-        style={chainStyles}
+        className={myMsg ? 'my-msg-box msg-box' : 'msg-box'}
+        style={chainSpacing}
       >
-        {!inChain && !lastInChain &&
-          <span className="user">{user}</span>
-        }
-        <p className="msg-text">{text}</p>
-        <div className="timestamp">{JSON.stringify(timestamp)}</div>
+        <div
+          className={myMsg ? 'my-msg msg' : 'msg'}
+          style={chainEdges}
+        >
+          {!inChain && !lastInChain &&
+            <span className="user">{user}</span>
+          }
+          <p className="msg-text">{text}</p>
+          <div className="timestamp">{JSON.stringify(timestamp)}</div>
+        </div>
       </li>
     );
   }

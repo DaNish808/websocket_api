@@ -16,18 +16,49 @@
   list-style: none;
 }
 
-.chat-box li.msg {
-  margin: 1rem;
+.chat-box li.msg-box {
+  margin: 1.5rem 2.5rem 1.5rem 1.5rem;
+}
+
+.chat-box div.msg {
+  width: fit-content;
   border-radius: 0.5rem;
   padding: 0.8rem;
   background: #cce;
+  position: relative;
 }
 
-.chat-box li.msg .timestamp {
+.chat-box div.msg span.user {
+  position: absolute;
+  top: -1rem;
+  left: -0.7rem;
+  border-radius: 0.8rem;
+  padding: 0.3rem 0.8rem;
+  background: #aac;
+}
+
+.chat-box div.msg div.timestamp {
   width: 100%;
   margin: 0.5rem 0 -0.3rem;
   font-size: 75%;
   text-align: right;
+}
+
+.chat-box li.my-msg-box {
+  margin: 1.5rem 1.5rem 1.5rem 2.5rem;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.chat-box div.my-msg {
+  text-align: right;
+}
+.chat-box div.my-msg span.user {
+  left: auto;
+  right: -0.7rem;
+}
+.chat-box div.my-msg div.timestamp {
+  text-align: left;
 }
 
 
