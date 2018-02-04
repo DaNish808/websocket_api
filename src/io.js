@@ -22,7 +22,6 @@ function addConnectionListener() {
       'message-all', 
       {
         user: 'system',
-        hue: '#ddd',
         text: members.length === 0 ?
           `Hello ${username}, you\'re the first one here!`:
           `Hello ${username}, you joined the chat with ${itemList(Object.keys(members))}`,
@@ -65,7 +64,6 @@ function addConnectionListener() {
         'message-all', 
         {
           user: 'system',
-          hue: '#ddd',
           text: `${username} has disconnected`,
           timestamp: new Date()
         }
@@ -84,7 +82,6 @@ function addConnectionListener() {
         'message-all', 
         {
           user: 'system',
-          hue: '#ddd',
           text: oldUsername ?
             `${newUsername} name changed from ${oldUsername}` :
             `${newUsername} has joined the chat`,

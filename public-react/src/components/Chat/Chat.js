@@ -8,6 +8,7 @@ import { receivePost, postAll } from '../../state/actions/messages';
 import { plugSocket } from '../../state/actions/socket';
 
 import './Chat.css';
+import { __esModule } from 'react-redux/lib/components/Provider';
 
 class Chat extends PureComponent {
 
@@ -60,7 +61,7 @@ class Chat extends PureComponent {
   }
 
   render() {
-    const { me, messages } = this.props;
+    const { me, messages, nameHueDict } = this.props;
 
     return (
       <section className="chat-box">
@@ -69,12 +70,20 @@ class Chat extends PureComponent {
             {messages.map((msg, i) => {
               const user = msg.user;
               const myMsg = user === me.username;
+              const systemMsg = user === 'system';
 
               return(
                 <Msg
                   key={i}
                   msg={msg}
                   myMsg={myMsg}
+                  hue={
+                    systemMsg ?
+                      0 :
+                      myMsg ? 
+                        me.myHue : 
+                        nameHueDict[user]}
+                  system={systemMsg}
                 />
               );
             })}
@@ -98,6 +107,10 @@ class Chat extends PureComponent {
 export default connect(
   state => ({
     me: state.me,
+    nameHueDict: state.members.reduce((dict, { username, userHue }) => {
+      dict[username] = userHue;
+      return dict;
+    }, {}),
     messages: state.messages,
     socket: state.socket
   }),

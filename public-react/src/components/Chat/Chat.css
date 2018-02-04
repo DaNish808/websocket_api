@@ -34,7 +34,7 @@
   left: -0.7rem;
   border-radius: 0.8rem;
   padding: 0.3rem 0.8rem;
-  background: #aac;
+  background: hsl(240, 25%, 73%);
 }
 
 .chat-box div.msg div.timestamp {

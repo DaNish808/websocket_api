@@ -9,9 +9,11 @@ class Msg extends PureComponent {
         user, text, timestamp,
         firstInChain, inChain, lastInChain
       }, 
-      myMsg
+      myMsg,
+      hue,
+      system
     } = this.props;
-
+    
     let chainSpacing = {};
     let chainEdges = {};
     if(firstInChain) {
@@ -52,10 +54,20 @@ class Msg extends PureComponent {
       >
         <div
           className={myMsg ? 'my-msg msg' : 'msg'}
-          style={chainEdges}
+          style={{
+            ...chainEdges,
+            backgroundColor: `hsl(${hue}, ${system ? '0%' : '100%'}, 90%)`,
+            color: `hsl(${hue}, 30%, 15%)`,
+          }}
         >
           {!inChain && !lastInChain &&
-            <span className="user">{user}</span>
+            <span 
+              className="user"
+              style={{
+                backgroundColor: `hsl(${hue}, ${system ? '0%' : '65%'}, 35%)`,
+                color: `hsl(${hue}, ${system ? '0%' : '100%'}, 95%)`,
+              }}
+            >{user}</span>
           }
           <p className="msg-text">{text}</p>
           <div className="timestamp">{JSON.stringify(timestamp)}</div>

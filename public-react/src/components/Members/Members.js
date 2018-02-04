@@ -14,8 +14,13 @@ class Members extends PureComponent {
           <h2>online now</h2>
         </header>
         <ul>
-          {members.map(({ username }, i) => (
-            <li key={i}>{username}</li>
+          {members.map(({ username, userHue }, i) => (
+            <li 
+              key={i}
+              style={{
+                color: `hsl(${userHue}, 50%, 50%)`
+              }}
+            >{username}</li>
           ))}
         </ul>
       </aside>
