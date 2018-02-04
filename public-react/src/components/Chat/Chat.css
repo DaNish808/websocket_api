@@ -23,6 +23,12 @@
   background: #cce;
 }
 
+.chat-box li.msg .timestamp {
+  width: 100%;
+  margin: 0.5rem 0 -0.3rem;
+  font-size: 75%;
+  text-align: right;
+}
 
 
 

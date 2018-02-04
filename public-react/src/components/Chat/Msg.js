@@ -39,8 +39,8 @@ class Msg extends PureComponent {
         {!inChain && !lastInChain &&
           <span className="user">{user}</span>
         }
-        <span className="timestamp">{JSON.stringify(timestamp)}</span>
         <p className="msg-text">{text}</p>
+        <div className="timestamp">{JSON.stringify(timestamp)}</div>
       </li>
     );
   }
