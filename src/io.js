@@ -13,7 +13,11 @@ function addConnectionListener() {
     let username = `${generateName()}`;
     let userHue = Math.floor(Math.random() * 256);
 
-    socket.emit('all-members', Object.keys(members));
+    socket.emit('all-members', Object.keys(members).map(username => ({
+      username,
+      userHue: members[username].hue
+    })));
+      
     socket.emit(
       'message-all', 
       {
@@ -25,7 +29,10 @@ function addConnectionListener() {
         timestamp: new Date()
       }
     );
-    members[username] = socket.id;
+    members[username] = {
+      socketId: socket.id,
+      hue: userHue
+    };
   
     sendUserUpdate(userHue, username);
     console.log('client connected!');
@@ -40,7 +47,10 @@ function addConnectionListener() {
   
       sendUserUpdate(userHue, username, oldUsername);
   
-      members[username] = socket.id;
+      members[username] = {
+        socketId: socket.id,
+        hue: userHue
+      };
     });
   
     socket.on('message-all', msg => {

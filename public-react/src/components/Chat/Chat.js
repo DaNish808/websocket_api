@@ -24,13 +24,17 @@ class Chat extends PureComponent {
       setUsername(user);
     });
     socket.on('all-members', members => {
+      console.log(members);
       setMembers(members);
     });
     socket.on('message-all', msg => {
       receivePost(msg);
     });
-    socket.on('member-update', ({ newUsername, oldUsername }) => {
-      newMember(newUsername);
+    socket.on('member-update', ({ userHue, newUsername, oldUsername }) => {
+      newMember({
+        username: newUsername,
+        userHue
+      });
       if(oldUsername) removeMember(oldUsername);
     });
     socket.on('member-disconnect', username => {

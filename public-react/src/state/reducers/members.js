@@ -30,6 +30,10 @@ const devDefault = [
   'Bristlestag Deer',
   'Saltshark Kicker'
 ];
+devDefault.map(username => ({
+  username,
+  userHue: Math.floor(Math.random() * 256)
+}));
 
 export default function members(state = devDefault || [], { type, payload }) {
   let i = null;
@@ -45,8 +49,9 @@ export default function members(state = devDefault || [], { type, payload }) {
         ...payload
       ];
     case MEMBER_DISCONNECT:
-      i = state.indexOf(payload);
-      console.log(`reducer: ${i}; ${payload}`);
+      for(i = 0; i < state.length; i++)
+        if(payload === state[i].username)
+          break;
       return [
         ...state.slice(0, i),
         ...state.slice(i + 1)
