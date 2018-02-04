@@ -39,8 +39,21 @@ class Chat extends PureComponent {
   }
 
   handlePost = e => {
+    console.log(e.target);
     e.preventDefault();
-    this.props.postAll(e.target.msgText.value);
+    const msgEl = e.target.msgText;
+    this.postMsg(msgEl);
+  }
+  
+  handleCtrlEnterPost = e => {
+    if(e.ctrlKey && e.key === 'Enter') {
+      this.postMsg(e.target);
+    }
+  }
+  
+  postMsg = textboxEl => {
+    this.props.postAll(textboxEl.value);
+    textboxEl.value = '';  
   }
 
   render() {
@@ -48,18 +61,31 @@ class Chat extends PureComponent {
 
     return (
       <section className="chat-box">
-        <ul className="messages">
-          {messages.map((msg, i) => (
-            <Msg
-              key={i}
-              msg={msg}
-              myMsg={msg.user === me.username}
-            />
-          ))}
-        </ul>
-        <form className="new-msg" onSubmit={this.handlePost}>
+        <div className="message-box">
+          <ul className="messages">
+            {messages.map((msg, i) => {
+              const user = msg.user;
+              const myMsg = user === me.username;
+
+              return(
+                <Msg
+                  key={i}
+                  msg={msg}
+                  myMsg={myMsg}
+                />
+              );
+            })}
+          </ul>
+        </div>
+        <form className="new-msg" 
+          onSubmit={this.handlePost}
+          onKeyDown={this.handleCtrlEnterPost}
+        >
           <textarea name="msgText"/>
-          <button type="submit">Send</button>
+          <button type="submit">
+            Send<br/>
+            <span>(Ctrl + Enter)</span>
+          </button>
         </form>
       </section>
     );

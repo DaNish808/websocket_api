@@ -1,0 +1,23 @@
+.members {
+  border-right: 0.3rem solid black;
+  padding: 0 0.5rem;
+  background: rgba(214,233,244,1);
+}
+
+.members header h2 {
+  font-weight: bold;
+  margin: 0.8rem 0;
+  border-bottom: 1px solid black;
+  padding-bottom: 0.8rem;
+}
+
+.members ul {
+  height: calc(100% - 4.4rem);
+  padding: 0 0.5rem;
+  overflow-y: scroll;
+  list-style: none;
+}
+
+.members ul li {
+  padding-bottom: 0.3rem;
+}

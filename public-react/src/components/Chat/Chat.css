@@ -1,0 +1,107 @@
+.chat-box {
+  position: relative;
+}
+
+
+
+
+.chat-box div.message-box {
+  height: calc(100% - 4rem);
+  display: flex;
+  flex-direction: column-reverse;
+  overflow-y: scroll;
+}
+
+.chat-box ul.messages {
+  list-style: none;
+}
+
+.chat-box li.msg-box {
+  margin: 1.5rem 2.5rem 1.5rem 1.5rem;
+}
+
+.chat-box div.msg {
+  width: fit-content;
+  border-radius: 0.5rem;
+  padding: 0.8rem;
+  background: #cce;
+  position: relative;
+}
+
+.chat-box div.msg span.user {
+  position: absolute;
+  top: -1rem;
+  left: -0.7rem;
+  border-radius: 0.8rem;
+  padding: 0.3rem 0.8rem;
+  background: #aac;
+}
+
+.chat-box div.msg div.timestamp {
+  width: 100%;
+  margin: 0.5rem 0 -0.3rem;
+  font-size: 75%;
+  text-align: right;
+}
+
+.chat-box li.my-msg-box {
+  margin: 1.5rem 1.5rem 1.5rem 2.5rem;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.chat-box div.my-msg {
+  text-align: right;
+}
+.chat-box div.my-msg span.user {
+  left: auto;
+  right: -0.7rem;
+}
+.chat-box div.my-msg div.timestamp {
+  text-align: left;
+}
+
+
+
+
+.chat-box form {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 4rem;
+  padding: 0.3rem 0.3rem 0.3rem 0;
+  background: rgba(0,0,0,1);
+  background: -moz-linear-gradient(-45deg, rgba(0,0,0,1) 0%, rgba(0,0,0,1) 60%, rgba(10,83,128,1) 100%);
+  background: -webkit-gradient(left top, right bottom, color-stop(0%, rgba(0,0,0,1)), color-stop(60%, rgba(0,0,0,1)), color-stop(100%, rgba(10,83,128,1)));
+  background: -webkit-linear-gradient(-45deg, rgba(0,0,0,1) 0%, rgba(0,0,0,1) 60%, rgba(10,83,128,1) 100%);
+  background: -o-linear-gradient(-45deg, rgba(0,0,0,1) 0%, rgba(0,0,0,1) 60%, rgba(10,83,128,1) 100%);
+  background: -ms-linear-gradient(-45deg, rgba(0,0,0,1) 0%, rgba(0,0,0,1) 60%, rgba(10,83,128,1) 100%);
+  background: linear-gradient(135deg, rgba(0,0,0,1) 0%, rgba(0,0,0,1) 60%, rgba(10,83,128,1) 100%);
+  display: grid;
+  grid-template-columns: auto 6rem;
+  grid-gap: 0.3rem;
+}
+
+.chat-box form button {
+  border: none;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: hsl(202, 40%, 93%);
+  color: rgba(10,83,128,1);
+  font-size: 120%;
+  transition: ease-in;
+  transition-duration: 0.1s;
+}
+
+.chat-box form button span {
+  font-size: 40%;
+}
+
+.chat-box form button:hover {
+  background: hsl(203, 40%, 85%); 
+  color: hsl(203, 86%, 17%);
+  font-size: 140%;
+}
