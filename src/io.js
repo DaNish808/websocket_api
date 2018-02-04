@@ -11,12 +11,14 @@ const members = {};
 function addConnectionListener() {
   io.on('connection', socket => {
     let username = `${generateName()}`;
+    let userHue = Math.floor(Math.random() * 256);
 
     socket.emit('all-members', Object.keys(members));
     socket.emit(
       'message-all', 
       {
         user: 'system',
+        hue: '#ddd',
         text: members.length === 0 ?
           `Hello ${username}, you\'re the first one here!`:
           `Hello ${username}, you joined the chat with ${itemList(Object.keys(members))}`,
@@ -25,7 +27,7 @@ function addConnectionListener() {
     );
     members[username] = socket.id;
   
-    sendUserUpdate(username);
+    sendUserUpdate(userHue, username);
     console.log('client connected!');
     console.log(members);
     
@@ -36,7 +38,7 @@ function addConnectionListener() {
       delete members[username];
       username = newName;
   
-      sendUserUpdate(username, oldUsername);
+      sendUserUpdate(userHue, username, oldUsername);
   
       members[username] = socket.id;
     });
@@ -53,6 +55,7 @@ function addConnectionListener() {
         'message-all', 
         {
           user: 'system',
+          hue: '#ddd',
           text: `${username} has disconnected`,
           timestamp: new Date()
         }
@@ -62,15 +65,16 @@ function addConnectionListener() {
     
 
     /***** broadcast emitters for member updates *****/
-    function sendUserUpdate(newUsername, oldUsername = null) {
-      socket.emit('set-username', { newUsername });
+    function sendUserUpdate(userHue, newUsername, oldUsername = null) {
+      socket.emit('set-user', { newUsername, userHue });
       socket.broadcast.emit('member-update', { 
-        newUsername, oldUsername 
+        newUsername, oldUsername, userHue
       });
       socket.broadcast.emit(
         'message-all', 
         {
           user: 'system',
+          hue: '#ddd',
           text: oldUsername ?
             `${newUsername} name changed from ${oldUsername}` :
             `${newUsername} has joined the chat`,

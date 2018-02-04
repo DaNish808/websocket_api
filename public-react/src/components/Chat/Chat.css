@@ -24,7 +24,7 @@
   width: fit-content;
   border-radius: 0.5rem;
   padding: 0.8rem;
-  background: #cce;
+  background: hsl(240, 50%, 87%);
   position: relative;
 }
 

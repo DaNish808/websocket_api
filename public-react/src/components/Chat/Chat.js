@@ -20,8 +20,8 @@ class Chat extends PureComponent {
     await plugSocket();
     const { socket } = this.props;
 
-    socket.on('set-username', ({ newUsername }) => {
-      setUsername(newUsername);
+    socket.on('set-user', (user) => {
+      setUsername(user);
     });
     socket.on('all-members', members => {
       setMembers(members);

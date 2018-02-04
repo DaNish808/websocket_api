@@ -8,9 +8,7 @@ const devDefaultState = {
 export default function me(state = devDefaultState, { type, payload }) {
   switch(type) {
     case SET_USERNAME:
-      return {
-        username: payload
-      };
+      return payload;
     default:
       return state;
   }
