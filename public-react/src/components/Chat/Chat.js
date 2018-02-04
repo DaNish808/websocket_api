@@ -72,7 +72,6 @@ class Chat extends PureComponent {
                   key={i}
                   msg={msg}
                   myMsg={myMsg}
-                  firstInChain={msg.firstInChain}
                 />
               );
             })}
