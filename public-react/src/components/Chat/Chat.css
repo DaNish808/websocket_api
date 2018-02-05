@@ -22,7 +22,7 @@
 
 .chat-box div.msg {
   width: fit-content;
-  border-radius: 0.5rem;
+  border-radius: 0.8rem;
   padding: 0.8rem;
   background: hsl(240, 50%, 87%);
   position: relative;
@@ -35,6 +35,10 @@
   border-radius: 0.8rem;
   padding: 0.3rem 0.8rem;
   background: hsl(240, 25%, 73%);
+}
+
+.chat-box div.msg p.msg-text {
+  white-space: pre-wrap;
 }
 
 .chat-box div.msg div.timestamp {
@@ -95,7 +99,7 @@
   justify-content: center;
   color: hsl(203, 86%, 27%);
   font-size: 120%;
-  
+
   transition: ease-in;
   transition-duration: 0.1s;
 }
