@@ -1,6 +1,6 @@
 export const PLUG_SOCKET = 'PLUG_SOCKET';
 
-export const SET_USERNAME = 'SET_USERNAME';
+export const SET_USER = 'SET_USER';
 
 export const NEW_MEMBER = 'NEW_MEMBER';
 export const NEW_MEMBERS = 'NEW_MEMBERS';
