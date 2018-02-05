@@ -40,6 +40,9 @@ function addConnectionListener() {
 
     /***** socket listeners *****/
     socket.on('reset-user', ({ username: newName, myHue: newHue }) => {
+      console.log('boop')
+      console.log(newName)
+      console.log(newHue)
       const oldUsername = username;
       delete members[username];
       username = newName;

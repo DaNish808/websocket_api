@@ -94,8 +94,7 @@ class Chat extends PureComponent {
 
     
     const normalButtonStyle = {
-      background: `hsl(${myHue}, 40%, 93%)`,
-      color: `hsl(${myHue}, 86%, 27%)`,
+      background: `hsl(${myHue}, 40%, 93%)`, 
     };
     const focusButtonStyle = {
       background: `hsl(${myHue}, 40%, 85%)`,

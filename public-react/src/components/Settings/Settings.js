@@ -31,8 +31,13 @@ class Settings extends PureComponent {
 
   handleUserUpdate = e => {
     e.preventDefault();
-    console.log(e.target.username.value);
-    console.log(this.state.previewHue);
+    
+    const userUpdate = {
+      username: e.target.username.value || this.props.username,
+      myHue: this.state.previewHue
+    };
+
+    this.props.socket.emit('reset-user', userUpdate);
   }
   
   componentWillMount() {
@@ -79,7 +84,7 @@ class Settings extends PureComponent {
                   color: `hsl(${previewHue || myHue}, 86%, 27%)`
                 }}/>
             </fieldset>
-            <button class="submit" type="submit">Change</button>
+            <button className="submit" type="submit">Change</button>
           </form>
         </Modal>
       </section>
@@ -90,7 +95,8 @@ class Settings extends PureComponent {
 export default connect(
   state => ({
     myHue: state.me.myHue,
-    username: state.me.username
+    username: state.me.username,
+    socket: state.socket
   }),
   null
 )(Settings);
