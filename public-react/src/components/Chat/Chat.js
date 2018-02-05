@@ -18,17 +18,9 @@ class Chat extends PureComponent {
   }
   
   componentWillReceiveProps() {
-    const { me: { myHue } } = this.props;
+    const { myHue } = this.props;
     this.setState({
-      buttonHasFocus: false,
-      normalButtonStyle: {
-        background: `hsl(${myHue}, 40%, 93%)`,
-        color: `hsl(${myHue}, 86%, 27%)`,
-      },
-      focusButtonStyle: {
-        background: `hsl(${myHue}, 40%, 85%)`,
-        color: `hsl(${myHue}, 86%, 17%)`,
-      }
+      buttonHasFocus: false
     });
   }
 
@@ -77,7 +69,6 @@ class Chat extends PureComponent {
   }
 
   handlePost = e => {
-    console.log(e.target);
     e.preventDefault();
     const msgEl = e.target.msgText;
     this.postMsg(msgEl);
@@ -96,14 +87,19 @@ class Chat extends PureComponent {
 
   render() {
     const { 
-      me, messages, nameHueDict,
-      me: { myHue }
+      username, myHue,
+      messages, nameHueDict
     } = this.props;
-    const {
-      buttonHasFocus, focusButtonStyle, normalButtonStyle
-    } = this.state;
+    const { buttonHasFocus } = this.state;
 
-    console.log('buttonHasFocus:', buttonHasFocus);
+    
+    const normalButtonStyle = {
+      background: `hsl(${myHue}, 40%, 93%)`, 
+    };
+    const focusButtonStyle = {
+      background: `hsl(${myHue}, 40%, 85%)`,
+      color: `hsl(${myHue}, 86%, 17%)`,
+    };
 
     return (
       <section className="chat-box">
@@ -111,7 +107,7 @@ class Chat extends PureComponent {
           <ul className="messages">
             {messages.map((msg, i) => {
               const user = msg.user;
-              const myMsg = user === me.username;
+              const myMsg = user === username;
               const systemMsg = user === 'system';
 
               return(
@@ -123,7 +119,7 @@ class Chat extends PureComponent {
                     systemMsg ?
                       0 :
                       myMsg ? 
-                        me.myHue : 
+                        myHue : 
                         nameHueDict[user]}
                   system={systemMsg}
                 />
@@ -161,6 +157,8 @@ class Chat extends PureComponent {
 export default connect(
   state => ({
     me: state.me,
+    username: state.me.username,
+    myHue: state.me.myHue,
     nameHueDict: state.members.reduce((dict, { username, userHue }) => {
       dict[username] = userHue;
       return dict;

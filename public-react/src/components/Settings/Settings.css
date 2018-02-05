@@ -1,0 +1,38 @@
+
+.settings-cog-centerer {
+  height: 2.5rem;
+  width: 2.5rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.settings-cog {
+  height: 30.87px;
+  width: 32px;
+}
+
+.settings form {
+  height: 100%;
+  width: 100%;
+  padding: 1rem 1rem 0.8rem 1rem;
+}
+
+.settings form fieldset {
+  display: inline-block;
+  margin: 0.5rem 0.5rem 0 0;
+}
+.settings form fieldset label {
+  margin-right: 0.5rem;
+}
+.settings form fieldset input {
+  width: 10.6rem;
+  border: 2px solid #ddd;
+  border-radius: 2px;
+}
+.settings form button.submit {
+  border: 1px solid black;
+  border-radius: 2px;
+  background-color: black;
+  color: white;
+}
