@@ -39,7 +39,7 @@ function addConnectionListener() {
     
 
     /***** socket listeners *****/
-    socket.on('reset-username', newName => {
+    socket.on('reset-user', ({ username: newName, myHue: newHue }) => {
       const oldUsername = username;
       delete members[username];
       username = newName;
@@ -48,7 +48,7 @@ function addConnectionListener() {
   
       members[username] = {
         socketId: socket.id,
-        hue: userHue
+        hue: newHue
       };
     });
   

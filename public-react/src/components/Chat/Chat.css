@@ -70,6 +70,7 @@
   left: 0;
   right: 0;
   height: 4rem;
+
   padding: 0.3rem 0.3rem 0.3rem 0;
   background: rgba(0,0,0,1);
   background: -moz-linear-gradient(-45deg, rgba(0,0,0,1) 0%, rgba(0,0,0,1) 60%, rgba(10,83,128,1) 100%);
@@ -78,6 +79,7 @@
   background: -o-linear-gradient(-45deg, rgba(0,0,0,1) 0%, rgba(0,0,0,1) 60%, rgba(10,83,128,1) 100%);
   background: -ms-linear-gradient(-45deg, rgba(0,0,0,1) 0%, rgba(0,0,0,1) 60%, rgba(10,83,128,1) 100%);
   background: linear-gradient(135deg, rgba(0,0,0,1) 0%, rgba(0,0,0,1) 60%, rgba(10,83,128,1) 100%);
+
   display: grid;
   grid-template-columns: auto 6rem;
   grid-gap: 0.3rem;
@@ -85,13 +87,15 @@
 
 .chat-box form button {
   border: none;
+  background: hsl(203, 40%, 93%);
+
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  background: hsl(203, 40%, 93%);
   color: hsl(203, 86%, 27%);
   font-size: 120%;
+  
   transition: ease-in;
   transition-duration: 0.1s;
 }

@@ -1,0 +1,16 @@
+.modal {
+  position: fixed;
+  top: 3.5rem;
+  right: 0rem;
+  z-index: 2;
+  
+  width: 24rem;
+  max-height: calc(100% - 8.5rem);
+  border-top-left-radius: 1rem;
+  border-bottom-left-radius: 1rem;
+
+  overflow-y: scroll;
+
+  transition: ease-out;
+  transition-duration: 0.3s;
+}
