@@ -9,16 +9,12 @@ export function plugSocket(cb) {
     return new Promise(async resolve => {
 
       const socket = await io();
-    
-      console.log(socket);
-    
+        
       dispatch({
         type: PLUG_SOCKET,
         payload: socket
       });
-  
-      console.log(getState().socket);
-  
+    
       resolve('socket available in store');
     });
   };
