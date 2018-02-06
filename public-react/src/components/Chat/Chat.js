@@ -1,14 +1,15 @@
 import React, { PureComponent } from 'react';
-import Msg from './Msg';
-
 import { connect } from 'react-redux';
+
+import Msg from './Msg';
+import Sky from '../Jets/Sky';
+
 import { setUser } from '../../state/actions/me';
 import { setMembers, newMember, removeMember } from '../../state/actions/members';
 import { updateUserMessages, receivePost, postAll } from '../../state/actions/messages';
 import { plugSocket } from '../../state/actions/socket';
 
 import './Chat.css';
-import { __esModule } from 'react-redux/lib/components/Provider';
 
 class Chat extends PureComponent {
 
@@ -108,6 +109,7 @@ class Chat extends PureComponent {
 
     return (
       <section className="chat-box">
+        <Sky/>
         <div className="message-box">
           <ul className="messages">
             {messages.map((msg, i) => {

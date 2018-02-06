@@ -1,0 +1,4 @@
+section.sky {
+  grid-area: msg-box;
+  position: relative;
+}
