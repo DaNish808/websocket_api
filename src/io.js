@@ -10,6 +10,8 @@ const members = {};
 
 function addConnectionListener() {
   io.on('connection', socket => {
+
+    /**************** add/distribute new member info *******************/
     let username = `${generateName()}`;
     let userHue = Math.floor(Math.random() * 256);
 
@@ -38,7 +40,9 @@ function addConnectionListener() {
     console.log(members);
     
 
-    /***** socket listeners *****/
+    /* ################# socket listeners #################### */
+
+    /************ member events *************/
     socket.on('reset-user', ({ username: newName, myHue: newHue }) => {
       const oldUsername = username;
       delete members[username];
@@ -51,46 +55,45 @@ function addConnectionListener() {
         hue: newHue
       };
     });
-  
-    socket.on('message-all', msg => {
-      console.log(msg);
-      socket.broadcast.emit('message-all', msg);
-    });
     
     socket.on('disconnect', () => {
       console.log('client disconnected');
       io.emit('member-disconnect', username);
       io.emit(
-        'message-all', 
-        {
-          user: 'system',
-          text: `${username} has disconnected`,
-          timestamp: new Date()
-        }
-      );
-      delete members[username];
-    });
-    
-
-    /***** broadcast emitters for member updates *****/
-    function sendUserUpdate(userHue, newUsername, oldUsername = null) {
-      socket.emit('set-user', { newUsername, userHue });
-      socket.broadcast.emit('member-update', { 
-        newUsername, oldUsername, userHue
-      });
-
-      if(newUsername !== oldUsername)
-        socket.broadcast.emit(
           'message-all', 
           {
             user: 'system',
-            text: oldUsername ?
-              `${newUsername} name changed from ${oldUsername}` :
-              `${newUsername} has joined the chat`,
+            text: `${username} has disconnected`,
             timestamp: new Date()
           }
         );
-    }
+        delete members[username];
+      });
+      
+      function sendUserUpdate(userHue, newUsername, oldUsername = null) {
+        socket.emit('set-user', { newUsername, userHue });
+        socket.broadcast.emit('member-update', { 
+          newUsername, oldUsername, userHue
+        });
+  
+        if(newUsername !== oldUsername)
+          socket.broadcast.emit(
+            'message-all', 
+            {
+              user: 'system',
+              text: oldUsername ?
+                `${newUsername} name changed from ${oldUsername}` :
+                `${newUsername} has joined the chat`,
+                timestamp: new Date()
+            }
+          );
+      }
+      
+      /************** messaging events **************/
+      socket.on('message-all', msg => {
+        console.log(msg);
+        socket.broadcast.emit('message-all', msg);
+      });
   });
 }
 
