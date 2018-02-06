@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 
 import Modal from '../Modal/Modal';
 
+import { setUser } from '../../state/actions/me';
 import { HuePicker } from 'react-color';
 import './Settings.css';
 
@@ -11,8 +12,7 @@ class Settings extends PureComponent {
   constructor() {
     super();
     this.state = {
-      modalIsOpen: true,
-      previewHue: '#ddd'
+      modalIsOpen: false
     };
   }
 
@@ -39,13 +39,7 @@ class Settings extends PureComponent {
 
     this.props.socket.emit('reset-user', userUpdate);
   }
-  
-  componentWillMount() {
-    this.setState({
-      ...this.state,
-      previewHue: this.props.myHue
-    });
-  }
+
 
   render() {
     const { myHue, username } = this.props;
@@ -74,7 +68,7 @@ class Settings extends PureComponent {
             }}
           >
             <HuePicker 
-              color={{ h: previewHue, s: 1, l: .5 }}
+              color={{ h: previewHue || myHue, s: 1, l: .5 }}
               onChange={this.handlePreview}
             />
             <fieldset>
@@ -98,5 +92,5 @@ export default connect(
     username: state.me.username,
     socket: state.socket
   }),
-  null
+  { setUser }
 )(Settings);

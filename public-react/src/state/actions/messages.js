@@ -1,5 +1,15 @@
-import { POST_ALL, RECEIVE_POST, MOD_POST } from '../constants';
+import { POST_ALL, RECEIVE_POST, MOD_POST, UPDATE_USER_MESSAGES } from '../constants';
 
+
+export function updateUserMessages(newUsername, oldUsername) {
+  return {
+    type: UPDATE_USER_MESSAGES,
+    payload: {
+      newUsername,
+      oldUsername
+    }
+  };
+}
 
 export function postAll(text) {
 

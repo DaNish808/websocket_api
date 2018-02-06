@@ -1,9 +1,10 @@
-import { SET_USERNAME } from '../constants';
+import { SET_USER } from '../constants';
 
 
-export function setUsername({ newUsername, userHue }) {
+export function setUser({ newUsername, userHue }) {
+
   return {
-    type: SET_USERNAME,
+    type: SET_USER,
     payload: {
       username: newUsername,
       myHue: userHue

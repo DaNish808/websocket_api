@@ -1,4 +1,4 @@
-import { SET_USERNAME } from '../constants';
+import { SET_USER } from '../constants';
 
 const devDefaultState = {
   username: 'dev',
@@ -8,7 +8,7 @@ const devDefaultState = {
 
 export default function me(state = devDefaultState, { type, payload }) {
   switch(type) {
-    case SET_USERNAME:
+    case SET_USER:
       return payload;
     default:
       return state;

@@ -40,14 +40,11 @@ function addConnectionListener() {
 
     /***** socket listeners *****/
     socket.on('reset-user', ({ username: newName, myHue: newHue }) => {
-      console.log('boop')
-      console.log(newName)
-      console.log(newHue)
       const oldUsername = username;
       delete members[username];
       username = newName;
   
-      sendUserUpdate(userHue, username, oldUsername);
+      sendUserUpdate(newHue, username, oldUsername);
   
       members[username] = {
         socketId: socket.id,
@@ -81,16 +78,18 @@ function addConnectionListener() {
       socket.broadcast.emit('member-update', { 
         newUsername, oldUsername, userHue
       });
-      socket.broadcast.emit(
-        'message-all', 
-        {
-          user: 'system',
-          text: oldUsername ?
-            `${newUsername} name changed from ${oldUsername}` :
-            `${newUsername} has joined the chat`,
-          timestamp: new Date()
-        }
-      );
+
+      if(newUsername !== oldUsername)
+        socket.broadcast.emit(
+          'message-all', 
+          {
+            user: 'system',
+            text: oldUsername ?
+              `${newUsername} name changed from ${oldUsername}` :
+              `${newUsername} has joined the chat`,
+            timestamp: new Date()
+          }
+        );
     }
   });
 }
