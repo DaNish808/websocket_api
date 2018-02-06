@@ -39,14 +39,7 @@ class Settings extends PureComponent {
 
     this.props.socket.emit('reset-user', userUpdate);
   }
-  
-  // componentWillReceiveProps() {
-  //   console.log('in componentWillReceiveProps()');
-  //   this.setState({
-  //     ...this.state,
-  //     previewHue: this.props.myHue
-  //   }, () => console.log(this.state.previewHue));
-  // }
+
 
   render() {
     const { myHue, username } = this.props;
