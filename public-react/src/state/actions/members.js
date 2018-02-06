@@ -8,6 +8,7 @@ export function setMembers(members) {
 }
 
 export function newMember(member) {
+  console.log(member);
   return {
     type: NEW_MEMBER,
     payload: member

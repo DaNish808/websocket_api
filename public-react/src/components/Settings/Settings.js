@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 
 import Modal from '../Modal/Modal';
 
+import { setUser } from '../../state/actions/me';
 import { HuePicker } from 'react-color';
 import './Settings.css';
 
@@ -98,5 +99,5 @@ export default connect(
     username: state.me.username,
     socket: state.socket
   }),
-  null
+  { setUser }
 )(Settings);

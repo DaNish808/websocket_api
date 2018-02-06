@@ -1,113 +1,6 @@
-import { POST_ALL, RECEIVE_POST, MOD_POST } from '../constants';
+import { POST_ALL, RECEIVE_POST, MOD_POST, UPDATE_USER_MESSAGES } from '../constants';
 import generateName from 'sillyname';
 
-// const devDefaults = [
-//   {
-//     user: 'FIRST POSTER',
-//     timestamp: new Date(),
-//     text: Array(Math.floor(Math.random() * 40)).fill('').map(() => generateName())
-//   },
-//   {
-//     user: generateName(),
-//     timestamp: new Date(),
-//     text: Array(Math.floor(Math.random() * 40)).fill('').map(() => generateName())
-//   },
-//   {
-//     user: generateName(),
-//     timestamp: new Date(),
-//     text: Array(Math.floor(Math.random() * 40)).fill('').map(() => generateName())
-//   },
-//   {
-//     user: generateName(),
-//     timestamp: new Date(),
-//     text: Array(Math.floor(Math.random() * 40)).fill('').map(() => generateName())
-//   },
-//   {
-//     user: generateName(),
-//     timestamp: new Date(),
-//     text: Array(Math.floor(Math.random() * 40)).fill('').map(() => generateName())
-//   },
-//   {
-//     user: generateName(),
-//     timestamp: new Date(),
-//     text: Array(Math.floor(Math.random() * 40)).fill('').map(() => generateName())
-//   },
-//   {
-//     user: generateName(),
-//     timestamp: new Date(),
-//     text: Array(Math.floor(Math.random() * 40)).fill('').map(() => generateName())
-//   },
-//   {
-//     user: generateName(),
-//     timestamp: new Date(),
-//     text: Array(Math.floor(Math.random() * 40)).fill('').map(() => generateName())
-//   },
-//   {
-//     user: generateName(),
-//     timestamp: new Date(),
-//     text: Array(Math.floor(Math.random() * 40)).fill('').map(() => generateName())
-//   },
-//   {
-//     user: generateName(),
-//     timestamp: new Date(),
-//     text: Array(Math.floor(Math.random() * 40)).fill('').map(() => generateName())
-//   },
-//   {
-//     user: generateName(),
-//     timestamp: new Date(),
-//     text: Array(Math.floor(Math.random() * 40)).fill('').map(() => generateName())
-//   },
-//   {
-//     user: generateName(),
-//     timestamp: new Date(),
-//     text: Array(Math.floor(Math.random() * 40)).fill('').map(() => generateName())
-//   },
-//   {
-//     user: generateName(),
-//     timestamp: new Date(),
-//     text: Array(Math.floor(Math.random() * 40)).fill('').map(() => generateName())
-//   },
-//   {
-//     user: generateName(),
-//     timestamp: new Date(),
-//     text: Array(Math.floor(Math.random() * 40)).fill('').map(() => generateName())
-//   },
-//   {
-//     user: generateName(),
-//     timestamp: new Date(),
-//     text: Array(Math.floor(Math.random() * 40)).fill('').map(() => generateName())
-//   },
-//   {
-//     user: generateName(),
-//     timestamp: new Date(),
-//     text: Array(Math.floor(Math.random() * 40)).fill('').map(() => generateName())
-//   },
-//   {
-//     user: generateName(),
-//     timestamp: new Date(),
-//     text: Array(Math.floor(Math.random() * 40)).fill('').map(() => generateName())
-//   },
-//   {
-//     user: generateName(),
-//     timestamp: new Date(),
-//     text: Array(Math.floor(Math.random() * 40)).fill('').map(() => generateName())
-//   },
-//   {
-//     user: generateName(),
-//     timestamp: new Date(),
-//     text: Array(Math.floor(Math.random() * 40)).fill('').map(() => generateName())
-//   },
-//   {
-//     user: generateName(),
-//     timestamp: new Date(),
-//     text: Array(Math.floor(Math.random() * 40)).fill('').map(() => generateName())
-//   },
-//   {
-//     user: 'LAST POSTER',
-//     timestamp: new Date(),
-//     text: Array(Math.floor(Math.random() * 40)).fill('').map(() => generateName())
-//   }
-// ];
 
 export default function messages(state = [], { type, payload }) {
   switch(type) {
@@ -126,6 +19,15 @@ export default function messages(state = [], { type, payload }) {
         },
         ...state.slice(payload.i + 1)
       ];
+    case UPDATE_USER_MESSAGES:  // when user changes name or color
+      return state.map(msg => {
+        if(payload.oldUsername === msg.user)
+          return {
+            ...msg,
+            user: payload.newUsername
+          };
+        return msg;
+      });
     default:
       return state;
   }
