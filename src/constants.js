@@ -1,0 +1,6 @@
+module.exports = {
+  PROJECTILE_RADIUS: 1,
+  JET_RADIUS: 4.5,
+  MAX_JET_VELOCITY: 10,
+  MIN_JET_VELOCITY: 1,
+}
