@@ -8,12 +8,12 @@ const devDefaultState = {
 
 export default function me(state = devDefaultState, { type, payload }) {
   switch(type) {
+    case TAKE_OFF:
     case SET_USER:
       return {
         ...state,
         ...payload
       };
-    case TAKE_OFF:
     default:
       return state;
   }

@@ -3,9 +3,24 @@ const IO = require('socket.io');
 const generateName = require('sillyname');
 const itemList = require('./utils/itemList');
 
+const { MIN_JET_VELOCITY, MAX_JET_VELOCITY} = require('./constants');
+
 
 let io = null;
 const members = {};
+
+let newJet = {
+  pos: {
+    xCoord: 95, // %
+    yCoord: 5,  // %
+    heading: 90,// deg 
+    velocity: (MAX_JET_VELOCITY + MIN_JET_VELOCITY) / 2 
+  },
+  stats: {
+    health: 100,
+    kills: 0
+  }
+}
 
 
 function addConnectionListener() {
@@ -14,6 +29,8 @@ function addConnectionListener() {
     /**************** add/distribute new member info *******************/
     let username = `${generateName()}`;
     let userHue = Math.floor(Math.random() * 256);
+    let totalKills = 0;
+    let killLog = [];
 
     socket.emit('all-members', Object.keys(members).map(username => ({
       username,
@@ -30,12 +47,14 @@ function addConnectionListener() {
         timestamp: new Date()
       }
     );
-    members[username] = {
+    const userData = members[username] = {
       socketId: socket.id,
-      hue: userHue
+      myHue: userHue,
+      totalKills,
+      killLog
     };
   
-    sendUserUpdate(userHue, username);
+    sendUserUpdate(userData, username);
     console.log('client connected!');
     console.log(members);
     
@@ -43,7 +62,7 @@ function addConnectionListener() {
     /* ################# socket listeners #################### */
 
     /************ member events *************/
-    socket.on('reset-user', ({ username: newName, myHue: newHue }) => {
+    socket.on('reset-user', ({ username: newName, userHue: newHue }) => {
       const oldUsername = username;
       delete members[username];
       username = newName;
@@ -70,10 +89,10 @@ function addConnectionListener() {
         delete members[username];
       });
       
-      function sendUserUpdate(userHue, newUsername, oldUsername = null) {
-        socket.emit('set-user', { newUsername, userHue });
+      function sendUserUpdate(userData, newUsername, oldUsername = null) {
+        socket.emit('set-user', { newUsername, userData });
         socket.broadcast.emit('member-update', { 
-          newUsername, oldUsername, userHue
+          newUsername, oldUsername, userData
         });
   
         if(newUsername !== oldUsername)

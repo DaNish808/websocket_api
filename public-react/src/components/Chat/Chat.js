@@ -4,8 +4,8 @@ import { connect } from 'react-redux';
 import Msg from './Msg';
 import Sky from '../Jets/Sky';
 
-import { setUser } from '../../state/actions/me';
-import { setMembers, newMember, removeMember } from '../../state/actions/members';
+import { setUser, releaseJet } from '../../state/actions/me';
+import { setMembers, memberUpdate, removeMember } from '../../state/actions/members';
 import { updateUserMessages, receivePost, postAll } from '../../state/actions/messages';
 import { plugSocket } from '../../state/actions/socket';
 
@@ -28,13 +28,14 @@ class Chat extends PureComponent {
   async componentDidMount() {
     const { 
       setUser, setMembers, 
-      newMember, removeMember, updateUserMessages,
+      memberUpdate, removeMember, updateUserMessages,
       plugSocket, receivePost 
     } = this.props;
 
     await plugSocket();
     const { socket } = this.props;
 
+    // TODO: move all these to a module
     socket.on('set-user', user => {
       updateUserMessages(user.newUsername, this.props.username);
       setUser(user);
@@ -45,16 +46,27 @@ class Chat extends PureComponent {
     socket.on('message-all', msg => {
       receivePost(msg);
     });
-    socket.on('member-update', ({ userHue, newUsername, oldUsername }) => {
-      newMember({
-        username: newUsername,
-        userHue
+    socket.on('member-update', 
+      ({ 
+        userData : { 
+          myHue: userHue,
+          totalKills,
+          killLog
+        }, 
+        newUsername,
+        oldUsername 
+      }) => {
+        memberUpdate({
+          username: newUsername,
+          userHue,
+          totalKills,
+          killLog
+        });
+        if(oldUsername) {
+          removeMember(oldUsername);
+          updateUserMessages(newUsername, oldUsername);
+        }
       });
-      if(oldUsername) {
-        removeMember(oldUsername);
-        updateUserMessages(newUsername, oldUsername);
-      }
-    });
     socket.on('member-disconnect', username => {
       removeMember(username);
     });
@@ -174,7 +186,7 @@ export default connect(
     socket: state.socket
   }),
   { 
-    setUser, setMembers, newMember, removeMember, 
+    setUser, setMembers, memberUpdate, removeMember, 
     receivePost, postAll, updateUserMessages,
     plugSocket }
 )(Chat);

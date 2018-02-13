@@ -5,7 +5,7 @@ export const PLUG_SOCKET = 'PLUG_SOCKET';
 /* ######## User info ######## */
 export const SET_USER = 'SET_USER';
 
-export const NEW_MEMBER = 'NEW_MEMBER';
+export const MEMBER_UPDATE = 'MEMBER_UPDATE';
 export const NEW_MEMBERS = 'NEW_MEMBERS';
 export const MEMBER_DISCONNECT = 'MEMBER_DISCONNECT';
 
