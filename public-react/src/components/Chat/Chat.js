@@ -9,6 +9,8 @@ import { setMembers, newMember, memberUpdate, removeMember } from '../../state/a
 import { updateUserMessages, receivePost, postAll } from '../../state/actions/messages';
 import { plugSocket } from '../../state/actions/socket';
 
+import setListeners from '../../services/io';
+
 import './Chat.css';
 
 class Chat extends PureComponent {
@@ -26,50 +28,20 @@ class Chat extends PureComponent {
   }
 
   async componentDidMount() {
-    const { 
-      setUser, setMembers, newMember,
-      memberUpdate, removeMember, updateUserMessages,
-      plugSocket, receivePost 
-    } = this.props;
-    
-    await plugSocket();
 
-    const { socket } = this.props;
-    const actionCreators = {
-      setUser, setMembers, newMember,
-      memberUpdate, removeMember, updateUserMessages,
-      plugSocket, receivePost 
-    };
-    setListeners(socket, actionCreators);
+    await this.props.plugSocket();
 
-    function setListeners(socket, actionCreators) {
-      socket.on('set-user', user => {
-        updateUserMessages(user.username);
-        setUser(user);
-      });
-      socket.on('all-members', members => {
-        setMembers(members);
-      });
-      socket.on('message-all', msg => {
-        receivePost(msg);
-      });
-      socket.on('new-member', member => {
-        newMember(member);
-      });
-      socket.on('member-update', ({ username, update, usernameIsChanged }) => {
-        
-        if(usernameIsChanged) {
-          updateUserMessages(update.username, username);
-        }
-        memberUpdate({ username, update });
-      });
-      socket.on('jet-update', orders => {
-        console.log('jet-update:', orders);
-      });
-      socket.on('member-disconnect', username => {
-        removeMember(username);
-      });
-    }
+    // pull all action creators from this.props 
+    // and set as properties of actionCreators
+    const actionCreators = (({ 
+      setUser, setMembers, newMember, memberUpdate, 
+      removeMember, updateUserMessages, receivePost
+    }) => ({
+      setUser, setMembers, newMember, memberUpdate, 
+      removeMember, updateUserMessages, receivePost
+    }))(this.props);
+
+    setListeners(this.props.socket, actionCreators);
   }
 
   handleButtonFocus = e => {
