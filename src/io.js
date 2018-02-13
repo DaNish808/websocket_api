@@ -10,16 +10,12 @@ let io = null;
 const members = {};
 
 let newJet = {
-  pos: {
-    xCoord: 95, // %
-    yCoord: 5,  // %
-    heading: 90,// deg 
-    velocity: (MAX_JET_VELOCITY + MIN_JET_VELOCITY) / 2 
-  },
-  stats: {
-    health: 100,
-    kills: 0
-  }
+  coordX: 95, // %
+  coordY: 5,  // %
+  heading: 90,// deg 
+  velocity: (MAX_JET_VELOCITY + MIN_JET_VELOCITY) / 2,
+  health: 100,
+  kills: 0
 }
 
 
@@ -62,16 +58,17 @@ function addConnectionListener() {
     /* ################# socket listeners #################### */
 
     /************ member events *************/
-    socket.on('reset-user', ({ username: newName, userHue: newHue }) => {
+    socket.on('update-user', update => {
       const oldUsername = username;
       delete members[username];
-      username = newName;
+      delete update.username;
+      username = update.username;
   
-      sendUserUpdate(newHue, username, oldUsername);
+      sendUserUpdate(update, username, oldUsername);
   
       members[username] = {
-        socketId: socket.id,
-        hue: newHue
+        // socketId: socket.id,
+        ...update
       };
     });
     
@@ -97,25 +94,29 @@ function addConnectionListener() {
         socket.emit('set-user', newUserPackage);
         console.log('notifyNewUser:', username);
         socket.broadcast.emit('new-member', newUserPackage);
+        broadcastSysMsg(`${username} has joined the chat`);
       }
 
-      function sendUserUpdate(userData, newUsername, oldUsername = null) {
-        socket.emit('set-user', { newUsername, userData });
+      function sendUserUpdate(update, newUsername, oldUsername = null) {
+        console.log('IN SET USER UPDATE ################################')
+        socket.emit('set-user', { newUsername, update });
         socket.broadcast.emit('member-update', { 
-          newUsername, oldUsername, userData
+          newUsername, oldUsername, update
         });
   
         if(newUsername !== oldUsername)
-          socket.broadcast.emit(
-            'message-all', 
-            {
-              user: 'system',
-              text: oldUsername ?
-                `${newUsername} name changed from ${oldUsername}` :
-                `${newUsername} has joined the chat`,
-                timestamp: new Date()
-            }
-          );
+          broadcastSysMsg(`${oldUsername} is now ${newUsername}`)
+      }
+      
+      function broadcastSysMsg(message) {
+        socket.broadcast.emit(
+          'message-all', 
+          {
+            user: 'system',
+            text: message,
+            timestamp: new Date()
+          }
+        );
       }
       
       /************** messaging events **************/

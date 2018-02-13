@@ -47,12 +47,16 @@ class Chat extends PureComponent {
       receivePost(msg);
     });
     socket.on('new-member', member => {
-      console.log('new member:', member);
       newMember(member);
 
     });
     socket.on('member-update', update => {
       console.log('member update:', update);
+    });
+    socket.on('jet-update', orders => {
+      // orders might include:
+      //   { username, action }
+      console.log('jet-update:', orders);
     });
     socket.on('member-disconnect', username => {
       removeMember(username);

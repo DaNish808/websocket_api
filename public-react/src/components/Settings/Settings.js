@@ -37,7 +37,7 @@ class Settings extends PureComponent {
       userHue: this.state.previewHue
     };
 
-    this.props.socket.emit('reset-user', userUpdate);
+    this.props.socket.emit('update-user', userUpdate);
   }
 
 
