@@ -101,7 +101,7 @@ function addConnectionListener() {
         socket.emit('set-user', update);
 
         socket.broadcast.emit('member-update', 
-          { username: oldUsername || username, update }
+          { username: oldUsername || username, update, usernameIsChanged: !!oldUsername }
         );
   
         if(newUsername !== oldUsername) {

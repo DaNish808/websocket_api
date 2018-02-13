@@ -31,34 +31,45 @@ class Chat extends PureComponent {
       memberUpdate, removeMember, updateUserMessages,
       plugSocket, receivePost 
     } = this.props;
-
+    
     await plugSocket();
+
     const { socket } = this.props;
+    const actionCreators = {
+      setUser, setMembers, newMember,
+      memberUpdate, removeMember, updateUserMessages,
+      plugSocket, receivePost 
+    };
+    setListeners(socket, actionCreators);
 
-    // TODO: move all these to a module
-    socket.on('set-user', user => {
-      updateUserMessages(user.Username, this.props.username);
-      setUser(user);
-    });
-    socket.on('all-members', members => {
-      setMembers(members);
-    });
-    socket.on('message-all', msg => {
-      receivePost(msg);
-    });
-    socket.on('new-member', member => {
-      newMember(member);
-
-    });
-    socket.on('member-update', updatePackage => {
-      memberUpdate(updatePackage);
-    });
-    socket.on('jet-update', orders => {
-      console.log('jet-update:', orders);
-    });
-    socket.on('member-disconnect', username => {
-      removeMember(username);
-    });
+    function setListeners(socket, actionCreators) {
+      socket.on('set-user', user => {
+        updateUserMessages(user.username);
+        setUser(user);
+      });
+      socket.on('all-members', members => {
+        setMembers(members);
+      });
+      socket.on('message-all', msg => {
+        receivePost(msg);
+      });
+      socket.on('new-member', member => {
+        newMember(member);
+      });
+      socket.on('member-update', ({ username, update, usernameIsChanged }) => {
+        
+        if(usernameIsChanged) {
+          updateUserMessages(update.username, username);
+        }
+        memberUpdate({ username, update });
+      });
+      socket.on('jet-update', orders => {
+        console.log('jet-update:', orders);
+      });
+      socket.on('member-disconnect', username => {
+        removeMember(username);
+      });
+    }
   }
 
   handleButtonFocus = e => {
