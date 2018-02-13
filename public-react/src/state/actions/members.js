@@ -14,10 +14,10 @@ export function newMember(member) {
   };
 }
 
-export function memberUpdate(member) {
+export function memberUpdate(updatePackage) {
   return {
     type: MEMBER_UPDATE,
-    payload: member
+    payload: updatePackage
   };
 }
 

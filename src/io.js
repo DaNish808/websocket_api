@@ -61,9 +61,8 @@ function addConnectionListener() {
     socket.on('update-user', update => {
       const oldUsername = username;
       delete members[username];
-      delete update.username;
       username = update.username;
-  
+
       sendUserUpdate(update, username, oldUsername);
   
       members[username] = {
@@ -98,14 +97,16 @@ function addConnectionListener() {
       }
 
       function sendUserUpdate(update, newUsername, oldUsername = null) {
-        console.log('IN SET USER UPDATE ################################')
-        socket.emit('set-user', { newUsername, update });
-        socket.broadcast.emit('member-update', { 
-          newUsername, oldUsername, update
-        });
+
+        socket.emit('set-user', update);
+
+        socket.broadcast.emit('member-update', 
+          { username: oldUsername || username, update }
+        );
   
-        if(newUsername !== oldUsername)
-          broadcastSysMsg(`${oldUsername} is now ${newUsername}`)
+        if(newUsername !== oldUsername) {
+          broadcastSysMsg(`${oldUsername} is now ${newUsername}`);
+        }
       }
       
       function broadcastSysMsg(message) {

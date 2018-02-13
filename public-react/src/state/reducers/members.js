@@ -16,7 +16,10 @@ export default function members(state = [], { type, payload }) {
       ];
     case MEMBER_UPDATE:
       return state.map(
-        member => member.username === payload.username ? payload : member
+        member => 
+          member.username === payload.username ? 
+            { ...member, ...payload.update } : 
+            member
       );
     case MEMBER_DISCONNECT:
       for(i = 0; i < state.length; i++)
