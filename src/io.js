@@ -54,7 +54,7 @@ function addConnectionListener() {
       killLog
     };
   
-    sendUserUpdate(userData, username);
+    notifyNewUser();
     console.log('client connected!');
     console.log(members);
     
@@ -89,6 +89,15 @@ function addConnectionListener() {
         delete members[username];
       });
       
+      
+      function notifyNewUser() {
+        const newUserPackage = {
+          username, userHue, totalKills, killLog
+        }
+        socket.emit('set-user', newUserPackage);
+        socket.broadcast.emit('member-update', newUserPackage);
+      }
+
       function sendUserUpdate(userData, newUsername, oldUsername = null) {
         socket.emit('set-user', { newUsername, userData });
         socket.broadcast.emit('member-update', { 

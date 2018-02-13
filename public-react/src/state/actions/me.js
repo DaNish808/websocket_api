@@ -1,16 +1,11 @@
 import { SET_USER, TAKE_OFF } from '../constants';
 
 
-export function setUser({ newUsername, userData: { myHue, totalKills, killLog } }) {
+export function setUser(user) {
 
   return {
     type: SET_USER,
-    payload: {
-      username: newUsername,
-      myHue,
-      totalKills,
-      killLog
-    }
+    payload: user
   };
 }
 
