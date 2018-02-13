@@ -1,4 +1,4 @@
-import { MEMBER_UPDATE, NEW_MEMBERS, MEMBER_DISCONNECT } from '../constants';
+import { NEW_MEMBER, MEMBER_UPDATE, NEW_MEMBERS, MEMBER_DISCONNECT } from '../constants';
 
 export function setMembers(members) {
   return {
@@ -7,8 +7,14 @@ export function setMembers(members) {
   };
 }
 
+export function newMember(member) {
+  return {
+    type: NEW_MEMBER,
+    payload: member
+  };
+}
+
 export function memberUpdate(member) {
-  console.log('memberUpdate member:', member);
   return {
     type: MEMBER_UPDATE,
     payload: member

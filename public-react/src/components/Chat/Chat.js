@@ -5,7 +5,7 @@ import Msg from './Msg';
 import Sky from '../Jets/Sky';
 
 import { setUser, releaseJet } from '../../state/actions/me';
-import { setMembers, memberUpdate, removeMember } from '../../state/actions/members';
+import { setMembers, newMember, memberUpdate, removeMember } from '../../state/actions/members';
 import { updateUserMessages, receivePost, postAll } from '../../state/actions/messages';
 import { plugSocket } from '../../state/actions/socket';
 
@@ -46,27 +46,12 @@ class Chat extends PureComponent {
     socket.on('message-all', msg => {
       receivePost(msg);
     });
-    socket.on('member-update', 
-      ({ 
-        userData : { 
-          myHue: userHue,
-          totalKills,
-          killLog
-        }, 
-        newUsername,
-        oldUsername 
-      }) => {
-        memberUpdate({
-          username: newUsername,
-          userHue,
-          totalKills,
-          killLog
-        });
-        if(oldUsername) {
-          removeMember(oldUsername);
-          updateUserMessages(newUsername, oldUsername);
-        }
-      });
+    socket.on('new-member', member => {
+      console.log('new member:', member);
+    });
+    socket.on('member-update', update => {
+      console.log('member update:', update);
+    });
     socket.on('member-disconnect', username => {
       removeMember(username);
     });
@@ -186,7 +171,7 @@ export default connect(
     socket: state.socket
   }),
   { 
-    setUser, setMembers, memberUpdate, removeMember, 
-    receivePost, postAll, updateUserMessages,
+    setUser, receivePost, postAll, updateUserMessages,
+    setMembers, newMember, memberUpdate, removeMember, 
     plugSocket }
 )(Chat);
