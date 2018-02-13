@@ -27,7 +27,7 @@ class Chat extends PureComponent {
 
   async componentDidMount() {
     const { 
-      setUser, setMembers, 
+      setUser, setMembers, newMember,
       memberUpdate, removeMember, updateUserMessages,
       plugSocket, receivePost 
     } = this.props;
@@ -37,7 +37,6 @@ class Chat extends PureComponent {
 
     // TODO: move all these to a module
     socket.on('set-user', user => {
-      console.log('set-user', user);
       updateUserMessages(user.Username, this.props.username);
       setUser(user);
     });
@@ -49,6 +48,8 @@ class Chat extends PureComponent {
     });
     socket.on('new-member', member => {
       console.log('new member:', member);
+      newMember(member);
+
     });
     socket.on('member-update', update => {
       console.log('member update:', update);

@@ -11,8 +11,8 @@ export default function members(state = [], { type, payload }) {
       ];
     case NEW_MEMBER:
       return [
-        state,
-        ...payload
+        ...state,
+        payload
       ];
     case MEMBER_UPDATE:
       return state.map(

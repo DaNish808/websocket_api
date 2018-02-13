@@ -34,7 +34,7 @@ function addConnectionListener() {
 
     socket.emit('all-members', Object.keys(members).map(username => ({
       username,
-      userHue: members[username].hue
+      ...members[username]
     })));
       
     socket.emit(
@@ -48,8 +48,8 @@ function addConnectionListener() {
       }
     );
     const userData = members[username] = {
-      socketId: socket.id,
-      myHue: userHue,
+      // socketId: socket.id,
+      userHue,
       totalKills,
       killLog
     };
@@ -95,7 +95,8 @@ function addConnectionListener() {
           username, userHue, totalKills, killLog
         }
         socket.emit('set-user', newUserPackage);
-        socket.broadcast.emit('member-update', newUserPackage);
+        console.log('notifyNewUser:', username);
+        socket.broadcast.emit('new-member', newUserPackage);
       }
 
       function sendUserUpdate(userData, newUsername, oldUsername = null) {
