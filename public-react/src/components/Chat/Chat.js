@@ -85,23 +85,14 @@ class Chat extends PureComponent {
     textboxEl.value = '';  
   }
   
-  
-  /********* game event handlers ***********/
-  onKey = toggle => ({ key }) => {
-    if(/^(Arrow|Shift)/.test(key)) {
-      console.log('action:', key);
-    }
-  }
-  
 
   render() {
     const { 
       username, userHue,
-      messages, nameHueDict
+      messages, nameHueDict, children
     } = this.props;
     const { buttonHasFocus } = this.state;
 
-    
     const normalButtonStyle = {
       background: `hsl(${userHue}, 40%, 93%)`, 
     };
@@ -111,11 +102,8 @@ class Chat extends PureComponent {
     };
 
     return (
-      <section className="chat-box" 
-        onKeyDown={this.onKey('on')}
-        onKeyUp={this.onKey('off')}
-      >
-        <Sky/>
+      <section className="chat-box">
+        {children}
         <div className="message-box">
           <ul className="messages">
             {messages.map((msg, i) => {

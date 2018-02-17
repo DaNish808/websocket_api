@@ -4,10 +4,7 @@ import { POST_ALL, RECEIVE_POST, MOD_POST, UPDATE_USER_MESSAGES } from '../const
 export function updateUserMessages(newUsername, oldUsername = null) {
 
   return (dispatch, getState) => {
-    if(oldUsername === null) oldUsername = getState().me.username;
-
-    console.log('newUsername:', newUsername)
-    console.log('oldUsername:', oldUsername)
+    if(oldUsername === null) oldUsername = getState().me.u
 
     dispatch({
       type: UPDATE_USER_MESSAGES,

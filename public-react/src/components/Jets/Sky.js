@@ -10,7 +10,7 @@ class Sky extends PureComponent {
 
   render() {
     return (
-      <section className="jet-game sky" tabIndex="0">
+      <section className="sky" tabIndex="0">
 
       </section>
     );

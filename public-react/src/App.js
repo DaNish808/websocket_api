@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 
 import Settings from './components/Settings/Settings';
 import Members from './components/Members/Members';
-import Chat from './components/Chat/Chat';
+import JetChat from './components/Jets/JetChat';
 
 import './App.css';
 
@@ -33,7 +33,8 @@ class App extends PureComponent {
           <Settings/>
         </header>
         <Members/>
-        <Chat/>
+        <JetChat/>
+        {/* <Chat/> */}
       </div>
     );
   }
