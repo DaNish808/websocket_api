@@ -2,10 +2,10 @@
 
 export default function setListeners(socket, actionCreators) {
 
-  const {
-    setUser, setMembers, newMember,
-    memberUpdate, removeMember, updateUserMessages,
-    plugSocket, receivePost
+  const { 
+    setUser, setMembers, newMember, memberUpdate, 
+    removeMember, updateUserMessages, receivePost,
+    commandJet
   } = actionCreators;
 
   socket.on('set-user', user => {
@@ -33,8 +33,12 @@ export default function setListeners(socket, actionCreators) {
     memberUpdate({ username, update });
   });
 
-  socket.on('jet-update', orders => {
-    console.log('jet-update:', orders);
+  socket.on('steer-jet', order => {
+    commandJet(order);
+  });
+
+  socket.on('jet-update', update => {
+    console.log('jet-update:', update);
   });
 
   socket.on('member-disconnect', username => {

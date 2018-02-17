@@ -9,9 +9,8 @@ export function setUser(user) {
 }
 
 
-export function releaseJet(jet) {
+export function commandJet(order) {
   return {
-    type: TAKE_OFF,
-    payload: jet
+    type: order
   };
 }

@@ -9,15 +9,6 @@ const { MIN_JET_VELOCITY, MAX_JET_VELOCITY} = require('./constants');
 let io = null;
 const members = {};
 
-let newJet = {
-  coordX: 95, // %
-  coordY: 5,  // %
-  heading: 90,// deg 
-  velocity: (MAX_JET_VELOCITY + MIN_JET_VELOCITY) / 2,
-  health: 100,
-  kills: 0
-}
-
 
 function addConnectionListener() {
   io.on('connection', socket => {
@@ -54,6 +45,7 @@ function addConnectionListener() {
     console.log('client connected!');
     console.log(members);
     
+
 
     /* ################# socket listeners #################### */
 
@@ -120,11 +112,19 @@ function addConnectionListener() {
         );
       }
       
+
       /************** messaging events **************/
       socket.on('message-all', msg => {
         console.log(msg);
         socket.broadcast.emit('message-all', msg);
       });
+
+    
+      /************** game events **************/
+      socket.on('jet-order', order => {
+        socket.emit('steer-jet', order);
+        socket.broadcast.emit('enemy-update', { username, order });
+      })
   });
 }
 

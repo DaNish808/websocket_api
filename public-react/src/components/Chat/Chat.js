@@ -4,10 +4,12 @@ import { connect } from 'react-redux';
 import Msg from './Msg';
 import Sky from '../Jets/Sky';
 
-import { setUser, releaseJet } from '../../state/actions/me';
+import { setUser, commandJet } from '../../state/actions/me';
 import { setMembers, newMember, memberUpdate, removeMember } from '../../state/actions/members';
 import { updateUserMessages, receivePost, postAll } from '../../state/actions/messages';
 import { plugSocket } from '../../state/actions/socket';
+
+import { TAKE_OFF } from '../../state/constants';
 
 import setListeners from '../../services/io';
 
@@ -35,15 +37,18 @@ class Chat extends PureComponent {
     // and set as properties of actionCreators
     const actionCreators = (({ 
       setUser, setMembers, newMember, memberUpdate, 
-      removeMember, updateUserMessages, receivePost
+      removeMember, updateUserMessages, receivePost,
+      commandJet
     }) => ({
       setUser, setMembers, newMember, memberUpdate, 
-      removeMember, updateUserMessages, receivePost
+      removeMember, updateUserMessages, receivePost,
+      commandJet
     }))(this.props);
 
     setListeners(this.props.socket, actionCreators);
   }
 
+  /********* message event handlers ***********/
   handleButtonFocus = e => {
     this.setState({
       ...this.state,
@@ -57,7 +62,7 @@ class Chat extends PureComponent {
       buttonHasFocus: false
     });
   }
-
+  
   handlePost = e => {
     e.preventDefault();
     const msgEl = e.target.msgText;
@@ -71,9 +76,23 @@ class Chat extends PureComponent {
   }
   
   postMsg = textboxEl => {
-    this.props.postAll(textboxEl.value);
+    const { postAll, userJet, socket } = this.props;
+    
+    if(!userJet) socket.emit('jet-order', TAKE_OFF);
+    
+    postAll(textboxEl.value);
+    
     textboxEl.value = '';  
   }
+  
+  
+  /********* game event handlers ***********/
+  onKey = toggle => ({ key }) => {
+    if(/^(Arrow|Shift)/.test(key)) {
+      console.log('action:', key);
+    }
+  }
+  
 
   render() {
     const { 
@@ -92,7 +111,10 @@ class Chat extends PureComponent {
     };
 
     return (
-      <section className="chat-box">
+      <section className="chat-box" 
+        onKeyDown={this.onKey('on')}
+        onKeyUp={this.onKey('off')}
+      >
         <Sky/>
         <div className="message-box">
           <ul className="messages">
@@ -150,6 +172,7 @@ export default connect(
     me: state.me,
     username: state.me.username,
     userHue: state.me.userHue,
+    userJet: state.me.userJet,
     nameHueDict: state.members.reduce((dict, { username, userHue }) => {
       dict[username] = userHue;
       return dict;
@@ -158,7 +181,8 @@ export default connect(
     socket: state.socket
   }),
   { 
-    setUser, receivePost, postAll, updateUserMessages,
+    setUser, commandJet, 
+    receivePost, postAll, updateUserMessages, 
     setMembers, newMember, memberUpdate, removeMember, 
     plugSocket }
 )(Chat);
