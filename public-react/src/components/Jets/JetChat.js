@@ -8,11 +8,27 @@ import './Sky.css';
 
 
 class JetChat extends PureComponent {
+
+  constructor() {
+    super();
+    this.state = {
+      ArrowUp: false,
+      ArrowDown: false,
+      ArrowLeft: false,
+      ArrowRight: false,
+      Shift: false 
+    };
+  }
   
   /********* game event handlers ***********/
   onKey = toggle => ({ key }) => {
     if(/^(Arrow|Shift)/.test(key)) {
-      console.log('action:', key);
+      toggle = toggle === 'on';
+
+      const newState = { ...this.state };
+      newState[key] = toggle;
+
+      this.setState(newState);
     }
   }
 

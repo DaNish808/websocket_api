@@ -19,7 +19,10 @@ export const UPDATE_USER_MESSAGES = 'UPDATE_USER_MESSAGES';
 
 
 /* ######## Jet Game ######## */
-/******* physical constants *******/
+/******* game constants *******/
+// time consts
+export const FRAME_INTERVAL = 10; //ms
+// physical consts
 export const PROJECTILE_RADIUS = 1;
 export const JET_RADIUS = 4.5;
 export const MAX_JET_VELOCITY = 10;
