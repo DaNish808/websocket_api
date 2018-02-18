@@ -4,6 +4,8 @@ import { connect } from 'react-redux';
 import Chat from '../Chat/Chat';
 import Sky from './Sky';
 
+import { FRAME_INTERVAL } from '../../state/constants';
+
 import './Sky.css';
 
 
@@ -19,17 +21,38 @@ class JetChat extends PureComponent {
       Shift: false 
     };
   }
+
+  /********* game animation drivers *********/
+  runGame = () => {
+    this.commandCycle();
+  }
+
+  commandCycle = () => {
+    setTimeout(() => {
+      this.commandCycle();
+
+      console.log(`${this.state.ArrowUp ? '^' : ' '}${this.state.ArrowDown ? 'v' : ' '}${this.state.ArrowLeft ? '<' : ' '}${this.state.ArrowRight ? '>' : ' '}${this.state.Shift ? '*' : ' '}`);
+
+    }, FRAME_INTERVAL);
+  }
   
   /********* game event handlers ***********/
   onKey = toggle => ({ key }) => {
-    if(/^(Arrow|Shift)/.test(key)) {
-      toggle = toggle === 'on';
+    
+    if(
+      /^(Arrow|Shift)/.test(key) &&
+      (toggle === 'on' && !this.state[key]) || toggle === 'off'
+    ) {
 
       const newState = { ...this.state };
-      newState[key] = toggle;
+      newState[key] = toggle === 'on';
 
       this.setState(newState);
     }
+  }
+
+  componentDidMount = () => {
+    this.runGame();
   }
 
   render() {
