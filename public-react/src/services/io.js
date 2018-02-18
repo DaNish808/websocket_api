@@ -15,7 +15,7 @@ export default function setListeners(socket, actionCreators) {
     setUser(user);
   });
 
-  
+
   /***** members *****/
   socket.on('new-member', member => {
     newMember(member);
@@ -47,10 +47,11 @@ export default function setListeners(socket, actionCreators) {
   /***** jet game *****/
   socket.on('steer-jet', order => {
     commandJet(order);
+    
   });
 
-  socket.on('jet-update', update => {
-    console.log('jet-update:', update);
+  socket.on('enemy-update', update => {
+    console.log('enemy-update:', update);
   });
 
 }

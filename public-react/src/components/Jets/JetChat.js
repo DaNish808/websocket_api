@@ -4,7 +4,11 @@ import { connect } from 'react-redux';
 import Chat from '../Chat/Chat';
 import Sky from './Sky';
 
-import { FRAME_INTERVAL } from '../../state/constants';
+import { 
+  FRAME_INTERVAL,
+  ACCELERATE, DECELERATE, BEAR_LEFT, BEAR_RIGHT, FIRE
+} from '../../state/constants';
+import { moveAll } from '../../state/actions/jet';
 
 import './Sky.css';
 
@@ -20,29 +24,48 @@ class JetChat extends PureComponent {
       ArrowRight: false,
       Shift: false 
     };
+    
+    this.keyCommandMap = {
+      ArrowUp: ACCELERATE,
+      ArrowDown: DECELERATE,
+      ArrowLeft: BEAR_LEFT,
+      ArrowRight: BEAR_RIGHT,
+      Shift: FIRE
+    };
   }
+
+
 
   /********* game animation drivers *********/
   runGame = () => {
-    this.commandCycle();
+    this.timeCycle();
   }
 
-  commandCycle = () => {
+  timeCycle = () => {
     setTimeout(() => {
-      this.commandCycle();
-
-      console.log(`${this.state.ArrowUp ? '^' : ' '}${this.state.ArrowDown ? 'v' : ' '}${this.state.ArrowLeft ? '<' : ' '}${this.state.ArrowRight ? '>' : ' '}${this.state.Shift ? '*' : ' '}`);
+      this.timeCycle();
+      
+      // actions per game loop
+      this.props.moveAll();
 
     }, FRAME_INTERVAL);
   }
   
-  /********* game event handlers ***********/
+
+
+  /********* game input handler ***********/
   onKey = toggle => ({ key }) => {
     
     if(
+      // the key is a relevant command and
       /^(Arrow|Shift)/.test(key) &&
-      (toggle === 'on' && !this.state[key]) || toggle === 'off'
+      // switches off a command or
+      toggle === 'off' ||
+      // switches on a command that was off...
+      (toggle === 'on' && !this.state[key]) 
     ) {
+
+      this.props.socket.emit('jet-order', this.keyCommandMap[key]);
 
       const newState = { ...this.state };
       newState[key] = toggle === 'on';
@@ -51,9 +74,13 @@ class JetChat extends PureComponent {
     }
   }
 
+
   componentDidMount = () => {
     this.runGame();
   }
+
+
+
 
   render() {
     return (
@@ -70,6 +97,8 @@ class JetChat extends PureComponent {
 }
 
 export default connect(
-  state => ({}),
-  null
+  state => ({
+    socket: state.socket
+  }),
+  { moveAll }
 )(JetChat);
