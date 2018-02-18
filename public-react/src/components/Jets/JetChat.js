@@ -60,11 +60,11 @@ class JetChat extends PureComponent {
       // the key is a relevant command and
       /^(Arrow|Shift)/.test(key) &&
       // switches off a command or
-      toggle === 'off' ||
       // switches on a command that was off...
-      (toggle === 'on' && !this.state[key]) 
+      (toggle === 'off' ||
+      (toggle === 'on' && !this.state[key]))
     ) {
-
+     
       this.props.socket.emit('jet-order', this.keyCommandMap[key]);
 
       const newState = { ...this.state };

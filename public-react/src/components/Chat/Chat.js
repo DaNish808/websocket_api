@@ -5,7 +5,7 @@ import Msg from './Msg';
 import Sky from '../Jets/Sky';
 
 import { setUser, commandJet } from '../../state/actions/me';
-import { setMembers, newMember, memberUpdate, removeMember } from '../../state/actions/members';
+import { setMembers, newMember, memberUpdate, removeMember, updateEnemyJet } from '../../state/actions/members';
 import { updateUserMessages, receivePost, postAll } from '../../state/actions/messages';
 import { plugSocket } from '../../state/actions/socket';
 
@@ -38,11 +38,11 @@ class Chat extends PureComponent {
     const actionCreators = (({ 
       setUser, setMembers, newMember, memberUpdate, 
       removeMember, updateUserMessages, receivePost,
-      commandJet
+      commandJet, updateEnemyJet
     }) => ({
       setUser, setMembers, newMember, memberUpdate, 
       removeMember, updateUserMessages, receivePost,
-      commandJet
+      commandJet, updateEnemyJet
     }))(this.props);
 
     setListeners(this.props.socket, actionCreators);
@@ -169,7 +169,7 @@ export default connect(
     socket: state.socket
   }),
   { 
-    setUser, commandJet, 
+    setUser, commandJet, updateEnemyJet, 
     receivePost, postAll, updateUserMessages, 
     setMembers, newMember, memberUpdate, removeMember, 
     plugSocket }

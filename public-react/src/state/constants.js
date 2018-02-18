@@ -21,7 +21,7 @@ export const UPDATE_USER_MESSAGES = 'UPDATE_USER_MESSAGES';
 /* ######## Jet Game ######## */
 /******* game constants *******/
 // time consts
-export const FRAME_INTERVAL = 60; //ms
+export const FRAME_INTERVAL = 5000; //ms
 // physical consts
 export const PROJECTILE_RADIUS = 1;
 export const JET_RADIUS = 4.5;
@@ -35,6 +35,14 @@ export const DECELERATE = 'DECELERATE';
 export const BEAR_RIGHT = 'BEAR_RIGHT';
 export const BEAR_LEFT = 'BEAR_LEFT';
 export const FIRE = 'FIRE';
+
+/******* enemy initiated *******/
+export const ENEMY_TAKE_OFF = 'ENEMY_TAKE_OFF';
+export const ENEMY_ACCELERATE = 'ENEMY_ACCELERATE';
+export const ENEMY_DECELERATE = 'ENEMY_DECELERATE';
+export const ENEMY_BEAR_RIGHT = 'ENEMY_BEAR_RIGHT';
+export const ENEMY_BEAR_LEFT = 'ENEMY_BEAR_LEFT';
+export const ENEMY_FIRE = 'ENEMY_FIRE';
 
 /******* calculated per frame *******/
 export const MOVE = 'MOVE';

@@ -27,3 +27,11 @@ export function removeMember(name) {
     payload: name
   };
 }
+
+
+export function updateEnemyJet({ username, order }) {
+  return {
+    type: 'ENEMY_' + order,
+    payload: username
+  };
+}

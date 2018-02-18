@@ -5,7 +5,7 @@ export default function setListeners(socket, actionCreators) {
   const { 
     setUser, setMembers, newMember, memberUpdate, 
     removeMember, updateUserMessages, receivePost,
-    commandJet
+    commandJet, updateEnemyJet
   } = actionCreators;
   
 
@@ -51,7 +51,7 @@ export default function setListeners(socket, actionCreators) {
   });
 
   socket.on('enemy-update', update => {
-    console.log('enemy-update:', update);
+    updateEnemyJet(update);
   });
 
 }
