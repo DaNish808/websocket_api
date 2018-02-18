@@ -59,6 +59,8 @@ class JetChat extends PureComponent {
     if(
       // the key is a relevant command and
       /^(Arrow|Shift)/.test(key) &&
+      // the user has a jet
+      this.props.userJet &&
       // switches off a command or
       // switches on a command that was off...
       (toggle === 'off' ||
@@ -98,6 +100,7 @@ class JetChat extends PureComponent {
 
 export default connect(
   state => ({
+    userJet: state.me.userJet,
     socket: state.socket
   }),
   { moveAll }

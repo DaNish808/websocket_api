@@ -34,8 +34,7 @@ export default function members(state = [], { type, payload }) {
    * @param {updateJetCallback} updates - callback that modifies the member's jet
    */
   const updateJet = (member, updates) => {
-    console.log('jet member:', member)
-    console.log('jet updates:', updates)
+
     return {
       ...member,
       userJet: {
@@ -51,7 +50,6 @@ export default function members(state = [], { type, payload }) {
    * @returns {*} the member with updated jet 
    */
 
-  console.log('type:', type);
 
   let i = null;
 
@@ -80,7 +78,6 @@ export default function members(state = [], { type, payload }) {
         ...state.slice(i + 1)
       ];
     case ENEMY_TAKE_OFF:
-      console.log('in ENEMY_TAKE_OFF')
       return updateOne(payload, 
         member => updateJet(member, jetFactory.build())
       );
