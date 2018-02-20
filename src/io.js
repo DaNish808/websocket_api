@@ -121,9 +121,9 @@ function addConnectionListener() {
 
     
       /************** game events **************/
-      socket.on('jet-order', order => {
-        socket.emit('steer-jet', order);
-        socket.broadcast.emit('enemy-update', { username, order });
+      socket.on('jet-order', orders => {
+        socket.emit('steer-jet', orders);
+        socket.broadcast.emit('enemy-update', { username, orders });
       })
   });
 }

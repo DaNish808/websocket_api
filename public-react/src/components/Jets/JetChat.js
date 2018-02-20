@@ -32,6 +32,8 @@ class JetChat extends PureComponent {
       ArrowRight: BEAR_RIGHT,
       Shift: FIRE
     };
+
+    this.commandOscillator = 0;
   }
 
 
@@ -42,6 +44,12 @@ class JetChat extends PureComponent {
   }
 
   timeCycle = () => {
+    // every other cycle, send all active commands
+    this.commandOscillator = !this.commandOscillator;
+    if(this.props.userJet && this.commandOscillator) {
+      this.sendActiveOrders();
+    }
+
     setTimeout(() => {
       this.timeCycle();
       
@@ -49,6 +57,17 @@ class JetChat extends PureComponent {
       this.props.moveAll();
 
     }, FRAME_INTERVAL);
+  }
+
+  sendActiveOrders = () => { 
+
+    const orders = [];
+    for(let key in this.state) {
+      if(this.state[key]) {
+        orders.push(this.keyCommandMap[key]);
+      }
+    }
+    this.props.socket.emit('jet-order', orders);
   }
   
 
