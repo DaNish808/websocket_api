@@ -85,13 +85,13 @@ class JetChat extends PureComponent {
       (toggle === 'off' ||
       (toggle === 'on' && !this.state[key]))
     ) {
-     
+
       this.props.socket.emit('jet-order', this.keyCommandMap[key]);
 
       const newState = { ...this.state };
       newState[key] = toggle === 'on';
 
-      this.setState(newState);
+      setTimeout(() => this.setState(newState), FRAME_INTERVAL - 10);
     }
   }
 

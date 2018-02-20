@@ -42,7 +42,7 @@ export function move({ coordX, coordY, velocity, heading }) {
   const tempY = coordY + coordYDiff;
 
   return { 
-    coordX: tempX >= 0 ? tempX % 360 : 360 - tempX,
-    coordY: tempY >= 0 ? tempY % 360 : 360 - tempY
+    coordX: tempX >= 0 ? tempX % 100 : 100 - tempX,
+    coordY: tempY >= 0 ? tempY % 100 : 100 - tempY
   };
 }

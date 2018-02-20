@@ -21,13 +21,13 @@ export const UPDATE_USER_MESSAGES = 'UPDATE_USER_MESSAGES';
 /* ######## Jet Game ######## */
 /******* game constants *******/
 // time consts
-export const FRAME_INTERVAL = 100; //ms
+export const FRAME_INTERVAL = 2000; //ms
 // size consts
 export const PROJECTILE_RADIUS = 1;
 export const JET_RADIUS = 4.5;
 // jet movement consts
-export const JET_MAX_VELOCITY = 10;
-export const JET_MIN_VELOCITY = 1;
+export const JET_MAX_VELOCITY = 1;
+export const JET_MIN_VELOCITY = 0.1;
 export const JET_TURNING_RATE = 18; //deg per frame
 export const JET_ACCEL_RATE = JET_MAX_VELOCITY / 20;
 
@@ -52,6 +52,6 @@ export const MOVE = 'MOVE';
 export const HIT = 'HIT';
 export const KILL = 'KILL';
 
-export const ENEMY_MOVE = 'MOVE';
-export const ENEMY_HIT = 'HIT';
-export const ENEMY_KILL = 'KILL';
+export const ENEMY_MOVE = 'ENEMY_MOVE';
+export const ENEMY_HIT = 'ENEMY_HIT';
+export const ENEMY_KILL = 'ENEMY_KILL';
