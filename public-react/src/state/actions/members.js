@@ -29,9 +29,9 @@ export function removeMember(name) {
 }
 
 
-export function updateEnemyJet({ username, order }) {
+export function updateEnemyJet({ username, orders }) {
   return {
-    type: 'ENEMY_' + order,
+    type: 'ENEMY_' + orders,
     payload: username
   };
 }

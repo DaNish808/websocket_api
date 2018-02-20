@@ -22,13 +22,14 @@ export const UPDATE_USER_MESSAGES = 'UPDATE_USER_MESSAGES';
 /******* game constants *******/
 // time consts
 export const FRAME_INTERVAL = 100; //ms
-// physical consts
+// size consts
 export const PROJECTILE_RADIUS = 1;
 export const JET_RADIUS = 4.5;
-export const MAX_JET_VELOCITY = 10;
-export const MIN_JET_VELOCITY = 1;
+// jet movement consts
+export const JET_MAX_VELOCITY = 10;
+export const JET_MIN_VELOCITY = 1;
 export const JET_TURNING_RATE = 18; //deg per frame
-export const JET_ACCEL_RATE = MAX_JET_VELOCITY / 20;
+export const JET_ACCEL_RATE = JET_MAX_VELOCITY / 20;
 
 /******* user initiated *******/
 export const TAKE_OFF = 'TAKE_OFF';

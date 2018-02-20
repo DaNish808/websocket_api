@@ -47,15 +47,23 @@ export default function setListeners(socket, actionCreators) {
   /***** jet game *****/
   socket.on('steer-jet', orders => {
 
-    if(typeof orders === 'string') commandJet(orders);
+    if(typeof orders === 'string') 
+      commandJet(orders);
 
-    else { // if array
+    else // if array
       orders.forEach(o => commandJet(o));
-    }
   });
 
   socket.on('enemy-update', update => {
-    updateEnemyJet(update);
+    if(typeof update.orders === 'string')
+      updateEnemyJet(update);
+
+    else { // if array
+      const { username, orders } = update;
+      orders.forEach(update => {
+        updateEnemyJet({ username, orders });
+      });
+    }
   });
 
 }

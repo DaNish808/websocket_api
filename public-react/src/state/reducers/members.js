@@ -1,8 +1,9 @@
 import { 
   MEMBER_UPDATE, NEW_MEMBER, NEW_MEMBERS, MEMBER_DISCONNECT,
   ENEMY_TAKE_OFF, ENEMY_ACCELERATE, ENEMY_DECELERATE, 
-  ENEMY_BEAR_RIGHT, ENEMY_BEAR_LEFT, ENEMY_FIRE
+  ENEMY_BEAR_RIGHT, ENEMY_BEAR_LEFT, ENEMY_FIRE,
 } from '../constants';
+import { accelJet, decelJet, bearLeft, bearRight } from '../../utils/jetPhysics';
 import { jetFactory } from '../../services/jetFactory';
 
 
@@ -49,6 +50,16 @@ export default function members(state = [], { type, payload }) {
    * @param {Object} member
    * @returns {*} the member with updated jet 
    */
+  const modJetProp = (jet, prop, mod) => ({
+    [prop]: mod(jet[prop])
+  });
+
+  const modSingleUsersJetProp = (targetUsername, prop, mod) => 
+    updateOne(targetUsername, 
+      member => updateJet(member, 
+        modJetProp(member.userJet, prop, mod)
+      )
+    );
 
 
   let i = null;
@@ -81,6 +92,17 @@ export default function members(state = [], { type, payload }) {
       return updateOne(payload, 
         member => updateJet(member, jetFactory.build())
       );
+    case ENEMY_ACCELERATE:
+      return modSingleUsersJetProp(payload, 'velocity', accelJet);
+    case ENEMY_DECELERATE:
+      return modSingleUsersJetProp(payload, 'velocity', decelJet);  
+    case ENEMY_BEAR_LEFT:
+      return modSingleUsersJetProp(payload, 'heading', bearLeft);  
+    case ENEMY_BEAR_RIGHT:
+      return modSingleUsersJetProp(payload, 'heading', bearRight);  
+    case ENEMY_FIRE:
+      console.log('blam');
+      return state;
     default: 
       return state;
   }

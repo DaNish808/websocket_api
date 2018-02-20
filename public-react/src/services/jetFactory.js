@@ -1,4 +1,4 @@
-import { MAX_JET_VELOCITY, MIN_JET_VELOCITY } from '../state/constants';
+import { JET_MAX_VELOCITY, JET_MIN_VELOCITY } from '../state/constants';
 
 
 // to avoid potential conflicts with the Jet react class 
@@ -7,7 +7,7 @@ export const jetFactory = {
     coordX: 95, // %
     coordY: 5,  // %
     heading: 90,// deg 
-    velocity: (MAX_JET_VELOCITY + MIN_JET_VELOCITY) / 2,
+    velocity: (JET_MAX_VELOCITY + JET_MIN_VELOCITY) / 2,
     health: 100,
     kills: 0
   },
