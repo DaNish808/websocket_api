@@ -34,7 +34,15 @@ export function bearRight(d) {
 const dTrig = (trigFunc, angle) => trigFunc(angle * (Math.PI / 180));
 
 export function move({ coordX, coordY, velocity, heading }) {
-  coordX += velocity * dTrig(Math.cos, heading);
-  coordY += velocity * dTrig(Math.sin, heading);
-  return { coordX, coordY };
+
+  const coordXDiff = velocity * dTrig(Math.cos, heading);
+  const coordYDiff = velocity * dTrig(Math.sin, heading);
+
+  const tempX = coordX + coordXDiff;
+  const tempY = coordY + coordYDiff;
+
+  return { 
+    coordX: tempX >= 0 ? tempX % 360 : 360 - tempX,
+    coordY: tempY >= 0 ? tempY % 360 : 360 - tempY
+  };
 }
