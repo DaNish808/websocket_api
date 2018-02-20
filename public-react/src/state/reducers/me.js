@@ -1,6 +1,7 @@
 import { 
   SET_USER, TAKE_OFF, 
-  ACCELERATE, DECELERATE, BEAR_RIGHT, BEAR_LEFT, FIRE
+  ACCELERATE, DECELERATE, BEAR_RIGHT, BEAR_LEFT, FIRE,
+  MOVE,
 } from '../constants';
 import { accelJet, decelJet, bearLeft, bearRight } from '../../utils/jetPhysics';
 import { jetFactory } from '../../services/jetFactory';
@@ -30,6 +31,7 @@ export default function me(state = devDefaultState, { type, payload }) {
         ...state,
         ...payload
       };
+
     case TAKE_OFF:
       return updateOnlyJet(jetFactory.build());
     case ACCELERATE:
@@ -43,6 +45,10 @@ export default function me(state = devDefaultState, { type, payload }) {
     case FIRE:
       console.log('pew');
       return state;
+      
+    case MOVE:
+      return updateOnlyJet(payload);
+
     default:
       return state;
   }

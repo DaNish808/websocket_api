@@ -51,3 +51,7 @@ export const ENEMY_FIRE = 'ENEMY_FIRE';
 export const MOVE = 'MOVE';
 export const HIT = 'HIT';
 export const KILL = 'KILL';
+
+export const ENEMY_MOVE = 'MOVE';
+export const ENEMY_HIT = 'HIT';
+export const ENEMY_KILL = 'KILL';

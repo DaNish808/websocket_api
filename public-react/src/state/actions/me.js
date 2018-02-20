@@ -1,4 +1,4 @@
-import { SET_USER, TAKE_OFF } from '../constants';
+import { SET_USER, MOVE, HIT, KILL } from '../constants';
 
 
 export function setUser(user) {

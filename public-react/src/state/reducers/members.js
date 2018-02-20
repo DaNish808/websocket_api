@@ -2,6 +2,7 @@ import {
   MEMBER_UPDATE, NEW_MEMBER, NEW_MEMBERS, MEMBER_DISCONNECT,
   ENEMY_TAKE_OFF, ENEMY_ACCELERATE, ENEMY_DECELERATE, 
   ENEMY_BEAR_RIGHT, ENEMY_BEAR_LEFT, ENEMY_FIRE,
+  ENEMY_MOVE,
 } from '../constants';
 import { accelJet, decelJet, bearLeft, bearRight } from '../../utils/jetPhysics';
 import { jetFactory } from '../../services/jetFactory';
@@ -88,6 +89,7 @@ export default function members(state = [], { type, payload }) {
         ...state.slice(0, i),
         ...state.slice(i + 1)
       ];
+
     case ENEMY_TAKE_OFF:
       return updateOne(payload, 
         member => updateJet(member, jetFactory.build())
@@ -103,6 +105,12 @@ export default function members(state = [], { type, payload }) {
     case ENEMY_FIRE:
       console.log('blam');
       return state;
+
+    case ENEMY_MOVE:
+      return updateOne(payload.username,
+        member => updateJet(member, payload.newCoords)
+      );
+
     default: 
       return state;
   }

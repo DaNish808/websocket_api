@@ -24,3 +24,17 @@ export function bearLeft(d) {
 export function bearRight(d) {
   return d > 0 ? d - JET_TURNING_RATE : 359;
 }
+
+/**
+ * converts a trig function taking radians to degrees
+ * @param {function} trigFunc - eg. Math.cos, Math.sin, etc.
+ * @param {number} angle - in degrees
+ * @returns {number}
+ */
+const dTrig = (trigFunc, angle) => trigFunc(angle * (Math.PI / 180));
+
+export function move({ coordX, coordY, velocity, heading }) {
+  coordX += velocity * dTrig(Math.cos, heading);
+  coordY += velocity * dTrig(Math.sin, heading);
+  return { coordX, coordY };
+}
