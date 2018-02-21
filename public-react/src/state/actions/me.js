@@ -1,13 +1,16 @@
-import { SET_USER } from '../constants';
+import { SET_USER, MOVE, HIT, KILL } from '../constants';
 
 
-export function setUser({ newUsername, userHue }) {
-
+export function setUser(user) {
   return {
     type: SET_USER,
-    payload: {
-      username: newUsername,
-      myHue: userHue
-    }
+    payload: user
+  };
+}
+
+
+export function commandJet(order) {
+  return {
+    type: order
   };
 }

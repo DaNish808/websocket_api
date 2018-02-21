@@ -7,10 +7,10 @@ import './Members.css';
 class Members extends PureComponent {
 
   render() {
-    const { myHue, members } = this.props;
+    const { userHue, members } = this.props;
     return (
       <aside className="members" style={{
-        background: `hsl(${myHue}, 58%, 95%)`
+        background: `hsl(${userHue}, 58%, 95%)`
       }}>
         <header>
           <h2>online now</h2>
@@ -32,7 +32,7 @@ class Members extends PureComponent {
 
 export default connect(
   state => ({
-    myHue: state.me.myHue,
+    userHue: state.me.userHue,
     members: state.members
   }),
   null

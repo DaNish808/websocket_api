@@ -1,17 +1,21 @@
 {
-  "name": "websocket_api",
+  "name": "JetChat",
   "version": "1.0.0",
-  "description": "",
+  "description": "A chat with fighter jets.",
   "main": "server.js",
   "dependencies": {
     "express": "^4.16.2",
     "sillyname": "^0.1.0",
-    "socket.io": "^2.0.4"
+    "socket.io": "^2.0.4",
+    "micro": "latest"
   },
   "devDependencies": {},
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node server.js"
+    "start": "nodemon server.js"
+  },
+  "now": {
+    "alias": "jet-chat"
   },
   "repository": {
     "type": "git",

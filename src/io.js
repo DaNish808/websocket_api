@@ -3,6 +3,8 @@ const IO = require('socket.io');
 const generateName = require('sillyname');
 const itemList = require('./utils/itemList');
 
+const { MIN_JET_VELOCITY, MAX_JET_VELOCITY} = require('./constants');
+
 
 let io = null;
 const members = {};
@@ -10,12 +12,17 @@ const members = {};
 
 function addConnectionListener() {
   io.on('connection', socket => {
+
+    /**************** add/distribute new member info *******************/
     let username = `${generateName()}`;
     let userHue = Math.floor(Math.random() * 256);
+    let userJet = null;
+    let totalKills = 0;
+    let killLog = [];
 
     socket.emit('all-members', Object.keys(members).map(username => ({
       username,
-      userHue: members[username].hue
+      ...members[username]
     })));
       
     socket.emit(
@@ -28,69 +35,103 @@ function addConnectionListener() {
         timestamp: new Date()
       }
     );
-    members[username] = {
-      socketId: socket.id,
-      hue: userHue
+    const userData = members[username] = {
+      // socketId: socket.id,
+      userHue,
+      totalKills,
+      killLog
     };
   
-    sendUserUpdate(userHue, username);
+    notifyNewUser();
     console.log('client connected!');
     console.log(members);
     
 
-    /***** socket listeners *****/
-    socket.on('reset-user', ({ username: newName, myHue: newHue }) => {
+
+    /* ################# socket listeners #################### */
+
+    /************ member events *************/
+    socket.on('update-user', update => {
       const oldUsername = username;
       delete members[username];
-      username = newName;
-  
-      sendUserUpdate(newHue, username, oldUsername);
+      username = update.username;
+
+      sendUserUpdate(update, username, oldUsername);
   
       members[username] = {
-        socketId: socket.id,
-        hue: newHue
+        // socketId: socket.id,
+        ...update
       };
-    });
-  
-    socket.on('message-all', msg => {
-      console.log(msg);
-      socket.broadcast.emit('message-all', msg);
     });
     
     socket.on('disconnect', () => {
       console.log('client disconnected');
       io.emit('member-disconnect', username);
       io.emit(
-        'message-all', 
-        {
-          user: 'system',
-          text: `${username} has disconnected`,
-          timestamp: new Date()
-        }
-      );
-      delete members[username];
-    });
-    
-
-    /***** broadcast emitters for member updates *****/
-    function sendUserUpdate(userHue, newUsername, oldUsername = null) {
-      socket.emit('set-user', { newUsername, userHue });
-      socket.broadcast.emit('member-update', { 
-        newUsername, oldUsername, userHue
+          'message-all', 
+          {
+            user: 'system',
+            text: `${username} has disconnected`,
+            timestamp: new Date()
+          }
+        );
+        delete members[username];
       });
+      
+      
+      function notifyNewUser() {
+        const newUserPackage = {
+          username, userHue, totalKills, killLog
+        }
+        socket.emit('set-user', newUserPackage);
+        console.log('notifyNewUser:', username);
+        socket.broadcast.emit('new-member', newUserPackage);
+        broadcastSysMsg(`${username} has joined the chat`);
+      }
 
-      if(newUsername !== oldUsername)
+      function sendUserUpdate(update, newUsername, oldUsername = null) {
+
+        socket.emit('set-user', update);
+
+        socket.broadcast.emit('member-update', 
+          { username: oldUsername || username, update, usernameIsChanged: !!oldUsername }
+        );
+  
+        if(newUsername !== oldUsername) {
+          broadcastSysMsg(`${oldUsername} is now ${newUsername}`);
+        }
+      }
+      
+      function broadcastSysMsg(message) {
         socket.broadcast.emit(
           'message-all', 
           {
             user: 'system',
-            text: oldUsername ?
-              `${newUsername} name changed from ${oldUsername}` :
-              `${newUsername} has joined the chat`,
+            text: message,
             timestamp: new Date()
           }
         );
-    }
+      }
+      
+
+      /************** messaging events **************/
+      socket.on('message-all', msg => {
+        console.log(msg);
+        socket.broadcast.emit('message-all', msg);
+      });
+
+    
+      /************** game events **************/
+
+      // // TODO: think about refactoring game logic to server...
+      // socket.on('my-jet-current-status', jetUpdate => {
+      //   members[username].userJet = userJet = jetUpdate;
+      // })
+
+      socket.on('jet-order', orders => {
+        socket.emit('steer-jet', orders);
+        socket.broadcast.emit('enemy-update', { username, orders });
+      })
   });
 }
 

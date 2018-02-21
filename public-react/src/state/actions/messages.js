@@ -1,13 +1,18 @@
 import { POST_ALL, RECEIVE_POST, MOD_POST, UPDATE_USER_MESSAGES } from '../constants';
 
 
-export function updateUserMessages(newUsername, oldUsername) {
-  return {
-    type: UPDATE_USER_MESSAGES,
-    payload: {
-      newUsername,
-      oldUsername
-    }
+export function updateUserMessages(newUsername, oldUsername = null) {
+
+  return (dispatch, getState) => {
+    if(oldUsername === null) oldUsername = getState().me.username;
+
+    dispatch({
+      type: UPDATE_USER_MESSAGES,
+      payload: {
+        newUsername,
+        oldUsername
+      }
+    });
   };
 }
 

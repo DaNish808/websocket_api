@@ -1,4 +1,4 @@
-import { NEW_MEMBER, NEW_MEMBERS, MEMBER_DISCONNECT } from '../constants';
+import { NEW_MEMBER, MEMBER_UPDATE, NEW_MEMBERS, MEMBER_DISCONNECT } from '../constants';
 
 export function setMembers(members) {
   return {
@@ -14,9 +14,24 @@ export function newMember(member) {
   };
 }
 
+export function memberUpdate(updatePackage) {
+  return {
+    type: MEMBER_UPDATE,
+    payload: updatePackage
+  };
+}
+
 export function removeMember(name) {
   return {
     type: MEMBER_DISCONNECT,
     payload: name
+  };
+}
+
+
+export function updateEnemyJet({ username, orders }) {
+  return {
+    type: 'ENEMY_' + orders,
+    payload: username
   };
 }

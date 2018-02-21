@@ -24,7 +24,7 @@ class Modal extends PureComponent {
 
 export default connect(
   state => ({
-    myHue: state.me.myHue
+    userHue: state.me.userHue
   }),
   null
 )(Modal);
