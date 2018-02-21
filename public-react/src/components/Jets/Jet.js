@@ -11,13 +11,14 @@ export default class Jet extends PureComponent {
     } = this.props;
 
     return (
-      <div className='jet' style={{
-        backgroundColor: `hsl(${hue}, 100%, 50%)`,
-        bottom: coordY + '%',
+      <div className='jet-positioner' style={{
+        top: 100 - coordY + '%',
         left: coordX + '%',
-        transform: `rotate(${-heading - 90}deg)`
       }}>
-        
+        <div className='jet' style={{
+          transform: `rotate(${-heading + 90}deg)`,
+          backgroundColor: `hsl(${hue}, 100%, 50%)`,
+        }}></div>
       </div>
     );
   }

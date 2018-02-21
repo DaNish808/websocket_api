@@ -91,17 +91,17 @@ export default function members(state = [], { type, payload }) {
       ];
 
     case ENEMY_TAKE_OFF:
-      return updateOne(payload, 
+      return updateOne(payload.username, 
         member => updateJet(member, jetFactory.build())
       );
     case ENEMY_ACCELERATE:
-      return modSingleUsersJetProp(payload, 'velocity', accelJet);
+      return modSingleUsersJetProp(payload.username, 'velocity', accelJet);
     case ENEMY_DECELERATE:
-      return modSingleUsersJetProp(payload, 'velocity', decelJet);  
+      return modSingleUsersJetProp(payload.username, 'velocity', decelJet);  
     case ENEMY_BEAR_LEFT:
-      return modSingleUsersJetProp(payload, 'heading', bearLeft);  
+      return modSingleUsersJetProp(payload.username, 'heading', bearLeft(payload.currentVelocity));  
     case ENEMY_BEAR_RIGHT:
-      return modSingleUsersJetProp(payload, 'heading', bearRight);  
+      return modSingleUsersJetProp(payload.username, 'heading', bearRight(payload.currentVelocity));  
     case ENEMY_FIRE:
       console.log('blam');
       return state;

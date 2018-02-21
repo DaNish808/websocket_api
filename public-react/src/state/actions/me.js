@@ -10,7 +10,18 @@ export function setUser(user) {
 
 
 export function commandJet(order) {
-  return {
-    type: order
-  };
+  if(/^BEAR_(LEFT|RIGHT)/.test(order)) {
+    return (dispatch, getState) => {
+      const currentVelocity = getState().me.userJet.velocity;
+      dispatch({
+        type: order,
+        payload: { currentVelocity }
+      });
+    };
+  }
+  else {
+    return {
+      type: order
+    };
+  }
 }
