@@ -11,11 +11,13 @@ export default class Jet extends PureComponent {
     } = this.props;
 
     return (
-      <div className='jet-positioner' style={{
+      <div className="jet-positioner" style={{
         top: 100 - coordY + '%',
         left: coordX + '%',
+        color: `hsl(${hue}, 100%, 35%)`
       }}>
-        <div className='jet' style={{
+        <span className="jet-owner">{username}</span>
+        <div className="jet" style={{
           transform: `rotate(${-heading + 90}deg)`,
           backgroundColor: `hsl(${hue}, 100%, 50%)`,
         }}></div>

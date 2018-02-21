@@ -5,10 +5,18 @@ section.sky {
 }
 
 div.jet-positioner {
+  z-index: 1;
   position: absolute;
   transform: translate(-50%, -50%);
   transition-duration: 60ms;
   transition-timing-function: linear;
+}
+
+span.jet-owner {
+  position: absolute;
+  left: 110%;
+  top: -0.5em;
+  font-size: 75%;
 }
 
 div.jet {
