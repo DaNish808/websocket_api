@@ -68,6 +68,7 @@ class JetChat extends PureComponent {
         orders.push(this.keyCommandMap[key]);
       }
     }
+    console.log('original orders:', orders);
     this.props.socket.emit('jet-order', orders);
   }
   

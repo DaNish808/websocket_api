@@ -60,8 +60,10 @@ export default function setListeners(socket, actionCreators) {
 
     else { // if array
       const { username, orders } = update;
-      orders.forEach(update => {
-        updateEnemyJet({ username, orders });
+      console.table('enemy update', update);
+      orders.forEach(o => {
+        updateEnemyJet({ username, orders: o });
+        console.log('individual order:', { username, orders: o })
       });
     }
   });
