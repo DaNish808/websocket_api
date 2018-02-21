@@ -16,6 +16,7 @@ function addConnectionListener() {
     /**************** add/distribute new member info *******************/
     let username = `${generateName()}`;
     let userHue = Math.floor(Math.random() * 256);
+    let userJet = null;
     let totalKills = 0;
     let killLog = [];
 
@@ -121,6 +122,12 @@ function addConnectionListener() {
 
     
       /************** game events **************/
+
+      // // TODO: think about refactoring game logic to server...
+      // socket.on('my-jet-current-status', jetUpdate => {
+      //   members[username].userJet = userJet = jetUpdate;
+      // })
+
       socket.on('jet-order', orders => {
         socket.emit('steer-jet', orders);
         socket.broadcast.emit('enemy-update', { username, orders });

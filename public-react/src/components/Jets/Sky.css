@@ -2,3 +2,12 @@ section.sky {
   grid-area: msg-box;
   position: relative;
 }
+
+div.jet {
+  transform-origin: 50% 50%;
+  position: absolute;
+  height: 2rem;
+  width: 1rem;
+  clip-path: polygon(50% 0%, 0% 100%, 50% 80%, 100% 100%);
+
+}

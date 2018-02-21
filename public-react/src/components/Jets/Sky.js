@@ -15,17 +15,15 @@ class Sky extends Component {
 
     return (
       <section className="sky" tabIndex="0">
-        <ul>
-          {!!allJets.length &&
-            allJets.map(({ username, hue, jet }) => (
-              <li>
-                <p>name: {username}, hue: {hue}</p>
-                <p>velocity: {roundHundreth(jet.velocity)}, heading: {roundHundreth(jet.heading)}</p>
-                <p>xCoord: {roundHundreth(jet.coordX)}, yCoord: {roundHundreth(jet.coordY)}</p>
-              </li>
-            ))
-          }
-        </ul>
+        {!!allJets.length &&
+          allJets.map(({ username, hue, jet }) => (
+            <Jet
+              username={username}
+              hue={hue}
+              jet={jet}
+            />
+          ))
+        }
       </section>
     );
   }
@@ -49,3 +47,11 @@ export default connect(
   }),
   null
 )(Sky);
+
+
+
+/* <li>
+  <p>name: {username}, hue: {hue}</p>
+  <p>velocity: {roundHundreth(jet.velocity)}, heading: {roundHundreth(jet.heading)}</p>
+  <p>xCoord: {roundHundreth(jet.coordX)}, yCoord: {roundHundreth(jet.coordY)}</p>
+</li> */
