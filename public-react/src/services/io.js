@@ -5,7 +5,7 @@ export default function setListeners(socket, actionCreators) {
   const { 
     setUser, setMembers, newMember, memberUpdate, 
     removeMember, updateUserMessages, receivePost,
-    commandJet, updateEnemyJet
+    commandJet, transmitEnemyOrders, updateEnemyJet
   } = actionCreators;
   
 
@@ -54,16 +54,20 @@ export default function setListeners(socket, actionCreators) {
       orders.forEach(o => commandJet(o));
   });
 
-  socket.on('enemy-update', update => {
-    if(typeof update.orders === 'string')
-      updateEnemyJet(update);
+  socket.on('enemy-orders', command => {
+    if(typeof command.orders === 'string')
+      transmitEnemyOrders(command);
 
     else { // if array
-      const { username, orders } = update;
+      const { username, orders } = command;
       orders.forEach(o => {
-        updateEnemyJet({ username, orders: o });
+        transmitEnemyOrders({ username, orders: o });
       });
     }
+  });
+
+  socket.on('enemy-update', update => {
+    updateEnemyJet(update);
   });
 
 }

@@ -123,14 +123,14 @@ function addConnectionListener() {
     
       /************** game events **************/
 
-      // // TODO: think about refactoring game logic to server...
-      // socket.on('my-jet-current-status', jetUpdate => {
-      //   members[username].userJet = userJet = jetUpdate;
-      // })
+      socket.on('my-jet-current-status', jetUpdate => {
+        console.log('update:', username);
+        socket.broadcast.emit('enemy-update', { username, jetUpdate });
+      })
 
       socket.on('jet-order', orders => {
         socket.emit('steer-jet', orders);
-        socket.broadcast.emit('enemy-update', { username, orders });
+        socket.broadcast.emit('enemy-orders', { username, orders });
       })
   });
 }

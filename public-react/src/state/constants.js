@@ -47,6 +47,7 @@ export const ENEMY_DECELERATE = 'ENEMY_DECELERATE';
 export const ENEMY_BEAR_RIGHT = 'ENEMY_BEAR_RIGHT';
 export const ENEMY_BEAR_LEFT = 'ENEMY_BEAR_LEFT';
 export const ENEMY_FIRE = 'ENEMY_FIRE';
+export const ENEMY_UPDATE = 'ENEMY_UPDATE';
 
 /******* calculated per frame *******/
 export const MOVE = 'MOVE';

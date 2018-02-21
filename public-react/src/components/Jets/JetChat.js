@@ -35,7 +35,7 @@ class JetChat extends PureComponent {
 
     this.commandOscillator = 0;
     this.cycleListener = null;
-    this.cycleCount = 0; // cyclically increments to 59 then reverts to 0
+    this.cycleCount = -1; // cyclically increments to 59 then reverts to 0
   }
 
 
@@ -58,17 +58,14 @@ class JetChat extends PureComponent {
       this.sendActiveOrders();
     }
 
-    // // related to "TODO: think about refactoring game" in src/io.js
-    // if(cycleCount === 0) {
-    //   socket.emit('my-jet-current-status', userJet);
-    // }
-    // this.cycleCount = cycleCount < 60 ? cycleCount++ : 0;
+    // related to "TODO: think about refactoring game" in src/io.js
+    this.cycleCount = cycleCount < 60 ? cycleCount + 1 : 0;
 
     this.cycleListener = setTimeout(() => {
       this.timeCycle();
       
       // actions per game loop
-      moveAll();
+      moveAll(this.cycleCount);
 
     }, FRAME_INTERVAL);
   }
