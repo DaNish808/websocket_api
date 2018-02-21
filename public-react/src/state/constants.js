@@ -26,9 +26,10 @@ export const FRAME_INTERVAL = 50; //ms
 export const PROJECTILE_RADIUS = 1;
 export const JET_RADIUS = 4.5;
 // jet movement consts
-export const JET_MAX_VELOCITY = 2;
-export const JET_MIN_VELOCITY = 0.1;
-export const JET_TURNING_RATE = 18; //deg per frame
+export const JET_MAX_VELOCITY = 3;
+export const JET_MIN_VELOCITY = 1;
+export const JET_MAX_TURNING_RATE = 25; //deg per frame
+export const JET_MIN_TURNING_RATE = 5; //deg per frame
 export const JET_ACCEL_RATE = JET_MAX_VELOCITY / 20;
 
 /******* user initiated *******/

@@ -30,8 +30,21 @@ export function removeMember(name) {
 
 
 export function updateEnemyJet({ username, orders }) {
-  return {
-    type: 'ENEMY_' + orders,
-    payload: username
-  };
+  if(/^BEAR_(LEFT|RIGHT)/.test(orders)) {
+    return (dispatch, getState) => {
+      const currentVelocity = getState()
+        .members.find(member => member.username === username)
+        .userJet.velocity;
+      dispatch({
+        type: 'ENEMY_' + orders,
+        payload: { username, currentVelocity }
+      });
+    };
+  }
+  else {
+    return {
+      type: 'ENEMY_' + orders,
+      payload: { username }
+    };
+  }
 }

@@ -39,9 +39,9 @@ export default function me(state = devDefaultState, { type, payload }) {
     case DECELERATE:
       return updateOnlyJet(modJetProp('velocity', decelJet));
     case BEAR_LEFT:
-      return updateOnlyJet(modJetProp('heading', bearLeft));
+      return updateOnlyJet(modJetProp('heading', bearLeft(payload.currentVelocity)));
     case BEAR_RIGHT:
-      return updateOnlyJet(modJetProp('heading', bearRight));
+      return updateOnlyJet(modJetProp('heading', bearRight(payload.currentVelocity)));
     case FIRE:
       console.log('pew');
       return state;
