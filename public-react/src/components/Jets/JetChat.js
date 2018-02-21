@@ -34,13 +34,14 @@ class JetChat extends PureComponent {
     };
 
     this.commandOscillator = 0;
+    this.cycleListener = null;
   }
 
 
 
   /********* game animation drivers *********/
   runGame = () => {
-    this.timeCycle();
+    if(!this.cycleListener) this.timeCycle();
   }
 
   timeCycle = () => {
@@ -50,7 +51,7 @@ class JetChat extends PureComponent {
       this.sendActiveOrders();
     }
 
-    setTimeout(() => {
+    this.cycleListener = setTimeout(() => {
       this.timeCycle();
       
       // actions per game loop
@@ -79,20 +80,25 @@ class JetChat extends PureComponent {
       // the key is a relevant command and
       /^(Arrow|Shift)/.test(key) &&
       // the user has a jet
-      this.props.userJet &&
-      // switches off a command or
-      // switches on a command that was off...
-      (toggle === 'off' ||
-      (toggle === 'on' && !this.state[key]))
+      this.props.userJet
     ) {
-
-      this.props.socket.emit('jet-order', this.keyCommandMap[key]);
-
-      const newState = { ...this.state };
-      newState[key] = toggle === 'on';
-
-      setTimeout(() => this.setState(newState), FRAME_INTERVAL - 10);
+      const toggleIsOn = toggle === 'on';
+      if(
+        // switches off a command or
+        // switches on a command that was off...
+        (!toggleIsOn ||
+        (toggleIsOn && !this.state[key]))
+      ) {
+  
+        if(toggleIsOn) this.props.socket.emit('jet-order', this.keyCommandMap[key]);
+  
+        const newState = { ...this.state };
+        newState[key] = toggleIsOn;
+  
+        this.setState(newState);
+      }
     }
+
   }
 
 
