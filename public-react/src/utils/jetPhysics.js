@@ -85,7 +85,7 @@ const newHit = (username, health) => ({
  * checks to see if obj and items in otherObjs have overlap
  * @param {Object} thisObj - { username, coords, health }
  * @param {Object[]} otherObjs - [{ username, coords, health }]
- * @returns {Object} - { collisions, scorers }: collisions - [{ username, outcome, health }], scorers - [username]
+ * @returns {Object[]} -collisions:[{ username, outcome, health }] 
  */
 export function checkCollisions(thisObj, otherObjs) {
 

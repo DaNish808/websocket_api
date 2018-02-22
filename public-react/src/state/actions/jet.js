@@ -25,7 +25,9 @@ export function moveAll(cycleCount) {
       coords: null,
       objType: JET
     };
+    let userSurvived = null;
     if(userHasJet) {
+      userSurvived = true;
 
       myNewJetState.health = userJet.health;
       myNewJetState.coords = move(userJet);
@@ -41,7 +43,7 @@ export function moveAll(cycleCount) {
     // at each projection, check for collisions 
     //   against all previously projected jet movements
     let collisions = [];
-    const enemyNewJetStates = [];
+    let enemyNewJetStates = [];
     if(enemyJetsPresent) {
       for(let i = 0; i < enemyJets.length; i++) {
 
@@ -64,7 +66,7 @@ export function moveAll(cycleCount) {
           newState,
           [ ...myNewJetStateArr, ...enemyNewJetStates ]
         );
-        collisions = [collisions, ...newCollisions] ;
+        collisions = [...collisions, ...newCollisions] ;
 
 
         // add this projection to previous
@@ -78,7 +80,18 @@ export function moveAll(cycleCount) {
     // TODO: projectile hits
 
 
-    if(userHasJet) {
+    // remove collided jets move queue
+    const usersCollided = collisions.map(col => col.username);
+
+    if(userHasJet && usersCollided.includes(myUsername)) {
+      userSurvived = false;
+    }
+    enemyNewJetStates = enemyNewJetStates.filter(enemy => !usersCollided.includes(enemy.username));
+
+
+
+    // dispatch movements
+    if(userHasJet && userSurvived) {
       dispatch({
         type: MOVE,
         payload: myNewJetState.coords
