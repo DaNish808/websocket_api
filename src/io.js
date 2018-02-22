@@ -116,7 +116,6 @@ function addConnectionListener() {
 
       /************** messaging events **************/
       socket.on('message-all', msg => {
-        console.log(msg);
         socket.broadcast.emit('message-all', msg);
       });
 
@@ -124,7 +123,6 @@ function addConnectionListener() {
       /************** game events **************/
 
       socket.on('my-jet-current-status', jetUpdate => {
-        console.log('update:', username);
         socket.broadcast.emit('enemy-update', { username, jetUpdate });
       })
 

@@ -1,6 +1,5 @@
 $(() => {
   const socket = io();
-  console.log(socket);
   
   $('form').submit(e => {
     inputEl = e.target.message;

@@ -4,16 +4,9 @@ import { connect } from 'react-redux';
 import Msg from './Msg';
 import Sky from '../Jets/Sky';
 
-import { setUser, commandJet } from '../../state/actions/me';
-import { 
-  setMembers, newMember, memberUpdate, removeMember, 
-  transmitEnemyOrders, updateEnemyJet } from '../../state/actions/members';
-import { updateUserMessages, receivePost, postAll } from '../../state/actions/messages';
-import { plugSocket } from '../../state/actions/socket';
+import { postAll } from '../../state/actions/messages';
 
 import { TAKE_OFF } from '../../state/constants';
-
-import setListeners from '../../services/io';
 
 import './Chat.css';
 
@@ -31,24 +24,6 @@ class Chat extends PureComponent {
     });
   }
 
-  async componentDidMount() {
-
-    await this.props.plugSocket();
-
-    // pull all action creators from this.props 
-    // and set as properties of actionCreators
-    const actionCreators = (({ 
-      setUser, setMembers, newMember, memberUpdate, 
-      removeMember, updateUserMessages, receivePost,
-      commandJet, transmitEnemyOrders, updateEnemyJet
-    }) => ({
-      setUser, setMembers, newMember, memberUpdate, 
-      removeMember, updateUserMessages, receivePost,
-      commandJet, transmitEnemyOrders, updateEnemyJet
-    }))(this.props);
-
-    setListeners(this.props.socket, actionCreators);
-  }
 
   /********* message event handlers ***********/
   handleButtonFocus = e => {
@@ -170,9 +145,5 @@ export default connect(
     messages: state.messages,
     socket: state.socket
   }),
-  { 
-    setUser, commandJet, transmitEnemyOrders, updateEnemyJet, 
-    receivePost, postAll, updateUserMessages, 
-    setMembers, newMember, memberUpdate, removeMember, 
-    plugSocket }
+  { postAll }
 )(Chat);
