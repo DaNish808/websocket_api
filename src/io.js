@@ -16,8 +16,8 @@ function addConnectionListener() {
     /**************** add/distribute new member info *******************/
     let username = `${generateName()}`;
     let userHue = Math.floor(Math.random() * 256);
-    let userJet = null;
     let totalKills = 0;
+    let totalDeaths = 0;
     let killLog = [];
 
     socket.emit('all-members', Object.keys(members).map(username => ({
@@ -39,6 +39,7 @@ function addConnectionListener() {
       // socketId: socket.id,
       userHue,
       totalKills,
+      totalDeaths,
       killLog
     };
   
@@ -81,7 +82,7 @@ function addConnectionListener() {
       
       function notifyNewUser() {
         const newUserPackage = {
-          username, userHue, totalKills, killLog
+          username, ...members[username]
         }
         socket.emit('set-user', newUserPackage);
         console.log('notifyNewUser:', username);

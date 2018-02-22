@@ -111,7 +111,7 @@ export default function members(state = [], { type, payload }) {
       return state;
 
     case ENEMY_MOVE:
-      return updateSingleUsersJet(payload.username, payload.newCoords);
+      return updateSingleUsersJet(payload.username, payload.coords);
     case ENEMY_UPDATE:
       return updateSingleUsersJet(payload.username, payload.jetUpdate);
 

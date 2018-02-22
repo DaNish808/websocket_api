@@ -1,10 +1,13 @@
 import { MOVE, ENEMY_MOVE } from '../constants';
-import { move } from '../../utils/jetPhysics';
+import { move, checkCollisions } from '../../utils/jetPhysics';
 
 export function moveAll(cycleCount) {
   return (dispatch, getState) => {
 
-    const { me: { userJet }, members, socket } = getState();
+    const { 
+      me: { username: myUsername, userJet }, 
+      members, socket 
+    } = getState();
 
     const userHasJet = !!userJet;
     
@@ -15,23 +18,41 @@ export function moveAll(cycleCount) {
     
 
     let collisions = [];
+    let scorers = [];
 
-    let myNewCoords = null;
+    const myNewJetState = {
+      username: myUsername,
+      health: null,
+      coords: null
+    };
     if(userHasJet) {
-      myNewCoords = move(userJet);
+
+      myNewJetState.health = userJet.health;
+      myNewJetState.coords = move(userJet);
+
       if(cycleCount === 0) {
-        socket.emit('my-jet-current-status', { ...userJet, ...myNewCoords });
+        socket.emit('my-jet-current-status', { ...userJet, ...myNewJetState.coords });
       }
     }
 
-    let enemyNewCoords = [];
+    const enemyNewJetStates = [];
     if(enemyJetsPresent) {
       for(let i = 0; i < enemyJets.length; i++) {
+
+        const { username, userJet } = enemyJets[i];
+
         const update = { 
-          username: enemyJets[i].username,
-          newCoords: move(enemyJets[i].userJet)
+          username,
+          health: userJet.health,
+          coords: move(userJet)
         };
-        enemyNewCoords.push(update);
+
+        // check for collisions against all already moved
+        // const { newCollisions, newScorers } = checkCollisions(
+        //   { ...update, health: userJet.health }
+        // );
+
+        enemyNewJetStates.push(update);
       }
     }
 
@@ -39,14 +60,17 @@ export function moveAll(cycleCount) {
     if(userHasJet) {
       dispatch({
         type: MOVE,
-        payload: myNewCoords
+        payload: myNewJetState.coords
       });
     }
 
     if(enemyJetsPresent) {
-      enemyNewCoords.forEach(enemyUpdate => dispatch({
+      enemyNewJetStates.forEach(newState => dispatch({
         type: ENEMY_MOVE,
-        payload: enemyUpdate
+        payload: {
+          username: newState.username,
+          coords: newState.coords
+        }
       }));
     }
 
