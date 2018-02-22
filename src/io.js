@@ -16,9 +16,8 @@ function addConnectionListener() {
     /**************** add/distribute new member info *******************/
     let username = `${generateName()}`;
     let userHue = Math.floor(Math.random() * 256);
-    let totalKills = 0;
-    let totalDeaths = 0;
-    let killLog = [];
+    const jetJunkyard = [];
+    const killLog = [];
 
     socket.emit('all-members', Object.keys(members).map(username => ({
       username,
@@ -38,8 +37,7 @@ function addConnectionListener() {
     const userData = members[username] = {
       // socketId: socket.id,
       userHue,
-      totalKills,
-      totalDeaths,
+      jetJunkyard,
       killLog
     };
   

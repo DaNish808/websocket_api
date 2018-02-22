@@ -4,6 +4,7 @@ import { move, checkCollisions } from '../../utils/jetPhysics';
 export function moveAll(cycleCount) {
   return (dispatch, getState) => {
 
+    /*** define all moving objects ***/
     const { 
       me: { username: myUsername, userJet }, 
       members, socket 
@@ -17,9 +18,7 @@ export function moveAll(cycleCount) {
     const enemyJetsPresent = !!enemyJets;
     
 
-    let collisions = [];
-    let scorers = [];
-
+    /*** project user's jet movement ***/
     const myNewJetState = {
       username: myUsername,
       health: null,
@@ -31,17 +30,24 @@ export function moveAll(cycleCount) {
       myNewJetState.health = userJet.health;
       myNewJetState.coords = move(userJet);
 
+      // periodically broadcast location updates to other users (for lag)
       if(cycleCount === 0) {
         socket.emit('my-jet-current-status', { ...userJet, ...myNewJetState.coords });
       }
     }
 
+
+    /*** project enemies' jet movements ***/
+    // at each projection, check for collisions 
+    //   against all previously projected jet movements
+    let collisions = [];
     const enemyNewJetStates = [];
     if(enemyJetsPresent) {
       for(let i = 0; i < enemyJets.length; i++) {
 
         const { username, userJet } = enemyJets[i];
 
+        // project movement for this enemy
         const newState = { 
           username,
           health: userJet.health,
@@ -49,18 +55,27 @@ export function moveAll(cycleCount) {
           objType: JET
         };
 
-        // check for collisions against all already moved
+        
+        // check for collisions against previous
         const myNewJetStateArr = [];
         if(userHasJet) myNewJetStateArr.push(myNewJetState);
+
         const newCollisions = checkCollisions(
           newState,
           [ ...myNewJetStateArr, ...enemyNewJetStates ]
         );
-        collisions = collisions.concat(newCollisions);
+        collisions = [collisions, ...newCollisions] ;
 
+
+        // add this projection to previous
         enemyNewJetStates.push(newState);
       }
     }
+
+
+    let hits = [];
+    let scorers = [];
+    // TODO: projectile hits
 
 
     if(userHasJet) {
