@@ -1,10 +1,10 @@
 import { MOVE, ENEMY_MOVE } from '../constants';
 import { move } from '../../utils/jetPhysics';
 
-export function moveAll() {
+export function moveAll(cycleCount) {
   return (dispatch, getState) => {
 
-    const { me: { userJet }, members } = getState();
+    const { me: { userJet }, members, socket } = getState();
 
     const userHasJet = !!userJet;
     
@@ -14,8 +14,13 @@ export function moveAll() {
     const enemyJetsPresent = !!enemyJets;
     
 
-    const myNewCoords = userHasJet && 
-      move(userJet);
+    let myNewCoords = null;
+    if(userHasJet) {
+      myNewCoords = move(userJet);
+      if(cycleCount === 0) {
+        socket.emit('my-jet-current-status', { ...userJet, ...myNewCoords });
+      }
+    }
 
     const enemyNewCoords = enemyJetsPresent && 
       enemyJets.map(enemy => {

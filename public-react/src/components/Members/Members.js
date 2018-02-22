@@ -20,7 +20,7 @@ class Members extends PureComponent {
             <li 
               key={i}
               style={{
-                color: `hsl(${userHue}, 100%, 40%)`
+                color: `hsl(${userHue}, 100%, 35%)`
               }}
             >{username}</li>
           ))}

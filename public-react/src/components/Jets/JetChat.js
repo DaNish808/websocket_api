@@ -8,7 +8,16 @@ import {
   FRAME_INTERVAL,
   ACCELERATE, DECELERATE, BEAR_LEFT, BEAR_RIGHT, FIRE
 } from '../../state/constants';
+
+import { setUser, commandJet } from '../../state/actions/me';
+import { 
+  setMembers, newMember, memberUpdate, removeMember, 
+  transmitEnemyOrders, updateEnemyJet } from '../../state/actions/members';
+import { updateUserMessages, receivePost, postAll } from '../../state/actions/messages';
+import { plugSocket } from '../../state/actions/socket';
 import { moveAll } from '../../state/actions/jet';
+
+import setListeners from '../../services/io';
 
 import './Sky.css';
 
@@ -35,7 +44,10 @@ class JetChat extends PureComponent {
 
     this.commandOscillator = 0;
     this.cycleListener = null;
-    this.cycleCount = 0; // cyclically increments to 59 then reverts to 0
+
+    // location updates are sent when cycleCount === 0
+    // cyclically increments to 59 then reverts to 0
+    this.cycleCount = -1; 
   }
 
 
@@ -58,17 +70,14 @@ class JetChat extends PureComponent {
       this.sendActiveOrders();
     }
 
-    // // related to "TODO: think about refactoring game" in src/io.js
-    // if(cycleCount === 0) {
-    //   socket.emit('my-jet-current-status', userJet);
-    // }
-    // this.cycleCount = cycleCount < 60 ? cycleCount++ : 0;
+    // related to "TODO: think about refactoring game" in src/io.js
+    this.cycleCount = cycleCount < 60 ? cycleCount + 1 : 0;
 
     this.cycleListener = setTimeout(() => {
       this.timeCycle();
       
       // actions per game loop
-      moveAll();
+      moveAll(this.cycleCount);
 
     }, FRAME_INTERVAL);
   }
@@ -113,9 +122,30 @@ class JetChat extends PureComponent {
     }
 
   }
+  
+  async componentDidMount() {
+    
+    await this.props.plugSocket();
 
+    // pull all action creators from this.props 
+    // and set as properties of actionCreators
+    const actionCreators = (({ 
+      setUser, setMembers, newMember, memberUpdate, 
+      removeMember, updateUserMessages, receivePost,
+      commandJet, transmitEnemyOrders, updateEnemyJet
+    }) => ({
+      setUser, setMembers, newMember, memberUpdate, 
+      removeMember, updateUserMessages, receivePost,
+      commandJet, transmitEnemyOrders, updateEnemyJet
+    }))(this.props);
 
-  componentDidMount = () => {
+    setListeners(this.props.socket, actionCreators);
+    
+    this.props.socket.on('new-member', () => {
+      this.cycleCount = -1;
+    });
+
+    
     this.runGame();
   }
 
@@ -141,5 +171,9 @@ export default connect(
     userJet: state.me.userJet,
     socket: state.socket
   }),
-  { moveAll }
+  { moveAll, 
+    setUser, commandJet, transmitEnemyOrders, updateEnemyJet, 
+    receivePost, updateUserMessages, 
+    setMembers, newMember, memberUpdate, removeMember, 
+    plugSocket }
 )(JetChat);

@@ -1,4 +1,7 @@
-import { NEW_MEMBER, MEMBER_UPDATE, NEW_MEMBERS, MEMBER_DISCONNECT } from '../constants';
+import { 
+  NEW_MEMBER, MEMBER_UPDATE, NEW_MEMBERS, MEMBER_DISCONNECT,
+  ENEMY_UPDATE
+} from '../constants';
 
 export function setMembers(members) {
   return {
@@ -29,7 +32,7 @@ export function removeMember(name) {
 }
 
 
-export function updateEnemyJet({ username, orders }) {
+export function transmitEnemyOrders({ username, orders }) {
   if(/^BEAR_(LEFT|RIGHT)/.test(orders)) {
     return (dispatch, getState) => {
       const currentVelocity = getState()
@@ -47,4 +50,15 @@ export function updateEnemyJet({ username, orders }) {
       payload: { username }
     };
   }
+}
+
+
+export function updateEnemyJet({ username, jetUpdate }) {
+  return {
+    type: ENEMY_UPDATE,
+    payload: {
+      username,
+      jetUpdate
+    }
+  };
 }

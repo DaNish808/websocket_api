@@ -2,7 +2,7 @@ import {
   MEMBER_UPDATE, NEW_MEMBER, NEW_MEMBERS, MEMBER_DISCONNECT,
   ENEMY_TAKE_OFF, ENEMY_ACCELERATE, ENEMY_DECELERATE, 
   ENEMY_BEAR_RIGHT, ENEMY_BEAR_LEFT, ENEMY_FIRE,
-  ENEMY_MOVE,
+  ENEMY_MOVE, ENEMY_UPDATE
 } from '../constants';
 import { accelJet, decelJet, bearLeft, bearRight } from '../../utils/jetPhysics';
 import { jetFactory } from '../../services/jetFactory';
@@ -55,6 +55,12 @@ export default function members(state = [], { type, payload }) {
     [prop]: mod(jet[prop])
   });
 
+  const updateSingleUsersJet = (targetUsername, update) => {
+    return updateOne(targetUsername,
+      member => updateJet(member, update)
+    );
+  };
+
   const modSingleUsersJetProp = (targetUsername, prop, mod) => 
     updateOne(targetUsername, 
       member => updateJet(member, 
@@ -91,9 +97,7 @@ export default function members(state = [], { type, payload }) {
       ];
 
     case ENEMY_TAKE_OFF:
-      return updateOne(payload.username, 
-        member => updateJet(member, jetFactory.build())
-      );
+      return updateSingleUsersJet(payload.username, jetFactory.build());
     case ENEMY_ACCELERATE:
       return modSingleUsersJetProp(payload.username, 'velocity', accelJet);
     case ENEMY_DECELERATE:
@@ -107,9 +111,9 @@ export default function members(state = [], { type, payload }) {
       return state;
 
     case ENEMY_MOVE:
-      return updateOne(payload.username,
-        member => updateJet(member, payload.newCoords)
-      );
+      return updateSingleUsersJet(payload.username, payload.newCoords);
+    case ENEMY_UPDATE:
+      return updateSingleUsersJet(payload.username, payload.jetUpdate);
 
     default: 
       return state;

@@ -116,21 +116,19 @@ function addConnectionListener() {
 
       /************** messaging events **************/
       socket.on('message-all', msg => {
-        console.log(msg);
         socket.broadcast.emit('message-all', msg);
       });
 
     
       /************** game events **************/
 
-      // // TODO: think about refactoring game logic to server...
-      // socket.on('my-jet-current-status', jetUpdate => {
-      //   members[username].userJet = userJet = jetUpdate;
-      // })
+      socket.on('my-jet-current-status', jetUpdate => {
+        socket.broadcast.emit('enemy-update', { username, jetUpdate });
+      })
 
       socket.on('jet-order', orders => {
         socket.emit('steer-jet', orders);
-        socket.broadcast.emit('enemy-update', { username, orders });
+        socket.broadcast.emit('enemy-orders', { username, orders });
       })
   });
 }
