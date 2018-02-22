@@ -14,6 +14,8 @@ export function moveAll(cycleCount) {
     const enemyJetsPresent = !!enemyJets;
     
 
+    let collisions = [];
+
     let myNewCoords = null;
     if(userHasJet) {
       myNewCoords = move(userJet);
@@ -22,14 +24,16 @@ export function moveAll(cycleCount) {
       }
     }
 
-    const enemyNewCoords = enemyJetsPresent && 
-      enemyJets.map(enemy => {
+    let enemyNewCoords = [];
+    if(enemyJetsPresent) {
+      for(let i = 0; i < enemyJets.length; i++) {
         const update = { 
-          username: enemy.username,
-          newCoords: move(enemy.userJet)
+          username: enemyJets[i].username,
+          newCoords: move(enemyJets[i].userJet)
         };
-        return update;
-      });
+        enemyNewCoords.push(update);
+      }
+    }
 
 
     if(userHasJet) {

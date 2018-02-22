@@ -150,8 +150,6 @@ class JetChat extends PureComponent {
   }
 
 
-
-
   render() {
     return (
       <div className="jet-chat" 
