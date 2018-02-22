@@ -1,4 +1,4 @@
-import { MOVE, ENEMY_MOVE } from '../constants';
+import { MOVE, ENEMY_MOVE, JET } from '../constants';
 import { move, checkCollisions } from '../../utils/jetPhysics';
 
 export function moveAll(cycleCount) {
@@ -23,7 +23,8 @@ export function moveAll(cycleCount) {
     const myNewJetState = {
       username: myUsername,
       health: null,
-      coords: null
+      coords: null,
+      objType: JET
     };
     if(userHasJet) {
 
@@ -41,18 +42,23 @@ export function moveAll(cycleCount) {
 
         const { username, userJet } = enemyJets[i];
 
-        const update = { 
+        const newState = { 
           username,
           health: userJet.health,
-          coords: move(userJet)
+          coords: move(userJet),
+          objType: JET
         };
 
         // check for collisions against all already moved
-        // const { newCollisions, newScorers } = checkCollisions(
-        //   { ...update, health: userJet.health }
-        // );
+        const myNewJetStateArr = [];
+        if(userHasJet) myNewJetStateArr.push(myNewJetState);
+        const newCollisions = checkCollisions(
+          newState,
+          [ ...myNewJetStateArr, ...enemyNewJetStates ]
+        );
+        collisions = collisions.concat(newCollisions);
 
-        enemyNewJetStates.push(update);
+        enemyNewJetStates.push(newState);
       }
     }
 

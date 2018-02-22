@@ -32,6 +32,9 @@ export const JET_MIN_VELOCITY = 1;
 export const JET_MAX_TURNING_RATE = 25; //deg per frame
 export const JET_MIN_TURNING_RATE = 5; //deg per frame
 export const JET_ACCEL_RATE = JET_MAX_VELOCITY / 20;
+// object types
+export const JET = 'jet';
+export const PROJECTILE = 'projectile';
 
 /******* user initiated *******/
 export const TAKE_OFF = 'TAKE_OFF';
