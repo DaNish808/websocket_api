@@ -1,5 +1,4 @@
 import { 
-  HIT, KILL,
   JET_MAX_VELOCITY, JET_MIN_VELOCITY, JET_ACCEL_RATE, 
   JET_MAX_TURNING_RATE, JET_MIN_TURNING_RATE,
   JET_COLLISION_RADIUS, PROJECTILE_COLLISION_RADIUS,
@@ -69,23 +68,11 @@ export function move({ coordX, coordY, velocity, heading }) {
 
 const checkCircleOverlap = ({ x1, y1, r1 }, { x2, y2, r2 }) => (r1 + r2) > Math.sqrt(Math.pow(x1 - x2, 2) + Math.pow(y1 - y2, 2));
 
-const newKill = username => ({
-  outcome: KILL,
-  username: username,
-  health: 0
-});
-
-const newHit = (username, health) => ({
-  outcome: HIT,
-  username: username,
-  health: health
-});
-
 /**
  * checks to see if obj and items in otherObjs have overlap
  * @param {Object} thisObj - { username, coords, health }
  * @param {Object[]} otherObjs - [{ username, coords, health }]
- * @returns {Object[]} -collisions:[{ username, outcome, health }] 
+ * @returns {string[]} -collisions:[username] 
  */
 export function checkCollisions(thisObj, otherObjs) {
 
@@ -104,12 +91,12 @@ export function checkCollisions(thisObj, otherObjs) {
 
     if(hasCollided) {
       thisObjHadCollision = true;
-      newCollisions.push(newKill(otherObj.username));
+      newCollisions.push(otherObj.username);
     }
   });
 
   if(thisObjHadCollision) {
-    newCollisions.push(newKill(thisObj.username));
+    newCollisions.push(thisObj.username);
   }
 
   return newCollisions;

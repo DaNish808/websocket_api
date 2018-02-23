@@ -7,6 +7,8 @@ section.sky {
 div.jet-positioner {
   z-index: 1;
   position: absolute;
+  height: 5%;
+  width: 5%;
   transform: translate(-50%, -50%);
   transition-duration: 60ms;
   transition-timing-function: linear;
@@ -21,8 +23,8 @@ span.jet-owner {
 
 div.jet {
   transform-origin: 50% 50%;
-  height: 30px;
-  width: 30px;
+  height: 100%;
+  width: 100%;
   clip-path: polygon(50% 0%, 0% 100%, 50% 70%, 100% 100%);
   transition-duration: 60ms;
   transition-timing-function: linear;

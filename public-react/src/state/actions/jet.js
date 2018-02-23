@@ -1,4 +1,8 @@
-import { MOVE, ENEMY_MOVE, JET } from '../constants';
+import { 
+  MOVE, ENEMY_MOVE, 
+  HIT, KILL, ENEMY_HIT, ENEMY_KILL,
+  JET, 
+} from '../constants';
 import { move, checkCollisions } from '../../utils/jetPhysics';
 
 export function moveAll(cycleCount) {
@@ -42,7 +46,7 @@ export function moveAll(cycleCount) {
     /*** project enemies' jet movements ***/
     // at each projection, check for collisions 
     //   against all previously projected jet movements
-    let collisions = [];
+    let usersCollided = [];
     let enemyNewJetStates = [];
     if(enemyJetsPresent) {
       for(let i = 0; i < enemyJets.length; i++) {
@@ -66,7 +70,7 @@ export function moveAll(cycleCount) {
           newState,
           [ ...myNewJetStateArr, ...enemyNewJetStates ]
         );
-        collisions = [...collisions, ...newCollisions] ;
+        usersCollided = [...usersCollided, ...newCollisions] ;
 
 
         // add this projection to previous
@@ -81,13 +85,21 @@ export function moveAll(cycleCount) {
 
 
     // remove collided jets move queue
-    const usersCollided = collisions.map(col => col.username);
 
-    if(userHasJet && usersCollided.includes(myUsername)) {
+    const userCollisionI = usersCollided.indexOf(myUsername);
+    if(userHasJet && userCollisionI !== -1) {
       userSurvived = false;
     }
     enemyNewJetStates = enemyNewJetStates.filter(enemy => !usersCollided.includes(enemy.username));
 
+
+    // dispatch kills
+    usersCollided.forEach(username => {
+      socket.emit('jet-status-action', {
+        type: KILL,
+        payload: username
+      });
+    });
 
 
     // dispatch movements
@@ -108,5 +120,23 @@ export function moveAll(cycleCount) {
       }));
     }
 
+  };
+}
+
+
+
+
+export function updateJetStatus(action) {
+  return (dispatch, getState) => {
+    const { username } = getState().me;
+
+    if(action.payload === username) {
+      delete action.payload;
+    }
+    else {
+      action.type = 'ENEMY_' + action.type;
+    }
+
+    dispatch(action);
   };
 }
