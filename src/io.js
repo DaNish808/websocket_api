@@ -16,7 +16,13 @@ function addConnectionListener() {
   io.on('connection', socket => {
 
     /**************** add/distribute new member info *******************/
-    let username = `${generateName()}`;
+
+    const generateShortName = () => {
+      const name = generateName();
+      return name.length < 15 ? name : name.split(' ')[0];
+    }
+
+    let username = `${generateShortName()}`;
     let userHue = Math.floor(Math.random() * 256);
     const jetJunkyard = [];
     const killLog = [];
