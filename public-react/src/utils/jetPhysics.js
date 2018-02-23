@@ -31,12 +31,12 @@ const turningRate = (v) => {
  */
 export function bearLeft(v) {
   return d => {
-    return d < 358 ? d + turningRate(v) : 0;
+    return d + turningRate(v);
   };
 }
 export function bearRight(v) {
   return d => {
-    return d > 0 ? d - turningRate(v) : 359;
+    return d - turningRate(v);
   };
 }
 

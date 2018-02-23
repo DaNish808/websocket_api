@@ -80,7 +80,6 @@ function addConnectionListener() {
       }
     });
     
-    
     socket.on('disconnect', () => {
 
       io.emit('member-disconnect', username);
@@ -150,6 +149,11 @@ function addConnectionListener() {
       logMsg(message);
     }
 
+    function sendSysMsgAll(msg) {
+      sendTargetedSysMsg(msg);
+      broadcastSysMsg(msg);
+    }
+
     function logMsg(msg) {
 
       if(recentMsgLog.length < 100) {
@@ -182,16 +186,22 @@ function addConnectionListener() {
     })
 
     socket.on('jet-status-action', action => {
+      const { payload: targetUsername, type } = action;
 
       // if the user targeted has been hit by the same action in the last 100 ms...
-      if(members[action.payload][action.type]) {
+      if(members[targetUsername][type]) {
         io.emit('jet-status-action', action);
+
+        if(type === 'KILL') {
+          sendSysMsgAll(`${targetUsername}'s plane is down.`);
+        }
+
       }
       else {
-        members[action.payload][action.type] = true;
+        members[targetUsername][type] = true;
 
         setTimeout(() => {
-          members[action.payload][action.type] = false
+          members[targetUsername][type] = false
         }, 100)
       }
     });
