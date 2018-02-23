@@ -1,9 +1,17 @@
-import { POST_ALL, RECEIVE_POST, MOD_POST, UPDATE_USER_MESSAGES } from '../constants';
+import { 
+  POST_ALL, RECEIVE_POST, MOD_POST, 
+  RECIEVE_MSG_LOG, UPDATE_USER_MESSAGES 
+} from '../constants';
 import generateName from 'sillyname';
 
 
 export default function messages(state = [], { type, payload }) {
   switch(type) {
+    case RECIEVE_MSG_LOG:
+      return [
+        ...state,
+        ...payload
+      ];
     case RECEIVE_POST:
     case POST_ALL:
       return [

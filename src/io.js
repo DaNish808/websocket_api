@@ -2,19 +2,34 @@ const IO = require('socket.io');
 
 const generateName = require('sillyname');
 const itemList = require('./utils/itemList');
+const formatDate = require('./utils/formatDate');
 
 const { MIN_JET_VELOCITY, MAX_JET_VELOCITY} = require('./constants');
 
 
 let io = null;
+
 const members = {};
+let recentMsgLog = [];
 
 
 function addConnectionListener() {
   io.on('connection', socket => {
 
     /**************** add/distribute new member info *******************/
-    let username = `${generateName()}`;
+
+    // returns true if username is already in use
+    const checkIfTaken = name => Object.keys(members).includes(name);
+
+    const generateShortName = () => {
+      let name = generateName();
+      name = name.length < 15 ? name : name.split(' ')[0];
+
+      if(checkIfTaken(name)) return generateShortName();
+      else return name;
+    }
+
+    let username = `${generateShortName()}`;
     let userHue = Math.floor(Math.random() * 256);
     const jetJunkyard = [];
     const killLog = [];
@@ -23,17 +38,14 @@ function addConnectionListener() {
       username,
       ...members[username]
     })));
-      
-    socket.emit(
-      'message-all', 
-      {
-        user: 'system',
-        text: members.length === 0 ?
-          `Hello ${username}, you\'re the first one here!`:
-          `Hello ${username}, you joined the chat with ${itemList(Object.keys(members))}`,
-        timestamp: new Date()
-      }
-    );
+
+    socket.emit('recent-msg-log', recentMsgLog);
+     
+    sendTargetedSysMsg(members.length === 0 ?
+      `Hello ${username}, you\'re the first one here!`:
+      `Hello ${username}, you joined the chat with ${itemList(Object.keys(members))}`);
+
+
     const userData = members[username] = {
       // socketId: socket.id,
       userHue,
@@ -42,8 +54,6 @@ function addConnectionListener() {
     };
   
     notifyNewUser();
-    console.log('client connected!');
-    console.log(members);
     
 
 
@@ -51,29 +61,37 @@ function addConnectionListener() {
 
     /************ member events *************/
     socket.on('update-user', update => {
-      const oldUsername = username;
-      delete members[username];
-      username = update.username;
+      if(update.username !== username && checkIfTaken(update.username)) {
 
-      sendUserUpdate(update, username, oldUsername);
+        sendTargetedSysMsg(`Sorry, "${update.username}" is already in use.`);
+      }
+      else {
+
+        const oldUsername = username;
+        delete members[username];
+        username = update.username;
   
-      members[username] = {
-        // socketId: socket.id,
-        ...update
-      };
+        sendUserUpdate(update, username, oldUsername);
+    
+        members[username] = {
+          // socketId: socket.id,
+          ...update
+        };
+      }
     });
     
+    
     socket.on('disconnect', () => {
-      console.log('client disconnected');
+
       io.emit('member-disconnect', username);
-      io.emit(
-        'message-all', 
-        {
-          user: 'system',
-          text: `${username} has disconnected`,
-          timestamp: new Date()
-        }
-      );
+      const msg = {
+        user: 'system',
+        text: `${username} has disconnected`,
+        timestamp: formatDate(new Date())
+      };
+      io.emit('message-all', msg);
+
+      logMsg(msg);
       delete members[username];
     });
     
@@ -83,7 +101,6 @@ function addConnectionListener() {
         username, ...members[username]
       }
       socket.emit('set-user', newUserPackage);
-      console.log('notifyNewUser:', username);
       socket.broadcast.emit('new-member', newUserPackage);
       broadcastSysMsg(`${username} has joined the chat`);
     }
@@ -100,23 +117,57 @@ function addConnectionListener() {
         broadcastSysMsg(`${oldUsername} is now ${newUsername}`);
       }
     }
-    
-    function broadcastSysMsg(message) {
-      socket.broadcast.emit(
-        'message-all', 
-        {
-          user: 'system',
-          text: message,
-          timestamp: new Date()
-        }
-      );
-    }
+  
     
 
     /************** messaging events **************/
     socket.on('message-all', msg => {
       socket.broadcast.emit('message-all', msg);
+      logMsg(msg);
     });
+
+    // to this user only
+    function sendTargetedSysMsg(msg) {
+      socket.emit(
+        'message-all', 
+        {
+          user: 'system',
+          text: msg,
+          timestamp: formatDate(new Date())
+        }
+      );
+    }
+
+    // to all other members
+    function broadcastSysMsg(msg) {
+      const message = {
+        user: 'system',
+        text: msg,
+        timestamp: formatDate(new Date())
+      }
+      socket.broadcast.emit('message-all', message);
+
+      logMsg(message);
+    }
+
+    function logMsg(msg) {
+
+      if(recentMsgLog.length < 100) {
+        recentMsgLog.push(msg);
+      }
+      else {
+        recentMsgLog = [
+          ...recentMsgLog.slice(89),
+          msg
+        ];
+      }
+
+      console.log({
+        user: msg.user,
+        text: msg.text,
+        timestamp: msg.timestamp
+      });
+    }
 
   
     /************** game events **************/

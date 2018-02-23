@@ -12,6 +12,7 @@ export const MEMBER_DISCONNECT = 'MEMBER_DISCONNECT';
 
 
 /* ######## Messaging ######## */
+export const RECIEVE_MSG_LOG = 'RECIEVE_MSG_LOG';
 export const POST_ALL = 'POST_ALL';
 export const RECEIVE_POST = 'RECEIVE_POST';
 export const MOD_POST = 'MOD_POST';
@@ -27,7 +28,7 @@ export const PROJECTILE_COLLISION_RADIUS = 2; //px
 export const JET_SQUARE_SIDE_LEN = 5; //px
 export const JET_COLLISION_RADIUS = JET_SQUARE_SIDE_LEN / 2 * 0.75;
 // jet movement consts
-export const JET_MAX_VELOCITY = 1;
+export const JET_MAX_VELOCITY = 2;
 export const JET_MIN_VELOCITY = JET_MAX_VELOCITY / 3;
 export const JET_MAX_TURNING_RATE = 25; //deg per frame
 export const JET_MIN_TURNING_RATE = JET_MAX_TURNING_RATE / 5; //deg per frame

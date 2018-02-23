@@ -1,4 +1,8 @@
-import { POST_ALL, RECEIVE_POST, MOD_POST, UPDATE_USER_MESSAGES } from '../constants';
+import { 
+  POST_ALL, RECEIVE_POST, MOD_POST,
+  RECIEVE_MSG_LOG, UPDATE_USER_MESSAGES 
+} from '../constants';
+import formatDate from '../../utils/formatDate';
 
 
 export function updateUserMessages(newUsername, oldUsername = null) {
@@ -16,6 +20,13 @@ export function updateUserMessages(newUsername, oldUsername = null) {
   };
 }
 
+export function receiveMsgLog(log) {
+  return {
+    type: RECIEVE_MSG_LOG,
+    payload: log
+  };
+}
+
 export function postAll(text) {
 
   return (dispatch, getState) => {
@@ -29,7 +40,7 @@ export function postAll(text) {
     const payload = {
       user,
       text,
-      timestamp: new Date(),
+      timestamp: formatDate(new Date()),
       firstInChain: false,
       inChain: false,
       lastInChain: false
@@ -78,6 +89,10 @@ function forgeChain(msg, messages, dispatch) {
           firstInChain: true
         }
       ;
+
+      if(msg.timestamp === prevMsg.timestamp) {
+        modifications.sameTimeAsNext = true;
+      }
 
       dispatch({
         type: MOD_POST,

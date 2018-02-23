@@ -73,7 +73,7 @@ class Settings extends PureComponent {
             />
             <fieldset>
               <label>username:</label>
-              <input type="text" name="username" placeholder={username} 
+              <input type="text" name="username" placeholder={username} maxLength="14" 
                 style={{
                   color: `hsl(${previewHue || userHue}, 86%, 27%)`
                 }}/>

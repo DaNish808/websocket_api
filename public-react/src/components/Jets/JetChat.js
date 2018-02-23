@@ -13,7 +13,10 @@ import { setUser, commandJet } from '../../state/actions/me';
 import { 
   setMembers, newMember, memberUpdate, removeMember, 
   transmitEnemyOrders, updateEnemyJet } from '../../state/actions/members';
-import { updateUserMessages, receivePost, postAll } from '../../state/actions/messages';
+import { 
+  updateUserMessages, receivePost,
+  postAll, receiveMsgLog
+} from '../../state/actions/messages';
 import { plugSocket } from '../../state/actions/socket';
 import { moveAll, updateJetStatus } from '../../state/actions/jet';
 
@@ -130,15 +133,15 @@ class JetChat extends PureComponent {
     // pull all action creators from this.props 
     // and set as properties of actionCreators
     const actionCreators = (({ 
-      setUser, setMembers, newMember, memberUpdate, 
-      removeMember, updateUserMessages, receivePost,
-      commandJet, transmitEnemyOrders, updateEnemyJet,
-      updateJetStatus
+      setUser, 
+      setMembers, newMember, memberUpdate, removeMember, 
+      updateUserMessages, receivePost, receiveMsgLog,
+      commandJet, transmitEnemyOrders, updateEnemyJet, updateJetStatus
     }) => ({
-      setUser, setMembers, newMember, memberUpdate, 
-      removeMember, updateUserMessages, receivePost,
-      commandJet, transmitEnemyOrders, updateEnemyJet,
-      updateJetStatus
+      setUser, 
+      setMembers, newMember, memberUpdate, removeMember, 
+      updateUserMessages, receivePost, receiveMsgLog,
+      commandJet, transmitEnemyOrders, updateEnemyJet, updateJetStatus
     }))(this.props);
 
     setListeners(this.props.socket, actionCreators);
@@ -175,7 +178,7 @@ export default connect(
     setUser, 
     commandJet, transmitEnemyOrders, updateEnemyJet, 
     moveAll, updateJetStatus,
-    receivePost, updateUserMessages, 
+    receivePost, updateUserMessages, receiveMsgLog,
     setMembers, newMember, memberUpdate, removeMember, 
     plugSocket 
   }
