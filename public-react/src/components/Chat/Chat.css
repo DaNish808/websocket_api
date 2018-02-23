@@ -46,9 +46,10 @@
 .chat-box div.msg p.msg-text {
   white-space: pre-wrap;
   padding-left: 2rem;
+  padding-right: 0.5rem;
 }
 .chat-box div.my-msg p.msg-text {
-  padding-left: 0;
+  padding-left: 0.5;
   padding-right: 2rem;
 }
 
