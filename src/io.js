@@ -17,9 +17,15 @@ function addConnectionListener() {
 
     /**************** add/distribute new member info *******************/
 
+    // returns true if username is already in use
+    const checkIfTaken = name => Object.keys(members).includes(name);
+
     const generateShortName = () => {
-      const name = generateName();
-      return name.length < 15 ? name : name.split(' ')[0];
+      let name = generateName();
+      name = name.length < 15 ? name : name.split(' ')[0];
+
+      if(checkIfTaken(name)) return generateShortName();
+      else return name;
     }
 
     let username = `${generateShortName()}`;
@@ -33,17 +39,12 @@ function addConnectionListener() {
     })));
 
     socket.emit('recent-msg-log', recentMsgLog);
-      
-    socket.emit(
-      'message-all', 
-      {
-        user: 'system',
-        text: members.length === 0 ?
-          `Hello ${username}, you\'re the first one here!`:
-          `Hello ${username}, you joined the chat with ${itemList(Object.keys(members))}`,
-        timestamp: new Date()
-      }
-    );
+     
+    sendTargetedSysMsg(members.length === 0 ?
+      `Hello ${username}, you\'re the first one here!`:
+      `Hello ${username}, you joined the chat with ${itemList(Object.keys(members))}`);
+
+
     const userData = members[username] = {
       // socketId: socket.id,
       userHue,
@@ -59,16 +60,23 @@ function addConnectionListener() {
 
     /************ member events *************/
     socket.on('update-user', update => {
-      const oldUsername = username;
-      delete members[username];
-      username = update.username;
+      if(update.username !== username && checkIfTaken(update.username)) {
 
-      sendUserUpdate(update, username, oldUsername);
+        sendTargetedSysMsg(`Sorry, "${update.username}" is already in use.`);
+      }
+      else {
+
+        const oldUsername = username;
+        delete members[username];
+        username = update.username;
   
-      members[username] = {
-        // socketId: socket.id,
-        ...update
-      };
+        sendUserUpdate(update, username, oldUsername);
+    
+        members[username] = {
+          // socketId: socket.id,
+          ...update
+        };
+      }
     });
     
     socket.on('disconnect', () => {
@@ -107,17 +115,7 @@ function addConnectionListener() {
         broadcastSysMsg(`${oldUsername} is now ${newUsername}`);
       }
     }
-    
-    function broadcastSysMsg(message) {
-      const msg = {
-        user: 'system',
-        text: message,
-        timestamp: new Date()
-      }
-      socket.broadcast.emit('message-all', msg);
-
-      logMsg(msg);
-    }
+  
     
 
     /************** messaging events **************/
@@ -125,6 +123,30 @@ function addConnectionListener() {
       socket.broadcast.emit('message-all', msg);
       logMsg(msg);
     });
+
+    // to this user only
+    function sendTargetedSysMsg(msg) {
+      socket.emit(
+        'message-all', 
+        {
+          user: 'system',
+          text: msg,
+          timestamp: new Date()
+        }
+      );
+    }
+
+    // to all other members
+    function broadcastSysMsg(msg) {
+      const message = {
+        user: 'system',
+        text: msg,
+        timestamp: new Date()
+      }
+      socket.broadcast.emit('message-all', message);
+
+      logMsg(message);
+    }
 
     function logMsg(msg) {
 
