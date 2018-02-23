@@ -7,7 +7,9 @@ const { MIN_JET_VELOCITY, MAX_JET_VELOCITY} = require('./constants');
 
 
 let io = null;
+
 const members = {};
+let recentMsgLog = [];
 
 
 function addConnectionListener() {
@@ -23,6 +25,8 @@ function addConnectionListener() {
       username,
       ...members[username]
     })));
+
+    socket.emit('recent-msg-log', recentMsgLog);
       
     socket.emit(
       'message-all', 
@@ -42,8 +46,6 @@ function addConnectionListener() {
     };
   
     notifyNewUser();
-    console.log('client connected!');
-    console.log(members);
     
 
 
@@ -64,16 +66,16 @@ function addConnectionListener() {
     });
     
     socket.on('disconnect', () => {
-      console.log('client disconnected');
+
       io.emit('member-disconnect', username);
-      io.emit(
-        'message-all', 
-        {
-          user: 'system',
-          text: `${username} has disconnected`,
-          timestamp: new Date()
-        }
-      );
+      const msg = {
+        user: 'system',
+        text: `${username} has disconnected`,
+        timestamp: new Date()
+      };
+      io.emit('message-all', msg);
+
+      logMsg(msg);
       delete members[username];
     });
     
@@ -83,7 +85,6 @@ function addConnectionListener() {
         username, ...members[username]
       }
       socket.emit('set-user', newUserPackage);
-      console.log('notifyNewUser:', username);
       socket.broadcast.emit('new-member', newUserPackage);
       broadcastSysMsg(`${username} has joined the chat`);
     }
@@ -102,21 +103,41 @@ function addConnectionListener() {
     }
     
     function broadcastSysMsg(message) {
-      socket.broadcast.emit(
-        'message-all', 
-        {
-          user: 'system',
-          text: message,
-          timestamp: new Date()
-        }
-      );
+      const msg = {
+        user: 'system',
+        text: message,
+        timestamp: new Date()
+      }
+      socket.broadcast.emit('message-all', msg);
+
+      logMsg(msg);
     }
     
 
     /************** messaging events **************/
     socket.on('message-all', msg => {
       socket.broadcast.emit('message-all', msg);
+      logMsg(msg);
     });
+
+    function logMsg(msg) {
+
+      if(recentMsgLog.length < 100) {
+        recentMsgLog.push(msg);
+      }
+      else {
+        recentMsgLog = [
+          ...recentMsgLog.slice(89),
+          msg
+        ];
+      }
+
+      console.log({
+        user: msg.user,
+        text: msg.text,
+        timestamp: msg.timestamp
+      });
+    }
 
   
     /************** game events **************/

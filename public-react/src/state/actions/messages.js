@@ -1,4 +1,7 @@
-import { POST_ALL, RECEIVE_POST, MOD_POST, UPDATE_USER_MESSAGES } from '../constants';
+import { 
+  POST_ALL, RECEIVE_POST, MOD_POST,
+  RECIEVE_MSG_LOG, UPDATE_USER_MESSAGES 
+} from '../constants';
 
 
 export function updateUserMessages(newUsername, oldUsername = null) {
@@ -13,6 +16,13 @@ export function updateUserMessages(newUsername, oldUsername = null) {
         oldUsername
       }
     });
+  };
+}
+
+export function receiveMsgLog(log) {
+  return {
+    type: RECIEVE_MSG_LOG,
+    payload: log
   };
 }
 

@@ -2,10 +2,10 @@
 export default function setListeners(socket, actionCreators) {
 
   const { 
-    setUser, setMembers, newMember, memberUpdate, 
-    removeMember, updateUserMessages, receivePost,
-    commandJet, transmitEnemyOrders, updateEnemyJet,
-    updateJetStatus
+    setUser, 
+    setMembers, newMember, memberUpdate, removeMember, 
+    updateUserMessages, receivePost, receiveMsgLog,
+    commandJet, transmitEnemyOrders, updateEnemyJet, updateJetStatus
   } = actionCreators;
   
 
@@ -41,6 +41,10 @@ export default function setListeners(socket, actionCreators) {
   /***** chat *****/
   socket.on('message-all', msg => {
     receivePost(msg);
+  });
+
+  socket.on('recent-msg-log', log => {
+    receiveMsgLog(log);
   });
 
 
