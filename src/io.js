@@ -80,6 +80,7 @@ function addConnectionListener() {
       }
     });
     
+    
     socket.on('disconnect', () => {
 
       io.emit('member-disconnect', username);
