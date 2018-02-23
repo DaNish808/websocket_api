@@ -1,7 +1,7 @@
 import { 
   SET_USER, TAKE_OFF, 
   ACCELERATE, DECELERATE, BEAR_RIGHT, BEAR_LEFT, FIRE,
-  MOVE,
+  MOVE, KILL
 } from '../constants';
 import { accelJet, decelJet, bearLeft, bearRight } from '../../utils/jetPhysics';
 import { jetFactory } from '../../services/jetFactory';
@@ -48,6 +48,12 @@ export default function me(state = devDefaultState, { type, payload }) {
       
     case MOVE:
       return updateOnlyJet(payload);
+    case KILL:
+      return {
+        ...state,
+        jetJunkyard: [ ...state.jetJunkyard, state.userJet ],
+        userJet: null,
+      };
 
     default:
       return state;

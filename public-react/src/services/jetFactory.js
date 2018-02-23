@@ -9,7 +9,7 @@ export const jetFactory = {
     heading: 90,// deg 
     velocity: JET_MIN_VELOCITY,
     health: 100,
-    kills: 0
+    kills: 0,
   },
   build: function(currentState) {
     if(currentState) {

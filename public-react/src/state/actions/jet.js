@@ -1,10 +1,18 @@
-import { MOVE, ENEMY_MOVE } from '../constants';
-import { move } from '../../utils/jetPhysics';
+import { 
+  MOVE, ENEMY_MOVE, 
+  HIT, KILL, ENEMY_HIT, ENEMY_KILL,
+  JET, 
+} from '../constants';
+import { move, checkCollisions } from '../../utils/jetPhysics';
 
 export function moveAll(cycleCount) {
   return (dispatch, getState) => {
 
-    const { me: { userJet }, members, socket } = getState();
+    /*** define all moving objects ***/
+    const { 
+      me: { username: myUsername, userJet }, 
+      members, socket 
+    } = getState();
 
     const userHasJet = !!userJet;
     
@@ -14,37 +22,121 @@ export function moveAll(cycleCount) {
     const enemyJetsPresent = !!enemyJets;
     
 
-    let myNewCoords = null;
+    /*** project user's jet movement ***/
+    const myNewJetState = {
+      username: myUsername,
+      health: null,
+      coords: null,
+      objType: JET
+    };
+    let userSurvived = null;
     if(userHasJet) {
-      myNewCoords = move(userJet);
+      userSurvived = true;
+
+      myNewJetState.health = userJet.health;
+      myNewJetState.coords = move(userJet);
+
+      // periodically broadcast location updates to other users (for lag)
       if(cycleCount === 0) {
-        socket.emit('my-jet-current-status', { ...userJet, ...myNewCoords });
+        socket.emit('my-jet-current-status', { ...userJet, ...myNewJetState.coords });
       }
     }
 
-    const enemyNewCoords = enemyJetsPresent && 
-      enemyJets.map(enemy => {
-        const update = { 
-          username: enemy.username,
-          newCoords: move(enemy.userJet)
+
+    /*** project enemies' jet movements ***/
+    // at each projection, check for collisions 
+    //   against all previously projected jet movements
+    let usersCollided = [];
+    let enemyNewJetStates = [];
+    if(enemyJetsPresent) {
+      for(let i = 0; i < enemyJets.length; i++) {
+
+        const { username, userJet } = enemyJets[i];
+
+        // project movement for this enemy
+        const newState = { 
+          username,
+          health: userJet.health,
+          coords: move(userJet),
+          objType: JET
         };
-        return update;
+
+        
+        // check for collisions against previous
+        const myNewJetStateArr = [];
+        if(userHasJet) myNewJetStateArr.push(myNewJetState);
+
+        const newCollisions = checkCollisions(
+          newState,
+          [ ...myNewJetStateArr, ...enemyNewJetStates ]
+        );
+        usersCollided = [...usersCollided, ...newCollisions] ;
+
+
+        // add this projection to previous
+        enemyNewJetStates.push(newState);
+      }
+    }
+
+
+    let hits = [];
+    let scorers = [];
+    // TODO: projectile hits
+
+
+    // remove collided jets move queue
+
+    const userCollisionI = usersCollided.indexOf(myUsername);
+    if(userHasJet && userCollisionI !== -1) {
+      userSurvived = false;
+    }
+    enemyNewJetStates = enemyNewJetStates.filter(enemy => !usersCollided.includes(enemy.username));
+
+
+    // dispatch kills
+    usersCollided.forEach(username => {
+      socket.emit('jet-status-action', {
+        type: KILL,
+        payload: username
       });
+    });
 
 
-    if(userHasJet) {
+    // dispatch movements
+    if(userHasJet && userSurvived) {
       dispatch({
         type: MOVE,
-        payload: myNewCoords
+        payload: myNewJetState.coords
       });
     }
 
     if(enemyJetsPresent) {
-      enemyNewCoords.forEach(enemyUpdate => dispatch({
+      enemyNewJetStates.forEach(newState => dispatch({
         type: ENEMY_MOVE,
-        payload: enemyUpdate
+        payload: {
+          username: newState.username,
+          coords: newState.coords
+        }
       }));
     }
 
+  };
+}
+
+
+
+
+export function updateJetStatus(action) {
+  return (dispatch, getState) => {
+    const { username } = getState().me;
+
+    if(action.payload === username) {
+      delete action.payload;
+    }
+    else {
+      action.type = 'ENEMY_' + action.type;
+    }
+
+    dispatch(action);
   };
 }

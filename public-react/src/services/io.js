@@ -1,11 +1,11 @@
 
-
 export default function setListeners(socket, actionCreators) {
 
   const { 
     setUser, setMembers, newMember, memberUpdate, 
     removeMember, updateUserMessages, receivePost,
-    commandJet, transmitEnemyOrders, updateEnemyJet
+    commandJet, transmitEnemyOrders, updateEnemyJet,
+    updateJetStatus
   } = actionCreators;
   
 
@@ -69,5 +69,8 @@ export default function setListeners(socket, actionCreators) {
   socket.on('enemy-update', update => {
     updateEnemyJet(update);
   });
-
+  
+  socket.on('jet-status-action', action => {
+    updateJetStatus(action);
+  });
 }
