@@ -2,6 +2,7 @@ const IO = require('socket.io');
 
 const generateName = require('sillyname');
 const itemList = require('./utils/itemList');
+const formatDate = require('./utils/formatDate');
 
 const { MIN_JET_VELOCITY, MAX_JET_VELOCITY} = require('./constants');
 
@@ -85,7 +86,7 @@ function addConnectionListener() {
       const msg = {
         user: 'system',
         text: `${username} has disconnected`,
-        timestamp: new Date()
+        timestamp: formatDate(new Date())
       };
       io.emit('message-all', msg);
 
@@ -131,7 +132,7 @@ function addConnectionListener() {
         {
           user: 'system',
           text: msg,
-          timestamp: new Date()
+          timestamp: formatDate(new Date())
         }
       );
     }
@@ -141,7 +142,7 @@ function addConnectionListener() {
       const message = {
         user: 'system',
         text: msg,
-        timestamp: new Date()
+        timestamp: formatDate(new Date())
       }
       socket.broadcast.emit('message-all', message);
 

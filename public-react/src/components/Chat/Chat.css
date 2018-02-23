@@ -23,13 +23,13 @@
 }
 
 .chat-box li.msg-box {
-  margin: 1.5rem 2.5rem 1.5rem 1.5rem;
+  margin: 1.5rem 20% 1.5rem 1.5rem;
 }
 
 .chat-box div.msg {
   width: fit-content;
   border-radius: 0.8rem;
-  padding: 0.8rem;
+  padding: 1.2rem 1.2rem 0.8rem 1.2rem;
   background: hsl(240, 50%, 87%);
   position: relative;
 }
@@ -45,6 +45,11 @@
 
 .chat-box div.msg p.msg-text {
   white-space: pre-wrap;
+  padding-left: 2rem;
+}
+.chat-box div.my-msg p.msg-text {
+  padding-left: 0;
+  padding-right: 2rem;
 }
 
 .chat-box div.msg div.timestamp {
@@ -55,7 +60,7 @@
 }
 
 .chat-box li.my-msg-box {
-  margin: 1.5rem 1.5rem 1.5rem 2.5rem;
+  margin: 1.5rem 1.5rem 1.5rem 20%;
   display: flex;
   justify-content: flex-end;
 }

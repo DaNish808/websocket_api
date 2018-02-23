@@ -1,24 +1,28 @@
 import React, { PureComponent } from 'react';
-
+import formatDate from '../../utils/formatDate';
 
 class Msg extends PureComponent {
 
   render() {
     const {
       msg: { 
-        user, text, timestamp,
-        firstInChain, inChain, lastInChain
+        user, text, timestamp, sameTimeAsNext,
+        firstInChain, inChain, lastInChain,
       }, 
       myMsg,
       hue,
       system
     } = this.props;
     
-    let chainSpacing = {};
+    let liChainSpacing = {};
+    let divChainSpacing = {};
     let chainEdges = {};
     if(firstInChain) {
-      chainSpacing = {
+      liChainSpacing = {
         marginBottom: '0',
+      };
+      divChainSpacing = {
+        paddingBottom: '0.4rem'
       };
       chainEdges = {
         width: '100%',
@@ -27,9 +31,13 @@ class Msg extends PureComponent {
       };
     }
     else if(inChain) {
-      chainSpacing = {
+      liChainSpacing = {
         marginTop: '0',
-        marginBottom: '0'
+        marginBottom: '0',
+      };
+      divChainSpacing = {
+        paddingTop: '0.4rem',
+        paddingBottom: '0.4rem'
       };
       chainEdges = {
         width: '100%',
@@ -37,8 +45,11 @@ class Msg extends PureComponent {
       };
     }
     else if(lastInChain) {
-      chainSpacing = {
+      liChainSpacing = {
         marginTop: '0',
+      };
+      divChainSpacing = {
+        paddingTop: '0.4rem',
       };
       chainEdges = {
         width: '100%',
@@ -50,11 +61,12 @@ class Msg extends PureComponent {
     return (
       <li 
         className={myMsg ? 'my-msg-box msg-box' : 'msg-box'}
-        style={chainSpacing}
+        style={liChainSpacing}
       >
         <div
           className={myMsg ? 'my-msg msg' : 'msg'}
           style={{
+            ...divChainSpacing,
             ...chainEdges,
             backgroundColor: `hsl(${hue}, ${system ? '0%' : '100%'}, 90%)`,
             color: `hsl(${hue}, 30%, 15%)`,
@@ -70,7 +82,9 @@ class Msg extends PureComponent {
             >{user}</span>
           }
           <p className="msg-text">{text}</p>
-          <div className="timestamp">{JSON.stringify(timestamp)}</div>
+          {sameTimeAsNext ||
+            <div className="timestamp">{timestamp}</div>
+          }
         </div>
       </li>
     );
