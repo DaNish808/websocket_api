@@ -103,14 +103,14 @@ class JetChat extends PureComponent {
   }
 
   sendShootOrders = () => {
-    const { user, userJet } = this.props;
+    // const { user, userJet } = this.props;
 
     if(this.shootRateLimiter < FIRING_RATE_INTERVAL) {
       this.shootRateLimiter++;
     }
     else {
       this.shootRateLimiter = 0;
-      this.props.socket.emit('shoot', genProjectile(user, userJet));
+      this.props.socket.emit('shoot', genProjectile(this.props.user, this.props.userJet));
     }
   }
   
@@ -144,7 +144,7 @@ class JetChat extends PureComponent {
         (toggleIsOn && !this.state[key]))
       ) {
   
-        if(toggleIsOn) this.props.socket.emit('jet-order', this.keyCommandMap[key]);
+        if(key !== 'Shift' && toggleIsOn) this.props.socket.emit('jet-order', this.keyCommandMap[key]);
   
         const newState = { ...this.state };
         newState[key] = toggleIsOn;

@@ -42,9 +42,6 @@ export default function me(state = devDefaultState, { type, payload }) {
       return updateOnlyJet(modJetProp('heading', bearLeft(payload.currentVelocity)));
     case BEAR_RIGHT:
       return updateOnlyJet(modJetProp('heading', bearRight(payload.currentVelocity)));
-    case FIRE:
-      console.log('pew');
-      return state;
       
     case MOVE:
       return updateOnlyJet(payload);

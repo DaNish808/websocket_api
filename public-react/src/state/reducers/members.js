@@ -106,9 +106,6 @@ export default function members(state = [], { type, payload }) {
       return modSingleUsersJetProp(payload.username, 'heading', bearLeft(payload.currentVelocity));  
     case ENEMY_BEAR_RIGHT:
       return modSingleUsersJetProp(payload.username, 'heading', bearRight(payload.currentVelocity));  
-    case ENEMY_FIRE:
-      console.log('blam');
-      return state;
 
     case ENEMY_MOVE:
       return updateSingleUsersJet(payload.username, payload.coords);

@@ -5,6 +5,8 @@ export default function projectiles(state = {}, { type, payload }) {
   let newState = {};
   switch(type) {
     case FIRE: 
+    console.log('type:', type)
+    console.log('payload:', payload)
       return {
         ...state,
         [payload.id]: payload

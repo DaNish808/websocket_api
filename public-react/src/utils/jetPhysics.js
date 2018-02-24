@@ -120,8 +120,8 @@ export function genProjectile(user, originJet) {
   const initDisplacement = (PROJECTILE_COLLISION_RADIUS + JET_COLLISION_RADIUS) * 2; 
 
   return {
-    coordX: initDisplacement * dTrig(Math.cos, heading),
-    coordY: initDisplacement * dTrig(Math.sin, heading),
+    coordX: coordX + initDisplacement * dTrig(Math.cos, heading),
+    coordY: coordY + initDisplacement * dTrig(Math.sin, heading),
     heading,
     velocity: velocity + PROJECTILE_VELOCITY,
     origin: { ...user },

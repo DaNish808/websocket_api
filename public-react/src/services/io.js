@@ -84,6 +84,5 @@ export default function setListeners(socket, actionCreators) {
 
   socket.on('shoot', projectile => {
     fire(projectile);
-    console.log(projectile);
   });
 }
