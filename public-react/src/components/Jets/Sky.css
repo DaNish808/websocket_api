@@ -29,3 +29,14 @@ div.jet {
   transition-duration: 60ms;
   transition-timing-function: linear;
 }
+
+div.projectile {
+  position: absolute;
+  z-index: 1;
+
+  border-radius: 50%;
+
+  transform: translate(-50%, -50%);
+  transition-duration: 60ms;
+  transition-timing-function: linear;
+}

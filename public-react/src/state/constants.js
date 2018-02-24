@@ -25,7 +25,7 @@ export const UPDATE_USER_MESSAGES = 'UPDATE_USER_MESSAGES';
 export const FRAME_INTERVAL = 50; //ms
 export const FIRING_RATE_INTERVAL = 10; // frames
 // size consts
-export const PROJECTILE_COLLISION_RADIUS = 2; //px
+export const PROJECTILE_COLLISION_RADIUS = 0.5; //px
 export const JET_SQUARE_SIDE_LEN = 5; //px
 export const JET_COLLISION_RADIUS = JET_SQUARE_SIDE_LEN / 2 * 0.75;
 // movement consts

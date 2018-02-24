@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
 import Jet from './Jet';
+import Projectile from './Projectile';
 
 import './Sky.css';
 
@@ -9,7 +10,7 @@ import './Sky.css';
 class Sky extends Component {
 
   render() {
-    const { allJets } = this.props;
+    const { allJets, projectiles } = this.props;
 
     const roundHundreth = n => Math.floor(parseFloat(n) * 100) / 100;
 
@@ -21,6 +22,13 @@ class Sky extends Component {
               username={username}
               hue={hue}
               jet={jet}
+            />
+          ))
+        }
+        {!!projectiles.length &&
+          projectiles.map(p => (
+            <Projectile
+              projectile={p}
             />
           ))
         }
@@ -43,7 +51,8 @@ export default connect(
         hue: state.me.userHue,
         jet: state.me.userJet
       } : []),
-    members: state.members
+    projectiles: Object.keys(state.projectiles)
+      .map(id => state.projectiles[id])
   }),
   null
 )(Sky);
