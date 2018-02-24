@@ -1,5 +1,6 @@
 import { 
-  JET_MAX_VELOCITY, JET_MIN_VELOCITY, JET_ACCEL_RATE, 
+  JET_MAX_VELOCITY, JET_MIN_VELOCITY, JET_ACCEL_RATE,
+  PROJECTILE_VELOCITY, 
   JET_MAX_TURNING_RATE, JET_MIN_TURNING_RATE,
   JET_COLLISION_RADIUS, PROJECTILE_COLLISION_RADIUS,
   JET, PROJECTILE
@@ -50,7 +51,7 @@ export function bearRight(v) {
  */
 const dTrig = (trigFunc, angle) => trigFunc(angle * (Math.PI / 180));
 
-export function move({ coordX, coordY, velocity, heading }) {
+export function move({ coordX, coordY, velocity, heading, isProjectile }) {
 
   const coordXDiff = velocity * dTrig(Math.cos, heading);
   const coordYDiff = velocity * dTrig(Math.sin, heading);
@@ -58,9 +59,13 @@ export function move({ coordX, coordY, velocity, heading }) {
   const tempX = coordX + coordXDiff;
   const tempY = coordY + coordYDiff;
 
+  const dragCoeff = isProjectile ? 0.001 : 0.01;
+  const tempV = velocity * (1 - dragCoeff);
+
   return { 
     coordX: tempX >= 0 ? tempX % 100 : 100 - tempX,
-    coordY: tempY >= 0 ? tempY % 100 : 100 - tempY
+    coordY: tempY >= 0 ? tempY % 100 : 100 - tempY,
+    velocity: tempV > JET_MIN_VELOCITY ? tempV : velocity
   };
 }
 
@@ -100,4 +105,24 @@ export function checkCollisions(thisObj, otherObjs) {
   }
 
   return newCollisions;
+}
+
+
+
+
+export function genProjectile(user, originJet) {
+  const { 
+    coordX, coordY, heading, velocity
+  } = originJet;
+
+  const initDisplacement = (PROJECTILE_COLLISION_RADIUS + JET_COLLISION_RADIUS) * 2; 
+
+  return {
+    coordX: initDisplacement * dTrig(Math.cos, heading),
+    coordY: initDisplacement * dTrig(Math.sin, heading),
+    heading,
+    velocity: velocity + PROJECTILE_VELOCITY,
+    origin: { ...user },
+    isProjectile: true
+  };
 }

@@ -19,6 +19,7 @@ import {
 } from '../../state/actions/messages';
 import { plugSocket } from '../../state/actions/socket';
 import { moveAll, updateJetStatus } from '../../state/actions/jet';
+import { genProjectile } from '../../utils/jetPhysics';
 
 import setListeners from '../../services/io';
 
@@ -86,14 +87,21 @@ class JetChat extends PureComponent {
   }
 
   sendActiveOrders = () => { 
-
+    const { 
+      user, userJet,
+      socket
+    } = this.props;
+    
     const orders = [];
     for(let key in this.state) {
-      if(this.state[key]) {
+      if(/^Arrow/.test(key) && this.state[key]) {
         orders.push(this.keyCommandMap[key]);
       }
     }
-    this.props.socket.emit('jet-order', orders);
+    socket.emit('jet-order', orders);
+
+    if(this.state.Shift)
+      socket.emit('shoot', genProjectile(user, userJet));
   }
   
 
@@ -171,6 +179,10 @@ class JetChat extends PureComponent {
 
 export default connect(
   state => ({
+    user: {
+      username: state.me.username,
+      userHue: state.me.userHue
+    },
     userJet: state.me.userJet,
     socket: state.socket
   }),

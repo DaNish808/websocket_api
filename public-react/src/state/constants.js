@@ -27,12 +27,13 @@ export const FRAME_INTERVAL = 50; //ms
 export const PROJECTILE_COLLISION_RADIUS = 2; //px
 export const JET_SQUARE_SIDE_LEN = 5; //px
 export const JET_COLLISION_RADIUS = JET_SQUARE_SIDE_LEN / 2 * 0.75;
-// jet movement consts
+// movement consts
 export const JET_MAX_VELOCITY = 2;
 export const JET_MIN_VELOCITY = JET_MAX_VELOCITY / 3;
 export const JET_MAX_TURNING_RATE = 25; //deg per frame
 export const JET_MIN_TURNING_RATE = JET_MAX_TURNING_RATE / 5; //deg per frame
 export const JET_ACCEL_RATE = JET_MAX_VELOCITY / 20;
+export const PROJECTILE_VELOCITY = JET_MAX_VELOCITY * 0.8;
 // object types
 export const JET = 'jet';
 export const PROJECTILE = 'projectile';
