@@ -6,6 +6,8 @@ import {
   JET, PROJECTILE
 } from '../state/constants';
 
+import shortid from 'shortid';
+
 
 
 
@@ -123,6 +125,7 @@ export function genProjectile(user, originJet) {
     heading,
     velocity: velocity + PROJECTILE_VELOCITY,
     origin: { ...user },
-    isProjectile: true
+    isProjectile: true,
+    id: shortid.generate()
   };
 }

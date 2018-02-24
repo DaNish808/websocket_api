@@ -1,11 +1,13 @@
+import { KILL } from "../state/constants";
 
 export default function setListeners(socket, actionCreators) {
 
   const { 
-    setUser, 
+    setUser, fire,
     setMembers, newMember, memberUpdate, removeMember, 
     updateUserMessages, receivePost, receiveMsgLog,
-    commandJet, transmitEnemyOrders, updateEnemyJet, updateJetStatus
+    commandJet, transmitEnemyOrders, updateEnemyJet, updateJetStatus,
+    resetKeys
   } = actionCreators;
   
 
@@ -76,5 +78,12 @@ export default function setListeners(socket, actionCreators) {
   
   socket.on('jet-status-action', action => {
     updateJetStatus(action);
+
+    if(action.type === KILL) resetKeys();
+  });
+
+  socket.on('shoot', projectile => {
+    fire(projectile);
+    console.log(projectile);
   });
 }

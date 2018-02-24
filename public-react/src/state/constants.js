@@ -23,6 +23,7 @@ export const UPDATE_USER_MESSAGES = 'UPDATE_USER_MESSAGES';
 /******* game constants *******/
 // time consts
 export const FRAME_INTERVAL = 50; //ms
+export const FIRING_RATE_INTERVAL = 10; // frames
 // size consts
 export const PROJECTILE_COLLISION_RADIUS = 2; //px
 export const JET_SQUARE_SIDE_LEN = 5; //px
@@ -63,3 +64,5 @@ export const KILL = 'KILL';
 export const ENEMY_MOVE = 'ENEMY_MOVE';
 export const ENEMY_HIT = 'ENEMY_HIT';
 export const ENEMY_KILL = 'ENEMY_KILL';
+
+export const PROJECTILE_DROP = 'PROJECTILE_DROP';

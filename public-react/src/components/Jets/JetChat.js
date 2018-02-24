@@ -5,7 +5,7 @@ import Chat from '../Chat/Chat';
 import Sky from './Sky';
 
 import { 
-  FRAME_INTERVAL,
+  FRAME_INTERVAL, FIRING_RATE_INTERVAL,
   ACCELERATE, DECELERATE, BEAR_LEFT, BEAR_RIGHT, FIRE
 } from '../../state/constants';
 
@@ -19,6 +19,7 @@ import {
 } from '../../state/actions/messages';
 import { plugSocket } from '../../state/actions/socket';
 import { moveAll, updateJetStatus } from '../../state/actions/jet';
+import { fire } from '../../state/actions/projectiles';
 import { genProjectile } from '../../utils/jetPhysics';
 
 import setListeners from '../../services/io';
@@ -47,6 +48,7 @@ class JetChat extends PureComponent {
     };
 
     this.commandOscillator = 0;
+    this.shootRateLimiter = FIRING_RATE_INTERVAL;
     this.cycleListener = null;
 
     // location updates are sent when cycleCount === 0
@@ -63,8 +65,8 @@ class JetChat extends PureComponent {
 
   timeCycle = () => {
     const { 
-      props: { userJet, moveAll, socket },
-      commandOscillator, cycleCount
+      props: { userJet, moveAll },
+      commandOscillator, cycleCount, state
     } = this;
 
     // every other cycle, send all active commands
@@ -74,7 +76,10 @@ class JetChat extends PureComponent {
       this.sendActiveOrders();
     }
 
-    // related to "TODO: think about refactoring game" in src/io.js
+    if(userJet && state.Shift) {
+      this.sendShootOrders();
+    }
+
     this.cycleCount = cycleCount < 60 ? cycleCount + 1 : 0;
 
     this.cycleListener = setTimeout(() => {
@@ -86,22 +91,27 @@ class JetChat extends PureComponent {
     }, FRAME_INTERVAL);
   }
 
-  sendActiveOrders = () => { 
-    const { 
-      user, userJet,
-      socket
-    } = this.props;
-    
+  sendActiveOrders = () => {  
+
     const orders = [];
     for(let key in this.state) {
       if(/^Arrow/.test(key) && this.state[key]) {
         orders.push(this.keyCommandMap[key]);
       }
     }
-    socket.emit('jet-order', orders);
+    this.props.socket.emit('jet-order', orders);
+  }
 
-    if(this.state.Shift)
-      socket.emit('shoot', genProjectile(user, userJet));
+  sendShootOrders = () => {
+    const { user, userJet } = this.props;
+
+    if(this.shootRateLimiter < FIRING_RATE_INTERVAL) {
+      this.shootRateLimiter++;
+    }
+    else {
+      this.shootRateLimiter = 0;
+      this.props.socket.emit('shoot', genProjectile(user, userJet));
+    }
   }
   
 
@@ -116,6 +126,17 @@ class JetChat extends PureComponent {
       this.props.userJet
     ) {
       const toggleIsOn = toggle === 'on';
+
+      // reset shot rate limiter when initiating fire
+      if(!toggleIsOn) {
+        if(key === 'Shift') {
+          this.shootRateLimiter = FIRING_RATE_INTERVAL;
+        }
+        else {
+          this.commandOscillator = 0;
+        }
+      }
+
       if(
         // switches off a command or
         // switches on a command that was off...
@@ -131,25 +152,37 @@ class JetChat extends PureComponent {
         this.setState(newState);
       }
     }
+  }
 
+  resetKeys = target => {
+    this.setState({
+      ArrowUp: false,
+      ArrowDown: false,
+      ArrowLeft: false,
+      ArrowRight: false,
+      Shift: false 
+    });
   }
   
   async componentDidMount() {
     
     await this.props.plugSocket();
 
+    
+
     // pull all action creators from this.props 
     // and set as properties of actionCreators
     const actionCreators = (({ 
-      setUser, 
+      setUser, fire,
       setMembers, newMember, memberUpdate, removeMember, 
       updateUserMessages, receivePost, receiveMsgLog,
-      commandJet, transmitEnemyOrders, updateEnemyJet, updateJetStatus
+      commandJet, transmitEnemyOrders, updateEnemyJet, updateJetStatus,
     }) => ({
-      setUser, 
+      setUser, fire, 
       setMembers, newMember, memberUpdate, removeMember, 
       updateUserMessages, receivePost, receiveMsgLog,
-      commandJet, transmitEnemyOrders, updateEnemyJet, updateJetStatus
+      commandJet, transmitEnemyOrders, updateEnemyJet, updateJetStatus,
+      resetKeys: this.resetKeys
     }))(this.props);
 
     setListeners(this.props.socket, actionCreators);
@@ -187,7 +220,7 @@ export default connect(
     socket: state.socket
   }),
   { 
-    setUser, 
+    setUser, fire,
     commandJet, transmitEnemyOrders, updateEnemyJet, 
     moveAll, updateJetStatus,
     receivePost, updateUserMessages, receiveMsgLog,

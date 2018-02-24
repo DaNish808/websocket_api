@@ -206,6 +206,11 @@ function addConnectionListener() {
       }
     });
 
+
+    socket.on('shoot', projectile => {
+      io.emit('shoot', projectile);
+    });
+
   });
 }
 
