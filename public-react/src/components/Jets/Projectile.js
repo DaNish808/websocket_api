@@ -12,6 +12,9 @@ export default class Projectile extends PureComponent {
         coordX, coordY
       }
     } = this.props;
+    console.log('hue:', hue)
+    console.log('coordX:', coordX)
+    console.log('coordY:', coordY)
 
     const sideLen = PROJECTILE_COLLISION_RADIUS * 2;
 

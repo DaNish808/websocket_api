@@ -11,7 +11,7 @@ export function moveAll(cycleCount) {
     /*** define all moving objects ***/
     const { 
       me: { username: myUsername, userJet }, 
-      members, socket 
+      members, projectiles: pObj, socket 
     } = getState();
 
     const userHasJet = !!userJet;
@@ -20,6 +20,9 @@ export function moveAll(cycleCount) {
       .filter(m => m.userJet)
       .map(m => ({ username: m.username, userJet: m.userJet }));
     const enemyJetsPresent = !!enemyJets;
+
+    const projectileIds = Object.keys(pObj);
+    const projectilesPresent = !!projectileIds;
     
 
     /*** project user's jet movement ***/
@@ -82,6 +85,10 @@ export function moveAll(cycleCount) {
     let hits = [];
     let scorers = [];
     // TODO: projectile hits
+
+    if(projectilesPresent) {
+
+    }
 
 
     // remove collided jets move queue

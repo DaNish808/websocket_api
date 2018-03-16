@@ -51,8 +51,7 @@ export default connect(
         hue: state.me.userHue,
         jet: state.me.userJet
       } : []),
-    projectiles: Object.keys(state.projectiles)
-      .map(id => state.projectiles[id])
+    projectiles: Array.from(state.projectiles.values())
   }),
   null
 )(Sky);
